@@ -17,7 +17,7 @@ class MainRecyclerAdapter(val context: Context, val titles: List<String>) :
     private var mSelectIndex = 0
     private var mOnItemClickListener: OnItemClickListener? = null
 
-    class MainViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mRadioButton: RadioButton = itemView.findViewById(R.id.radio_btn);
         val mTitle: TextView = itemView.findViewById(R.id.item_title)
     }
@@ -33,10 +33,9 @@ class MainRecyclerAdapter(val context: Context, val titles: List<String>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-        val binding: SampleItemLayoutBinding =
-            SampleItemLayoutBinding.inflate(LayoutInflater.from(parent.context))
-        binding.root.setOnClickListener(this)
-        return MainViewHolder(binding.root)
+        val itemRoot = LayoutInflater.from(context).inflate(R.layout.sample_item_layout,parent,false)
+        itemRoot.setOnClickListener(this)
+        return MainViewHolder(itemRoot)
     }
 
     override fun getItemCount(): Int =titles.size

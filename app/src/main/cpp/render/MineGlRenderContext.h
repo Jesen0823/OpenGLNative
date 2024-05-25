@@ -8,6 +8,8 @@
 #include "stdint.h"
 #include <GLES3/gl3.h>
 #include "TriangleSample.h"
+#include "TextureMapSample.h"
+#include "NV21TextureMapSample.h"
 
 class MineGlRenderContext {
 public:
@@ -26,7 +28,9 @@ public:
     void OnDrawFrame();
 
     static void DestroyInstance();
+
     static MineGlRenderContext *GetInstance();
+
 private:
     static MineGlRenderContext *m_pContext;
     GLSampleBase *m_Sample;

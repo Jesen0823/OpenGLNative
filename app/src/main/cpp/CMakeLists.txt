@@ -26,6 +26,9 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         JNIImpl.cpp
         util/GLUtils.cpp
         sample/TriangleSample.cpp
+        sample/TextureMapSample.cpp
+        sample/NV21TextureMapSample.cpp
+        sample/VaoSample.cpp
         # List C/C++ source files with relative paths to this CMakeLists.txt.
         ${src_files})
 

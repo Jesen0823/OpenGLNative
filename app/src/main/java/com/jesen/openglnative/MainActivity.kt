@@ -50,8 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadNV21Image() {
         assets.open("YUV_Image_840x1074.NV21").use {
-            var length = 0
-            length = it.available()
+            val length = it.available()
             val buffer = ByteArray(length)
             it.read(buffer)
             mGLSurfaceView.getNativeRender()
@@ -59,10 +58,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showGLSampleDialog(){
+    private fun showGLSampleDialog() {
         val builder = AlertDialog.Builder(this)
         val inflater = LayoutInflater.from(this)
-        val viewRoot = inflater.inflate(R.layout.sample_select_layout,null)
+        val viewRoot = inflater.inflate(R.layout.sample_select_layout, null)
         val dialog = builder.create()
         val confirmBtn = viewRoot.findViewById<Button>(R.id.confirm_btn)
         confirmBtn.setOnClickListener {
@@ -71,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         val recycler = viewRoot.findViewById<RecyclerView>(R.id.resolution_list_view)
         val adapter = MainRecyclerAdapter(this, Constants.SAMPLE_TITLES.toList())
         adapter.setSelectIndex(mSampleSelectedIndex)
-        adapter.addOnItemClickListener(object :OnItemClickListener{
+        adapter.addOnItemClickListener(object : OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 val selectIndex = adapter.getSelectIndex()
                 adapter.apply {
@@ -81,11 +80,13 @@ class MainActivity : AppCompatActivity() {
                 }
                 mSampleSelectedIndex = position
 
-                mGLSurfaceView.getNativeRender().native_SetParamsInt(Constants.SAMPLE_TYPE,position)
-                when(position){
-                    Constants.SAMPLE_TYPE_KEY_TRIANGLE,Constants.SAMPLE_TYPE_KEY_TEXTURE_MAP-> loadRGBAImage()
+                mGLSurfaceView.getNativeRender()
+                    .native_SetParamsInt(Constants.SAMPLE_TYPE, position)
+                when (position) {
+                    Constants.SAMPLE_TYPE_KEY_TRIANGLE, Constants.SAMPLE_TYPE_KEY_TEXTURE_MAP -> loadRGBAImage()
                     Constants.SAMPLE_TYPE_KEY_YUV_TEXTURE_MAP -> loadNV21Image()
-                    else->{}
+                    Constants.SAMPLE_TYPE_KEY_VAO ->{}
+                    else -> {}
                 }
                 mGLSurfaceView.requestRender()
 
@@ -103,12 +104,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main,menu)
+        menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_select_sample){
+        if (item.itemId == R.id.action_select_sample) {
             showGLSampleDialog()
         }
         return true
