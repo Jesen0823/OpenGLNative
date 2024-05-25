@@ -38,7 +38,7 @@ void TriangleSample::Init() {
     m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr, m_VertexShader, m_FragmentShader);
 }
 
-void TriangleSample::Draw() {
+void TriangleSample::Draw(int width,int height) {
     LOGCATE("TriangleSample::Draw");
     GLfloat vVertices[] = {
             0.0f, 0.5f, 0.0f,

@@ -25,10 +25,13 @@ file(GLOB src_files
 add_library(${CMAKE_PROJECT_NAME} SHARED
         JNIImpl.cpp
         util/GLUtils.cpp
+        render/BgRender.cpp
+        render/MineGlRenderContext.cpp
         sample/TriangleSample.cpp
         sample/TextureMapSample.cpp
         sample/NV21TextureMapSample.cpp
         sample/VaoSample.cpp
+        sample/FBOSample.cpp
         # List C/C++ source files with relative paths to this CMakeLists.txt.
         ${src_files})
 

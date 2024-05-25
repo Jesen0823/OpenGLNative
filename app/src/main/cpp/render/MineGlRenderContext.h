@@ -34,6 +34,8 @@ public:
 private:
     static MineGlRenderContext *m_pContext;
     GLSampleBase *m_Sample;
+    int m_ScreenW;
+    int m_ScreenH;
 };
 
 

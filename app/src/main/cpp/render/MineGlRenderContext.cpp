@@ -5,12 +5,14 @@
 #include "MineGlRenderContext.h"
 #include "LogUtil.h"
 #include "VaoSample.h"
+#include "FBOSample.h"
 
 const int SAMPLE_TYPE =                     200;
 const int SAMPLE_TYPE_KEY_TRIANGLE =        0;
 const int SAMPLE_TYPE_KEY_TEXTURE_MAP =     1;
 const int SAMPLE_TYPE_KEY_YUV_TEXTURE_MAP = 2;
 const int SAMPLE_TYPE_KEY_VAO =             3;
+const int SAMPLE_TYPE_KEY_FBO             = 4;
 
 MineGlRenderContext *MineGlRenderContext::m_pContext = nullptr;
 
@@ -45,6 +47,8 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value) {
             case SAMPLE_TYPE_KEY_VAO:
                 m_Sample = new VaoSample();
                 break;
+            case SAMPLE_TYPE_KEY_FBO:
+                m_Sample = new FBOSample();
             default:
                 break;
         }
@@ -84,6 +88,8 @@ void MineGlRenderContext::OnSurfaceCreated() {
 void MineGlRenderContext::OnSurfaceChanged(int width, int height) {
     LOGCATE("MineGlRenderContext::OnSurfaceChanged [w, h] = [%d, %d]", width, height);
     glViewport(0, 0, width, height);
+    m_ScreenW = width;
+    m_ScreenH = height;
 }
 
 void MineGlRenderContext::OnDrawFrame() {
@@ -91,7 +97,7 @@ void MineGlRenderContext::OnDrawFrame() {
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     if (m_Sample) {
         m_Sample->Init();
-        m_Sample->Draw();
+        m_Sample->Draw(m_ScreenW,m_ScreenH);
         m_Sample->Destroy();
     }
 }

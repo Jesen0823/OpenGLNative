@@ -100,7 +100,7 @@ void VaoSample::LoadImage(NativeImage *pImage) {
     //null implement
 }
 
-void VaoSample::Draw() {
+void VaoSample::Draw(int width,int height) {
     if (m_ProgramObj == 0) return;
 
     glUseProgram(m_ProgramObj);

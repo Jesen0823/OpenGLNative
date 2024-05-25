@@ -14,7 +14,7 @@ public:
 
     virtual void Init();
     virtual void LoadImage(NativeImage *pImage);
-    virtual void Draw();
+    virtual void Draw(int width,int height);
     virtual void Destroy();
 
 private:

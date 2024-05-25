@@ -1,5 +1,6 @@
 package com.jesen.openglnative
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jesen.openglnative.databinding.ActivityMainBinding
+import com.jesen.openglnative.egl.EGLActivity
 import java.nio.ByteBuffer
 
 class MainActivity : AppCompatActivity() {
@@ -27,12 +29,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.mineGlSurfaceView.getNativeRender().native_OnInit()
         mGLSurfaceView = binding.mineGlSurfaceView
-
-        loadRGBAImage()
     }
 
-    private fun loadRGBAImage() {
-        resources.openRawResource(R.raw.dzzz).use {
+    private fun loadRGBAImage(resId: Int) {
+        resources.openRawResource(resId).use {
             val bitmap = BitmapFactory.decodeStream(it)
             val bytes = bitmap.byteCount
             val byteBuf = ByteBuffer.allocate(bytes)
@@ -83,9 +83,16 @@ class MainActivity : AppCompatActivity() {
                 mGLSurfaceView.getNativeRender()
                     .native_SetParamsInt(Constants.SAMPLE_TYPE, position)
                 when (position) {
-                    Constants.SAMPLE_TYPE_KEY_TRIANGLE, Constants.SAMPLE_TYPE_KEY_TEXTURE_MAP -> loadRGBAImage()
+                    Constants.SAMPLE_TYPE_KEY_TRIANGLE, Constants.SAMPLE_TYPE_KEY_TEXTURE_MAP -> {
+                        loadRGBAImage(R.drawable.dzzz)
+                    }
+
                     Constants.SAMPLE_TYPE_KEY_YUV_TEXTURE_MAP -> loadNV21Image()
-                    Constants.SAMPLE_TYPE_KEY_VAO ->{}
+                    Constants.SAMPLE_TYPE_KEY_VAO -> {}
+                    Constants.SAMPLE_TYPE_KEY_FBO -> loadRGBAImage(R.drawable.java)
+                    Constants.SAMPLE_TYPE_KEY_EGL -> {
+                        startActivity(Intent(this@MainActivity, EGLActivity::class.java))
+                    }
                     else -> {}
                 }
                 mGLSurfaceView.requestRender()

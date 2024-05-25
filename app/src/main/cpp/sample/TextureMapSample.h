@@ -20,7 +20,7 @@ public:
 
     virtual void Init();
 
-    virtual void Draw();
+    virtual void Draw(int width,int height);
 
     virtual void Destroy();
 

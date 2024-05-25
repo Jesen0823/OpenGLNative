@@ -58,7 +58,7 @@ void NV21TextureMapSample::LoadImage(NativeImage *pImage) {
     }
 }
 
-void NV21TextureMapSample::Draw() {
+void NV21TextureMapSample::Draw(int width,int height) {
     LOGCATE("NV21TextureMapSample::Draw()");
     if (m_ProgramObj == GL_NONE || m_yTextureId == GL_NONE || m_uvTextureId == GL_NONE) {
         return;
