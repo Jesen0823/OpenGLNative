@@ -1,0 +1,16 @@
+//
+// Created by xie_s on 2024/5/25.
+//
+
+#ifndef OPENGLNATIVE_NV21TEXTUREMAPSAMPLE_H
+#define OPENGLNATIVE_NV21TEXTUREMAPSAMPLE_H
+
+
+
+class NV21TextureMapSample {
+
+};
+
+
+
+#endif //OPENGLNATIVE_NV21TEXTUREMAPSAMPLE_H
