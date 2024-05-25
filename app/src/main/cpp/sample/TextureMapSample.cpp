@@ -14,7 +14,14 @@ TextureMapSample::~TextureMapSample() {
 }
 
 void TextureMapSample::Init() {
-    CreateTexture();
+    //create RGBA texture
+    glGenTextures(1, &m_TextureId);
+    glBindTexture(GL_TEXTURE_2D, m_TextureId);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, GL_NONE);
 
     char vShaderStr[] =
             "#version  300  es                               \n"
@@ -51,14 +58,6 @@ void TextureMapSample::Draw(int width,int height) {
     if (m_ProgramObj == GL_NONE || m_TextureId == GL_NONE) {
         return;
     }
-    // 激活图层
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_TextureId);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_RenderImage.width, m_RenderImage.height, 0, GL_RGBA,
-                 GL_UNSIGNED_BYTE, m_RenderImage.ppPlane[0]);
-    glBindTexture(GL_TEXTURE_2D, GL_NONE);
-
-    //glViewport(0, 0, m_RenderImage.width, m_RenderImage.height);
 
     GLfloat verticesCoords[] = {
             -1.0f,  0.5f, 0.0f,  // Position 0
@@ -75,6 +74,13 @@ void TextureMapSample::Draw(int width,int height) {
     };
 
     GLushort indices[] = {0, 1, 2, 0, 2, 3};
+
+    //upload RGBA image data
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_TextureId);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_RenderImage.width, m_RenderImage.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_RenderImage.ppPlane[0]);
+    glBindTexture(GL_TEXTURE_2D, GL_NONE);
+
     // Use the program object
     glUseProgram(m_ProgramObj);
 

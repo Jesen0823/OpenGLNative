@@ -5,8 +5,6 @@ import android.graphics.BitmapFactory
 import android.opengl.GLES20
 import android.opengl.GLException
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.jesen.openglnative.R
@@ -25,6 +23,7 @@ class EGLActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         nativeBgRender = NativeBgRender()
+        nativeBgRender.native_BgRenderInit()
 
         binding.button.setOnClickListener {
             val btn = it as Button
@@ -36,27 +35,12 @@ class EGLActivity : AppCompatActivity() {
                 btn.setText(R.string.btn_txt_reset)
             }
         }
-
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main,menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.action_select_sample){
-
-        }
-        return true
     }
 
     private fun startBgRender(){
-        nativeBgRender.native_BgRenderInit()
         loadRGBAImage(R.drawable.java, nativeBgRender);
         nativeBgRender.native_BgRenderDraw();
         binding.imageView.setImageBitmap(createBitmapFromGLSurface(0, 0, 421, 586));
-        nativeBgRender.native_BgRenderUnInit();
     }
 
     private fun loadRGBAImage(resId: Int, render: NativeBgRender) {
@@ -99,5 +83,10 @@ class EGLActivity : AppCompatActivity() {
             return null
         }
         return Bitmap.createBitmap(bitmapSource, w, h, Bitmap.Config.ARGB_8888)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        nativeBgRender.native_BgRenderUnInit();
     }
 }
