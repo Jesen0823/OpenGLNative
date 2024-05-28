@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory
 import android.opengl.GLES20
 import android.opengl.GLException
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.jesen.openglnative.R
@@ -12,10 +14,11 @@ import com.jesen.openglnative.databinding.ActivityEglactivityBinding
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 
-
 class EGLActivity : AppCompatActivity() {
     private lateinit var nativeBgRender:NativeBgRender
     private lateinit var binding:ActivityEglactivityBinding
+    private var PARAM_TYPE_SHADER_INDEX = 200
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,6 +38,28 @@ class EGLActivity : AppCompatActivity() {
                 btn.setText(R.string.btn_txt_reset)
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_egl, menu);
+        return true;
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        var shaderIndex = 0
+        when (item.itemId) {
+            R.id.action_shader0 -> shaderIndex = 0
+            R.id.action_shader1 -> shaderIndex = 1
+            R.id.action_shader2 -> shaderIndex = 2
+            R.id.action_shader3 -> shaderIndex = 3
+            R.id.action_shader4 -> shaderIndex = 4
+            else -> {}
+        }
+
+        nativeBgRender.native_BgRenderSetIntParams(PARAM_TYPE_SHADER_INDEX, shaderIndex)
+        startBgRender()
+        binding.button.setText(R.string.btn_txt_reset)
+        return true
     }
 
     private fun startBgRender(){

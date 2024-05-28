@@ -17,12 +17,13 @@ public interface Constants {
     public static final int IMAGE_FORMAT_I420 = 0x04;
 
     public static final String[] SAMPLE_TITLES = {
-            "DrawTriangle",
+            /*"DrawTriangle",
             "TextureMapping",
             "YUV Rendering",
             "VAO&VBO",
             "FBO Offscreen Rendering",
-            "EGL Background Rendering",
+            "EGL Background Rendering",*/
+            "绘制三角形","纹理映射","YUV 渲染","VAO&VBO","FBO 离屏渲染","EGL 后台渲染"
     };
 
 }

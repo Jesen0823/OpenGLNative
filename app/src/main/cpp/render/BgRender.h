@@ -67,6 +67,8 @@ private:
     EGLContext m_eglCtx;
     EGLDisplay m_eglDisplay;
     bool m_IsGLContextReady;
+    const char*m_fShaderStrs[5];
+    int m_ShaderIndex;
 };
 
 
