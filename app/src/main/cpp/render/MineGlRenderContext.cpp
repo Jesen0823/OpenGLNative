@@ -6,6 +6,8 @@
 #include "LogUtil.h"
 #include "VaoSample.h"
 #include "FBOSample.h"
+#include "FBOLegLengthSample.h"
+#include "CoordSystemSample.h"
 
 const int SAMPLE_TYPE =                     200;
 const int SAMPLE_TYPE_KEY_TRIANGLE =        0;
@@ -13,6 +15,8 @@ const int SAMPLE_TYPE_KEY_TEXTURE_MAP =     1;
 const int SAMPLE_TYPE_KEY_YUV_TEXTURE_MAP = 2;
 const int SAMPLE_TYPE_KEY_VAO =             3;
 const int SAMPLE_TYPE_KEY_FBO             = 4;
+const int SAMPLE_TYPE_KEY_FBO_LEG_LENGTHEN   = 6;
+const int SAMPLE_TYPE_KEY_COORD_SYSTEM       = 7;
 
 MineGlRenderContext *MineGlRenderContext::m_pContext = nullptr;
 
@@ -27,14 +31,15 @@ MineGlRenderContext::~MineGlRenderContext() {
     }
 }
 
-void MineGlRenderContext::SetParamsInt(int paramType, int value) {
-    LOGCATE("MineGLREnderContext::SetParamsInt paramType = %d, value = %d", paramType, value);
-    if (m_Sample) {
-        delete m_Sample;
-        m_Sample = nullptr;
-    }
+void MineGlRenderContext::SetParamsInt(int paramType, int value0,int value1) {
+    LOGCATE("MineGLREnderContext::SetParamsInt paramType = %d, value0 = %d, value1 = %d", paramType, value0,value1);
+
     if (paramType == SAMPLE_TYPE) {
-        switch (value) {
+        if (m_Sample) {
+            delete m_Sample;
+            m_Sample = nullptr;
+        }
+        switch (value0) {
             case SAMPLE_TYPE_KEY_TRIANGLE:
                 m_Sample = new TriangleSample();
                 break;
@@ -49,9 +54,18 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value) {
                 break;
             case SAMPLE_TYPE_KEY_FBO:
                 m_Sample = new FBOSample();
+            case SAMPLE_TYPE_KEY_FBO_LEG_LENGTHEN:
+                m_Sample = new FBOLegLengthSample();
+                break;
+            case SAMPLE_TYPE_KEY_COORD_SYSTEM:
+                m_Sample = new CoordSystemSample();
+                break;
             default:
                 break;
         }
+    }
+    if(paramType == ANGLE_PARAM_TYPE && m_Sample){
+        m_Sample->SetParamsInt(paramType,value0,value1);
     }
 }
 

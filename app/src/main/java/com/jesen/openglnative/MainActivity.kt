@@ -81,18 +81,20 @@ class MainActivity : AppCompatActivity() {
                 mSampleSelectedIndex = position
 
                 mGLSurfaceView.getNativeRender()
-                    .native_SetParamsInt(Constants.SAMPLE_TYPE, position)
+                    .native_SetParamsInt(Constants.SAMPLE_TYPE, position, 0)
                 when (position) {
-                    Constants.SAMPLE_TYPE_KEY_TRIANGLE, Constants.SAMPLE_TYPE_KEY_TEXTURE_MAP -> {
-                        loadRGBAImage(R.drawable.dzzz)
-                    }
+                    Constants.SAMPLE_TYPE_KEY_TRIANGLE,
+                    Constants.SAMPLE_TYPE_KEY_TEXTURE_MAP -> loadRGBAImage(R.raw.dzzz)
 
                     Constants.SAMPLE_TYPE_KEY_YUV_TEXTURE_MAP -> loadNV21Image()
                     Constants.SAMPLE_TYPE_KEY_VAO -> {}
-                    Constants.SAMPLE_TYPE_KEY_FBO -> loadRGBAImage(R.drawable.java)
+                    Constants.SAMPLE_TYPE_KEY_FBO -> loadRGBAImage(R.raw.java)
                     Constants.SAMPLE_TYPE_KEY_EGL -> {
                         startActivity(Intent(this@MainActivity, EGLActivity::class.java))
                     }
+
+                    Constants.SAMPLE_TYPE_KEY_FBO_LEG -> loadRGBAImage(R.raw.leg)
+                    Constants.SAMPLE_TYPE_KEY_COORD_SYSTEM -> loadRGBAImage(R.raw.dzzz)
                     else -> {}
                 }
                 mGLSurfaceView.requestRender()

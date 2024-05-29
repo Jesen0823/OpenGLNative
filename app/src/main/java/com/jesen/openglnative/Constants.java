@@ -3,6 +3,7 @@ package com.jesen.openglnative;
 public interface Constants {
     public static final String TAG = "MainActivity";
     public static final int SAMPLE_TYPE = 200;
+    public static final int ANGLE_TYPE = 300;
 
     public static final int SAMPLE_TYPE_KEY_TRIANGLE = 0;
     public static final int SAMPLE_TYPE_KEY_TEXTURE_MAP = 1;
@@ -10,6 +11,8 @@ public interface Constants {
     public static final int SAMPLE_TYPE_KEY_VAO = 3;
     public static final int SAMPLE_TYPE_KEY_FBO = 4;
     public static final int SAMPLE_TYPE_KEY_EGL = 5;
+    public static final int SAMPLE_TYPE_KEY_FBO_LEG = 6;
+    public static final int SAMPLE_TYPE_KEY_COORD_SYSTEM = 7;
 
     public static final int IMAGE_FORMAT_RGBA = 0x01;
     public static final int IMAGE_FORMAT_NV21 = 0x02;
@@ -23,7 +26,7 @@ public interface Constants {
             "VAO&VBO",
             "FBO Offscreen Rendering",
             "EGL Background Rendering",*/
-            "绘制三角形","纹理映射","YUV 渲染","VAO&VBO","FBO 离屏渲染","EGL 后台渲染"
+            "绘制三角形","纹理映射","YUV 渲染","VAO&VBO","FBO 离屏渲染","EGL 后台渲染","FBO 拉伸", "坐标系统"
     };
 
 }

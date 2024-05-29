@@ -7,6 +7,7 @@ include_directories(
         util
         render
         sample
+        glm
 )
 
 find_library(
@@ -32,6 +33,8 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         sample/NV21TextureMapSample.cpp
         sample/VaoSample.cpp
         sample/FBOSample.cpp
+        sample/FBOLegLengthSample.cpp
+        sample/CoordSystemSample.cpp
         # List C/C++ source files with relative paths to this CMakeLists.txt.
         ${src_files})
 

@@ -31,6 +31,10 @@ public:
     virtual void Draw(int width,int height) = 0;
 
     virtual void Destroy() = 0;
+
+    void SetParamsInt(int paramType, int value0, int value1) {
+
+    }
 };
 
 #endif //OPENGLNATIVE_GLSAMPLEBASE_H

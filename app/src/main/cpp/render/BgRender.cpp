@@ -417,12 +417,12 @@ void BgRender::SetImageData(uint8_t *pData, int width, int height) {
     }
 }
 
-void BgRender::SetIntParams(int paramType, int param) {
-    LOGCATE("BgRender::SetIntParams paramType = %d, param = %d", paramType, param);
+void BgRender::SetIntParams(int paramType, int param0,int param1) {
+    LOGCATE("BgRender::SetIntParams paramType = %d, param0 = %d, param1 = %d", paramType, param0,param1);
     switch (paramType) {
         case PARAM_TYPE_SHADER_INDEX: {
-            if (param >= 0) {
-                m_ShaderIndex = param % 5;
+            if (param0 >= 0) {
+                m_ShaderIndex = param0 % 5;
 
                 if (m_ProgramObj) {
                     glDeleteProgram(m_ProgramObj);
