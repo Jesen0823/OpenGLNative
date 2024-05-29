@@ -1,49 +1,54 @@
 //
-// Created by xie_s on 2024/5/28.
+// Created by xie_s on 2024/5/29.
 //
 
-#ifndef OPENGLNATIVE_COORDSYSTEMSAMPLE_H
-#define OPENGLNATIVE_COORDSYSTEMSAMPLE_H
+#ifndef OPENGLNATIVE_BASICLIGHTINGSAMPLE_H
+#define OPENGLNATIVE_BASICLIGHTINGSAMPLE_H
 
+#include "GLSampleBase.h"
+#include "GLUtils.h"
 #include <detail/type_mat.hpp>
 #include <detail/type_mat4x4.hpp>
-#include "GLSampleBase.h"
 
-class CoordSystemSample :public GLSampleBase{
+class BasicLightingSample :public GLSampleBase{
 public:
-    CoordSystemSample();
-
-    ~CoordSystemSample();
+    BasicLightingSample();
+    ~BasicLightingSample();
 
     virtual void Init();
-
     virtual void LoadImage(NativeImage *pImage);
-
-    virtual void Draw(int screenW, int screenH);
-
     virtual void SetParamsInt(int paramType, int value0, int value1);
-
+    virtual void Draw(int screenW,int screenH);
     virtual void Destroy();
 
     /**
      * @param angleX 绕X轴旋转度数
      * @param angleY 绕Y轴旋转度数
      * @param ratio 宽高比
-     */
+     * */
     void UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio);
 
 private:
     GLuint m_TextureId;
     GLint m_SamplerLoc;
     GLint m_MVPMatLoc;
+    GLint m_ModelMatrixLoc;
+    GLint m_LightPosLoc;
+    GLint m_LightColorLoc;
+    GLint m_ViewPosLoc;
+
     GLuint m_VAOId;
-    GLuint m_VBOIds[3];
+    GLuint m_VBOIds[1];
+    GLuint m_TfoId;
+    GLuint m_TfoBufId;
     NativeImage m_RenderImage;
     glm::mat4 m_MVPMatrix;
+    glm::mat4 m_ModelMatrix;
 
     int m_AngleX;
     int m_AngleY;
+
 };
 
 
-#endif //OPENGLNATIVE_COORDSYSTEMSAMPLE_H
+#endif //OPENGLNATIVE_BASICLIGHTINGSAMPLE_H

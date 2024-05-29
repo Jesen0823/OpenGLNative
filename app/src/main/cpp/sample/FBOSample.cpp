@@ -172,12 +172,13 @@ void FBOSample::LoadImage(NativeImage *pImage) {
 }
 
 void FBOSample::Draw(int screenW, int screenH) {
+    // 离屏渲染
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glViewport(0, 0, m_RenderImage.width, m_RenderImage.height);
 
     // Do FBO off screen rendering
-    glUseProgram(m_FBOProgramObj);
     glBindFramebuffer(GL_FRAMEBUFFER, m_FBOId);
+    glUseProgram(m_FBOProgramObj);
 
     glBindVertexArray(m_VAOIds[1]);
     glActiveTexture(GL_TEXTURE0);
@@ -203,8 +204,8 @@ void FBOSample::Draw(int screenW, int screenH) {
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    glViewport(0, 0, screenW, screenH);
     // Do normal rendering
+    glViewport(0, 0, screenW, screenH);
     glUseProgram(m_ProgramObj);
     GO_CHECK_GL_ERROR();
     glBindVertexArray(m_VAOIds[0]);
@@ -249,6 +250,7 @@ void FBOSample::Destroy() {
 }
 
 bool FBOSample::CreateFrameBufferObj() {
+    // 创建并初始化 FBO 纹理
     glGenTextures(1, &m_FBOTextureId);
     glBindTexture(GL_TEXTURE_2D, m_FBOTextureId);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -257,6 +259,7 @@ bool FBOSample::CreateFrameBufferObj() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, GL_NONE);
 
+    // 创建并初始化 FBO
     glGenFramebuffers(1, &m_FBOId);
     glBindFramebuffer(GL_FRAMEBUFFER, m_FBOId);
     glBindTexture(GL_TEXTURE_2D, m_FBOTextureId);

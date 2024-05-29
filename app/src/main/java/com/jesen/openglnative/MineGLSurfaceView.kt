@@ -29,18 +29,23 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val x = event.x
         val y = event.y
-        when(event.action){
-            MotionEvent.ACTION_MOVE->{
+        when (event.action) {
+            MotionEvent.ACTION_MOVE -> {
                 val dx = x - mPreviousX
                 val dy = x - mPreviousY
                 mXAngle += dx * TOUCH_SCALE_FACTOR
                 mYAngle += dy * TOUCH_SCALE_FACTOR
             }
-            else->{}
+
+            else -> {}
         }
         mPreviousX = x
-        mPreviousY =y
-        mNativeRender.native_SetParamsInt(300,mXAngle.toInt(),mYAngle.toInt())
+        mPreviousY = y
+        mNativeRender.native_SetParamsInt(
+            Constants.PARAM_TYPE_ROTATE_ANGLE,
+            mXAngle.toInt(),
+            mYAngle.toInt()
+        )
         requestRender()
         return true
     }

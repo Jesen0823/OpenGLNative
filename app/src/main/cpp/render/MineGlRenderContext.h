@@ -10,6 +10,11 @@
 #include "TriangleSample.h"
 #include "TextureMapSample.h"
 #include "NV21TextureMapSample.h"
+#include "VaoSample.h"
+#include "FBOSample.h"
+#include "FBOLegLengthSample.h"
+#include "CoordSystemSample.h"
+#include "BasicLightingSample.h"
 
 class MineGlRenderContext {
 public:
