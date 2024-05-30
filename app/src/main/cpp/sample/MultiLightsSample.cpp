@@ -7,23 +7,22 @@
 #include <gtc/matrix_transform.hpp>
 
 glm::vec3 transPositions[] = {
-        glm::vec3( 0.0f,  0.0f,  0.0f),
-        glm::vec3( 2.0f,  2.0f, -1.0f),
+        glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec3(2.0f, 2.0f, -1.0f),
         glm::vec3(-1.5f, -2.2f, -1.5f),
-        glm::vec3(-1.8f, -2.0f,  1.3f),
-        glm::vec3( 1.4f, -1.4f, -1.5f),
-        glm::vec3(-1.7f,  2.0f, -1.5f),
-        glm::vec3( 1.3f, -2.0f,  2.5f),
-        glm::vec3( 0.5f,  1.3f, -0.1f),
-        glm::vec3( 1.5f,  2.2f,  1.5f),
-        glm::vec3(-1.3f,  1.0f, -1.5f),
-        glm::vec3(-1.3f,  0.0f, -1.5f),
-        glm::vec3( 0.0f, -1.3f, -0.5f),
-        glm::vec3( 0.0f, -1.5f,  1.5f),
+        glm::vec3(-1.8f, -2.0f, 1.3f),
+        glm::vec3(1.4f, -1.4f, -1.5f),
+        glm::vec3(-1.7f, 2.0f, -1.5f),
+        glm::vec3(1.3f, -2.0f, 2.5f),
+        glm::vec3(0.5f, 1.3f, -0.1f),
+        glm::vec3(1.5f, 2.2f, 1.5f),
+        glm::vec3(-1.3f, 1.0f, -1.5f),
+        glm::vec3(-1.3f, 0.0f, -1.5f),
+        glm::vec3(0.0f, -1.3f, -0.5f),
+        glm::vec3(0.0f, -1.5f, 1.5f),
 };
 
-MultiLightsSample::MultiLightsSample()
-{
+MultiLightsSample::MultiLightsSample() {
 
     m_SamplerLoc = GL_NONE;
     m_MVPMatLoc = GL_NONE;
@@ -38,16 +37,13 @@ MultiLightsSample::MultiLightsSample()
     m_ModelMatrix = glm::mat4(0.0f);
 }
 
-MultiLightsSample::~MultiLightsSample()
-{
+MultiLightsSample::~MultiLightsSample() {
     NativeImageUtil::FreeNativeImage(&m_RenderImage);
 
 }
 
-void MultiLightsSample::Init()
-{
-    if (m_ProgramObj)
-    {
+void MultiLightsSample::Init() {
+    if (m_ProgramObj) {
         return;
     }
     //create RGBA texture
@@ -149,8 +145,7 @@ void MultiLightsSample::Init()
             "}";
 
     m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr, m_VertexShader, m_FragmentShader);
-    if (m_ProgramObj)
-    {
+    if (m_ProgramObj) {
         m_SamplerLoc = glGetUniformLocation(m_ProgramObj, "s_TextureMap");
         GO_CHECK_GL_ERROR();
         m_MVPMatLoc = glGetUniformLocation(m_ProgramObj, "u_MVPMatrix");
@@ -159,56 +154,54 @@ void MultiLightsSample::Init()
         GO_CHECK_GL_ERROR();
         m_ViewPosLoc = glGetUniformLocation(m_ProgramObj, "viewPos");
         GO_CHECK_GL_ERROR();
-    }
-    else
-    {
+    } else {
         LOGCATE("MultiLightsSample::Init create program fail");
         return;
     }
 
     GLfloat vertices[] = {
             //position            //texture coord  //normal
-            -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,      0.0f,  0.0f, -1.0f,
-            0.5f, -0.5f, -0.5f,   1.0f, 0.0f,      0.0f,  0.0f, -1.0f,
-            0.5f,  0.5f, -0.5f,   1.0f, 1.0f,      0.0f,  0.0f, -1.0f,
-            0.5f,  0.5f, -0.5f,   1.0f, 1.0f,      0.0f,  0.0f, -1.0f,
-            -0.5f,  0.5f, -0.5f,   0.0f, 1.0f,      0.0f,  0.0f, -1.0f,
-            -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,      0.0f,  0.0f, -1.0f,
+            -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f,
+            0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f,
+            0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f,
+            0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f,
+            -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f,
+            -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f,
 
-            -0.5f, -0.5f, 0.5f,    0.0f, 0.0f,      0.0f,  0.0f,  1.0f,
-            0.5f, -0.5f, 0.5f,    1.0f, 0.0f,      0.0f,  0.0f,  1.0f,
-            0.5f,  0.5f, 0.5f,    1.0f, 1.0f,      0.0f,  0.0f,  1.0f,
-            0.5f,  0.5f, 0.5f,    1.0f, 1.0f,      0.0f,  0.0f,  1.0f,
-            -0.5f,  0.5f, 0.5f,    0.0f, 1.0f,      0.0f,  0.0f,  1.0f,
-            -0.5f, -0.5f, 0.5f,    0.0f, 0.0f,      0.0f,  0.0f,  1.0f,
+            -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+            0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+            0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+            0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+            -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+            -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
 
-            -0.5f,  0.5f,  0.5f,   1.0f, 0.0f,     -1.0f,  0.0f,  0.0f,
-            -0.5f,  0.5f, -0.5f,   1.0f, 1.0f,     -1.0f,  0.0f,  0.0f,
-            -0.5f, -0.5f, -0.5f,   0.0f, 1.0f,     -1.0f,  0.0f,  0.0f,
-            -0.5f, -0.5f, -0.5f,   0.0f, 1.0f,     -1.0f,  0.0f,  0.0f,
-            -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,     -1.0f,  0.0f,  0.0f,
-            -0.5f,  0.5f,  0.5f,   1.0f, 0.0f,     -1.0f,  0.0f,  0.0f,
+            -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+            -0.5f, 0.5f, -0.5f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f,
+            -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+            -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f,
 
-            0.5f,  0.5f,  0.5f,   1.0f, 0.0f,      1.0f,  0.0f,  0.0f,
-            0.5f,  0.5f, -0.5f,   1.0f, 1.0f,      1.0f,  0.0f,  0.0f,
-            0.5f, -0.5f, -0.5f,   0.0f, 1.0f,      1.0f,  0.0f,  0.0f,
-            0.5f, -0.5f, -0.5f,   0.0f, 1.0f,      1.0f,  0.0f,  0.0f,
-            0.5f, -0.5f,  0.5f,   0.0f, 0.0f,      1.0f,  0.0f,  0.0f,
-            0.5f,  0.5f,  0.5f,   1.0f, 0.0f,      1.0f,  0.0f,  0.0f,
+            0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+            0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+            0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+            0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
 
-            -0.5f, -0.5f, -0.5f,   0.0f, 1.0f,      0.0f, -1.0f,  0.0f,
-            0.5f, -0.5f, -0.5f,   1.0f, 1.0f,      0.0f, -1.0f,  0.0f,
-            0.5f, -0.5f,  0.5f,   1.0f, 0.0f,      0.0f, -1.0f,  0.0f,
-            0.5f, -0.5f,  0.5f,   1.0f, 0.0f,      0.0f, -1.0f,  0.0f,
-            -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,      0.0f, -1.0f,  0.0f,
-            -0.5f, -0.5f, -0.5f,   0.0f, 1.0f,      0.0f, -1.0f,  0.0f,
+            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f,
+            0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f,
+            0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f,
+            0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f,
+            -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f,
 
-            -0.5f, 0.5f, -0.5f,    0.0f, 1.0f,      0.0f,  1.0f,  0.0f,
-            0.5f, 0.5f, -0.5f,    1.0f, 1.0f,      0.0f,  1.0f,  0.0f,
-            0.5f, 0.5f,  0.5f,    1.0f, 0.0f,      0.0f,  1.0f,  0.0f,
-            0.5f, 0.5f,  0.5f,    1.0f, 0.0f,      0.0f,  1.0f,  0.0f,
-            -0.5f, 0.5f,  0.5f,    0.0f, 0.0f,      0.0f,  1.0f,  0.0f,
-            -0.5f, 0.5f, -0.5f,    0.0f, 1.0f,      0.0f,  1.0f,  0.0f,
+            -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+            0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+            0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+            0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+            -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+            -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
     };
 
     // Generate VBO Ids and load the VBOs with data
@@ -224,9 +217,11 @@ void MultiLightsSample::Init()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (const void *) 0);
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (const void *) (3* sizeof(GLfloat)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
+                          (const void *) (3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (const void *) (5* sizeof(GLfloat)));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
+                          (const void *) (5 * sizeof(GLfloat)));
     glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
 
     glBindVertexArray(GL_NONE);
@@ -240,11 +235,9 @@ void MultiLightsSample::Init()
 
 }
 
-void MultiLightsSample::LoadImage(NativeImage *pImage)
-{
+void MultiLightsSample::LoadImage(NativeImage *pImage) {
     LOGCATE("MultiLightsSample::LoadImage pImage = %p", pImage->ppPlane[0]);
-    if (pImage)
-    {
+    if (pImage) {
         m_RenderImage.width = pImage->width;
         m_RenderImage.height = pImage->height;
         m_RenderImage.format = pImage->format;
@@ -253,21 +246,20 @@ void MultiLightsSample::LoadImage(NativeImage *pImage)
 
 }
 
-void MultiLightsSample::Draw(int screenW, int screenH)
-{
+void MultiLightsSample::Draw(int screenW, int screenH) {
     LOGCATE("MultiLightsSample::Draw()");
 
     if (m_ProgramObj == GL_NONE || m_TextureId == GL_NONE) return;
     glEnable(GL_DEPTH_TEST);
 
-    float ratio = (float)screenW / screenH;
+    float ratio = (float) screenW / screenH;
 
     // Use the program object
     glUseProgram(m_ProgramObj);
 
     glBindVertexArray(m_VaoId);
 
-    glUniform3f(m_ViewPosLoc,     0.0f, 0.0f, 3.0f);
+    glUniform3f(m_ViewPosLoc, 0.0f, 0.0f, 3.0f);
 
     // Bind the RGBA map
     glActiveTexture(GL_TEXTURE0);
@@ -281,17 +273,18 @@ void MultiLightsSample::Draw(int screenW, int screenH)
 
     // 鐢ㄤ簬璁＄畻杈圭紭鐨勮繃搴︼紝cutOff 琛ㄧず鍐呭垏鍏夎§掞紝outerCutOff 琛ㄧず澶栧垏鍏夎§
     glUniform1f(glGetUniformLocation(m_ProgramObj, "light.cutOff"), glm::cos(glm::radians(10.5f)));
-    glUniform1f(glGetUniformLocation(m_ProgramObj, "light.outerCutOff"), glm::cos(glm::radians(11.5f)));
+    glUniform1f(glGetUniformLocation(m_ProgramObj, "light.outerCutOff"),
+                glm::cos(glm::radians(11.5f)));
 
     // 琛板噺绯绘暟,甯告暟椤¹ constant锛屼竴娆￠」 linear 鍜屼簩娆￠」 quadratic銆
-    glUniform1f(glGetUniformLocation(m_ProgramObj, "light.constant"),  1.0f);
-    glUniform1f(glGetUniformLocation(m_ProgramObj, "light.linear"),    0.09);
+    glUniform1f(glGetUniformLocation(m_ProgramObj, "light.constant"), 1.0f);
+    glUniform1f(glGetUniformLocation(m_ProgramObj, "light.linear"), 0.09);
     glUniform1f(glGetUniformLocation(m_ProgramObj, "light.quadratic"), 0.032);
 
     // 缁樺埗澶氫釜绔嬫柟浣擄紝涓嶅悓鐨勪綅绉诲拰鏃嬭浆瑙掑害
-    for(int i = 0; i < sizeof(transPositions)/ sizeof(transPositions[0]); i++)
-    {
-        UpdateMatrix(m_MVPMatrix, m_ModelMatrix, m_AngleX + 10, m_AngleY + 10, 0.4, transPositions[i], ratio);
+    for (int i = 0; i < sizeof(transPositions) / sizeof(transPositions[0]); i++) {
+        UpdateMatrix(m_MVPMatrix, m_ModelMatrix, m_AngleX + 10, m_AngleY + 10, 0.4,
+                     transPositions[i], ratio);
         glUniformMatrix4fv(m_MVPMatLoc, 1, GL_FALSE, &m_MVPMatrix[0][0]);
         glUniformMatrix4fv(m_ModelMatrixLoc, 1, GL_FALSE, &m_ModelMatrix[0][0]);
         glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -299,10 +292,8 @@ void MultiLightsSample::Draw(int screenW, int screenH)
 
 }
 
-void MultiLightsSample::Destroy()
-{
-    if (m_ProgramObj)
-    {
+void MultiLightsSample::Destroy() {
+    if (m_ProgramObj) {
         glDeleteProgram(m_ProgramObj);
         glDeleteBuffers(3, m_VboIds);
         glDeleteVertexArrays(1, &m_VaoId);
@@ -314,13 +305,13 @@ void MultiLightsSample::Destroy()
 
 }
 
-void MultiLightsSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio)
-{
+void MultiLightsSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio) {
     //No implement
 }
 
-void MultiLightsSample::UpdateMatrix(glm::mat4 &mvpMatrix, glm::mat4 &modelMatrix, int angleXRotate, int angleYRotate, float scale, glm::vec3 transVec3, float ratio)
-{
+void MultiLightsSample::UpdateMatrix(glm::mat4 &mvpMatrix, glm::mat4 &modelMatrix, int angleXRotate,
+                                     int angleYRotate, float scale, glm::vec3 transVec3,
+                                     float ratio) {
     LOGCATE("MultiLightsSample::UpdateMatrix angleX = %d, angleY = %d, ratio = %f", angleXRotate,
             angleYRotate, ratio);
     angleXRotate = angleXRotate % 360;
@@ -355,13 +346,11 @@ void MultiLightsSample::UpdateMatrix(glm::mat4 &mvpMatrix, glm::mat4 &modelMatri
     mvpMatrix = Projection * View * Model;
 }
 
-void MultiLightsSample::SetParamsInt(int paramType, int value0, int value1)
-{
+void MultiLightsSample::SetParamsInt(int paramType, int value0, int value1) {
     LOGCATE("MultiLightsSample::SetParamsInt paramType = %d, value0 = %d", paramType, value0);
     GLSampleBase::SetParamsInt(paramType, value0, value1);
     //no implement
-    if (paramType == ROTATE_ANGLE_PARAM_TYPE)
-    {
+    if (paramType == ROTATE_ANGLE_PARAM_TYPE) {
         m_AngleX = value0;
         m_AngleY = value1;
     }
