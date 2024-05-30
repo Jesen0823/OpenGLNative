@@ -51,6 +51,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_BASIC_LIGHTING:
                 m_Sample = new BasicLightingSample();
                 break;
+            case SAMPLE_TYPE_KEY_TRANSFORM_FEEDBACK:
+                m_Sample = new TransformFeedbackSample();
+                break;
             default:
                 break;
         }

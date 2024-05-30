@@ -15,6 +15,7 @@
 #include "FBOLegLengthSample.h"
 #include "CoordSystemSample.h"
 #include "BasicLightingSample.h"
+#include "TransformFeedbackSample.h"
 
 class MineGlRenderContext {
 public:
