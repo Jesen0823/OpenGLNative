@@ -54,8 +54,6 @@ void BasicLightingSample::Init() {
             "out vec3 ambient;\n"
             "out vec3 diffuse;\n"
             "out vec3 specular;\n"
-            "out vec3 outVec0;\n"
-            "out vec3 outVec1;\n"
             "void main()\n"
             "{\n"
             "    gl_Position = u_MVPMatrix * a_position;\n"
@@ -77,7 +75,6 @@ void BasicLightingSample::Init() {
             "    vec3 reflectDir = reflect(-lightDir, unitNormal);\n"
             "    float spec = pow(max(dot(unitNormal, reflectDir), 0.0), 16.0);\n"
             "    specular = specularStrength * spec * lightColor;\n"
-            "    outVec0 = unitNormal;outVec1 = specular;\n"
             "    v_texCoord = a_texCoord;\n"
             "}";
 
@@ -97,10 +94,9 @@ void BasicLightingSample::Init() {
             "    outColor = vec4(finalColor, 1.0);\n"
             "}";
 
-    GLchar const *varyings[] = {"outVec0", "outVec1"};
-    m_ProgramObj = GLUtils::CreateProgramWithFeedback(vShaderStr, fShaderStr, m_VertexShader,
-                                                      m_FragmentShader, varyings,
-                                                      sizeof(varyings) / sizeof(varyings[0]));
+    //GLchar const *varyings[] = {"outVec0", "outVec1"};
+    m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr, m_VertexShader, m_FragmentShader);
+
     if (m_ProgramObj) {
         m_SamplerLoc = glGetUniformLocation(m_ProgramObj, "s_TextureMap");
         m_MVPMatLoc = glGetUniformLocation(m_ProgramObj, "u_MVPMatrix");
@@ -114,7 +110,7 @@ void BasicLightingSample::Init() {
     }
 
     GLfloat vertices[] = {
-            //position  //texture coord  //normal
+            //position            //texture coord  //normal
             -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f,
             0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f,
             0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f,
@@ -169,31 +165,28 @@ void BasicLightingSample::Init() {
 
     glBindBuffer(GL_ARRAY_BUFFER, m_VBOIds[0]);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (const void *) 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
+                          8 * sizeof(GLfloat), (const void *) 0);
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
-                          (const void *) (3 * sizeof(GLfloat)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE,
+                          8 * sizeof(GLfloat), (const void *) (3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
-                          (const void *) (5 * sizeof(GLfloat)));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE,
+                          8 * sizeof(GLfloat), (const void *) (5 * sizeof(GLfloat)));
     glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
 
     glBindVertexArray(GL_NONE);
 
-
-    glGenBuffers(1, &m_TfoBufId);
+    /*glGenBuffers(1, &m_TfoBufId);
     glBindBuffer(GL_ARRAY_BUFFER, m_TfoBufId);
     glBufferData(GL_ARRAY_BUFFER, 6 * 36 * sizeof(GLfloat), NULL, GL_STATIC_READ);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glGenTransformFeedbacks(1, &m_TfoId);
     glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, m_TfoId);
-    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0,
-                     m_TfoBufId); // Specify the index of the binding point within the array specified by target.
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_TfoBufId); // Specify the index of the binding point within the array specified by target.
     glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
-    glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
-
-
+    glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, 0);*/
 }
 
 void BasicLightingSample::LoadImage(NativeImage *pImage) {
@@ -204,7 +197,6 @@ void BasicLightingSample::LoadImage(NativeImage *pImage) {
         m_RenderImage.format = pImage->format;
         NativeImageUtil::CopyNativeImage(pImage, &m_RenderImage);
     }
-
 }
 
 void BasicLightingSample::Draw(int screenW, int screenH) {
@@ -232,19 +224,18 @@ void BasicLightingSample::Draw(int screenW, int screenH) {
 
     glUniform3f(m_LightColorLoc, 1.0f, 1.0f, 1.0f);
     glUniform3f(m_LightPosLoc, -2.0f, 0.0f, 2.0f);
-    glUniform3f(m_ViewPosLoc, -2.0f, 0.0f, 2.0f);
+    glUniform3f(m_ViewPosLoc, -3.0f, 0.0f, 3.0f);
 
     // Bind the RGBA map
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_TextureId);
     glUniform1i(m_SamplerLoc, 0);
 
-    glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, m_TfoId);
+    /*glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, m_TfoId);
     glBeginTransformFeedback(GL_TRIANGLES);
     GO_CHECK_GL_ERROR();
 
     glDrawArrays(GL_TRIANGLES, 0, 36);
-
     GO_CHECK_GL_ERROR();
 
     glEndTransformFeedback();
@@ -266,18 +257,15 @@ void BasicLightingSample::Draw(int screenW, int screenH) {
     }
 
     glUnmapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER);
-    glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
-
+    glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, 0);*/
 }
 
 void BasicLightingSample::Destroy() {
-//	if (m_ProgramObj)
-//	{
-//		glDeleteProgram(m_ProgramObj);
-//		glDeleteBuffers(3, m_VboIds);
-//		glDeleteVertexArrays(1, &m_VaoId);
-//	}
-
+    /*if (m_ProgramObj) {
+        glDeleteProgram(m_ProgramObj);
+        glDeleteBuffers(3, m_VBOIds);
+        glDeleteVertexArrays(1, &m_VAOId);
+    }*/
 }
 
 void
@@ -291,15 +279,14 @@ BasicLightingSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angle
     float radiansX = static_cast<float>(MATH_PI / 180.0f * angleX);
     float radiansY = static_cast<float>(MATH_PI / 180.0f * angleY);
 
-
-    // Projection matrix
+// Projection matrix
     //glm::mat4 Projection = glm::ortho(-ratio, ratio, -1.0f, 1.0f, 0.0f, 100.0f);
     //glm::mat4 Projection = glm::frustum(-ratio, ratio, -1.0f, 1.0f, 4.0f, 100.0f);
     glm::mat4 Projection = glm::perspective(45.0f, ratio, 0.1f, 100.f);
 
     // View matrix
     glm::mat4 View = glm::lookAt(
-            glm::vec3(-2, 0, 2), // Camera is at (0,0,1), in World Space
+            glm::vec3(-3, 0, 3), // Camera is at (0,0,1), in World Space
             glm::vec3(0, 0, 0), // and looks at the origin
             glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
     );
@@ -314,7 +301,6 @@ BasicLightingSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angle
     m_ModelMatrix = Model;
 
     mvpMatrix = Projection * View * Model;
-
 }
 
 void BasicLightingSample::SetParamsInt(int paramType, int value0, int value1) {

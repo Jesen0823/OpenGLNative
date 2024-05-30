@@ -94,8 +94,10 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     Constants.SAMPLE_TYPE_FBO_LEG -> loadRGBAImage(R.raw.java)
-                    Constants.SAMPLE_TYPE_COORD_SYSTEM -> loadRGBAImage(R.raw.java)
-                    Constants.SAMPLE_TYPE_BASIC_LIGHTING -> loadRGBAImage(R.raw.java)
+                    Constants.SAMPLE_TYPE_COORD_SYSTEM, Constants.SAMPLE_TYPE_BASIC_LIGHTING,
+                    Constants.SAMPLE_TYPE_TRANS_FEEDBACK, Constants.SAMPLE_TYPE_MULTI_LIGHTS -> {
+                        loadRGBAImage(R.raw.java)
+                    }
                     else -> {}
                 }
                 mGLSurfaceView.requestRender()

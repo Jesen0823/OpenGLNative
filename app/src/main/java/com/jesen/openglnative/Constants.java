@@ -15,6 +15,8 @@ public interface Constants {
     public static final int SAMPLE_TYPE_FBO_LEG = SAMPLE_TYPE + 6;
     public static final int SAMPLE_TYPE_COORD_SYSTEM = SAMPLE_TYPE + 7;
     public static final int SAMPLE_TYPE_BASIC_LIGHTING = SAMPLE_TYPE + 8;
+    public static final int SAMPLE_TYPE_TRANS_FEEDBACK  = SAMPLE_TYPE + 9;
+    public static final int SAMPLE_TYPE_MULTI_LIGHTS    = SAMPLE_TYPE + 10;
 
     public static final int PARAM_TYPE_ROTATE_ANGLE = 300;
 
@@ -30,7 +32,9 @@ public interface Constants {
             "VAO&VBO",
             "FBO Offscreen Rendering",
             "EGL Background Rendering",*/
-            "绘制三角形", "纹理映射", "YUV 渲染", "VAO&VBO", "FBO 离屏渲染", "EGL 后台渲染", "FBO 拉伸", "坐标系统", "基础光照"
+            "绘制三角形", "纹理映射", "YUV 渲染", "VAO&VBO",
+            "FBO 离屏渲染", "EGL 后台渲染", "FBO 拉伸", "坐标系统",
+            "基础光照", "TransformFeedback", "MultiLights",
     };
 
 }

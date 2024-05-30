@@ -73,8 +73,10 @@ void TransformFeedbackSample::Init() {
             "}";
 
     GLchar const *varyings[] = {"outPos", "outTex"};
-    m_ProgramObj = GLUtils::CreateProgramWithFeedback(vShaderStr, fShaderStr, m_VertexShader,
-                                                      m_FragmentShader);
+    m_ProgramObj = GLUtils::CreateProgramWithFeedback(vShaderStr,
+                                                      fShaderStr, m_VertexShader,
+                                                      m_FragmentShader,varyings,
+                                                      sizeof(varyings)/ sizeof(varyings[0]));
     if (m_ProgramObj == GL_NONE) {
         LOGCATE("TransformFeedbackSample::Init m_ProgramObj == GL_NONE");
         return;

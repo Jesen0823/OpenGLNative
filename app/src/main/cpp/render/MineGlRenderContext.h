@@ -16,6 +16,7 @@
 #include "CoordSystemSample.h"
 #include "BasicLightingSample.h"
 #include "TransformFeedbackSample.h"
+#include "MultiLightsSample.h"
 
 class MineGlRenderContext {
 public:
