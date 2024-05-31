@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
                 val buf = ByteBuffer.allocate(bp.byteCount)
                 bp.copyPixelsToBuffer(buf)
                 val byteArray = buf.array()
+                mGLSurfaceView.setAspectRatio(bp.width, bp.height)
                 mGLSurfaceView.getNativeRender()
                     .native_SetImageData(IMAGE_FORMAT_RGBA, bp.width, bp.height, byteArray)
             }
@@ -92,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                         startActivity(Intent(this@MainActivity, EGLActivity::class.java))
                     }
 
-                    Constants.SAMPLE_TYPE_FBO_LEG -> loadRGBAImage(R.raw.java)
+                    Constants.SAMPLE_TYPE_FBO_LEG -> loadRGBAImage(R.drawable.leg)
                     Constants.SAMPLE_TYPE_COORD_SYSTEM, Constants.SAMPLE_TYPE_BASIC_LIGHTING,
                     Constants.SAMPLE_TYPE_TRANS_FEEDBACK, Constants.SAMPLE_TYPE_MULTI_LIGHTS,
                     Constants.SAMPLE_TYPE_DEPTH_TESTING -> {

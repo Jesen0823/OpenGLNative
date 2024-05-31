@@ -15,6 +15,8 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
     private var mPreviousX = 0f
     private var mXAngle = 0f
     private var mYAngle = 0f
+    private var mRatioWidth = 0
+    private var mRatioHeight = 0
 
     init {
         this.setEGLContextClientVersion(3)
@@ -48,5 +50,30 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
         )
         requestRender()
         return true
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val width = MeasureSpec.getSize(widthMeasureSpec)
+        val height = MeasureSpec.getSize(heightMeasureSpec)
+
+        if (0 == mRatioWidth || 0 == mRatioHeight) {
+            setMeasuredDimension(width, height)
+        } else {
+            if (width < height * mRatioWidth / mRatioHeight) {
+                setMeasuredDimension(width, width * mRatioHeight / mRatioWidth)
+            } else {
+                setMeasuredDimension(height * mRatioWidth / mRatioHeight, height)
+            }
+        }
+    }
+
+    fun setAspectRatio(width: Int, height: Int) {
+        if (width < 0 || height < 0) {
+            throw IllegalArgumentException("Size cannot be negative.");
+        }
+        mRatioWidth = width;
+        mRatioHeight = height;
+        requestLayout();
     }
 }
