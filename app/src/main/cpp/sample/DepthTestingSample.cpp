@@ -82,7 +82,7 @@ void DepthTestingSample::Init() {
     if (m_ProgramObj) {
         m_SamplerLoc = glGetUniformLocation(m_ProgramObj, "s_TextureMap");
         GO_CHECK_GL_ERROR();
-        m_MVPMatLoc = glGetUniformLocation(m_ProgramObj, "s_TextureMap");
+        m_MVPMatLoc = glGetUniformLocation(m_ProgramObj, "u_MVPMatrix");
         GO_CHECK_GL_ERROR();
     } else {
         LOGCATE("DepthTestingSample::Init create program fail");
