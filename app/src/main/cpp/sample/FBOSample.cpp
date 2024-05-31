@@ -56,8 +56,8 @@ void FBOSample::Init() {
             "layout(location = 1) in vec2 a_texCoord;  \n"
             "out vec2 v_texCoord;                      \n"
             "void main(){                              \n"
-            "gl_Position = a_position;              \n"
-            "v_texCoord = a_texCoord;               \n"
+            "   gl_Position = a_position;              \n"
+            "   v_texCoord = a_texCoord;               \n"
             "}                                         \n";
     // 用于普通渲染的片段着色器脚本，简单纹理映射
     char fShaderStr[] =
@@ -90,7 +90,7 @@ void FBOSample::Init() {
         return;
     }
     m_SamplerLoc = glGetUniformLocation(m_ProgramObj, "s_TextureMap");
-    m_FBOProgramObj = glGetUniformLocation(m_FBOProgramObj, "s_TextureMap");
+    m_FBOSamplerLoc = glGetUniformLocation(m_FBOProgramObj, "s_TextureMap");
 
     // Generate VBO Ids and load the VBOs with data
     glGenBuffers(4, m_VBOIds);
@@ -164,11 +164,16 @@ void FBOSample::Init() {
         LOGCATE("FBOSample::Init CreateFrameBufferObj fail");
         return;
     }
-
 }
 
 void FBOSample::LoadImage(NativeImage *pImage) {
-
+    LOGCATE("FBOSample::LoadImage pImage = %p", pImage->ppPlane[0]);
+    if (pImage) {
+        m_RenderImage.width = pImage->width;
+        m_RenderImage.height = pImage->height;
+        m_RenderImage.format = pImage->format;
+        NativeImageUtil::CopyNativeImage(pImage, &m_RenderImage);
+    }
 }
 
 void FBOSample::Draw(int screenW, int screenH) {
@@ -179,7 +184,6 @@ void FBOSample::Draw(int screenW, int screenH) {
     // Do FBO off screen rendering
     glBindFramebuffer(GL_FRAMEBUFFER, m_FBOId);
     glUseProgram(m_FBOProgramObj);
-
     glBindVertexArray(m_VAOIds[1]);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_ImageTextureId);
@@ -258,7 +262,6 @@ bool FBOSample::CreateFrameBufferObj() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, GL_NONE);
-
     // 创建并初始化 FBO
     glGenFramebuffers(1, &m_FBOId);
     glBindFramebuffer(GL_FRAMEBUFFER, m_FBOId);

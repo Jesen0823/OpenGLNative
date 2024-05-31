@@ -40,63 +40,61 @@ void BasicLightingSample::Init() {
     glBindTexture(GL_TEXTURE_2D, GL_NONE);
 
     char vShaderStr[] =
-            "#version 300 es\n"
-            "precision mediump float;\n"
-            "layout(location = 0) in vec4 a_position;\n"
-            "layout(location = 1) in vec2 a_texCoord;\n"
-            "layout(location = 2) in vec3 a_normal;\n"
-            "uniform mat4 u_MVPMatrix;\n"
-            "uniform mat4 u_ModelMatrix;\n"
-            "uniform vec3 lightPos;\n"
-            "uniform vec3 lightColor;\n"
-            "uniform vec3 viewPos;\n"
-            "out vec2 v_texCoord;\n"
-            "out vec3 ambient;\n"
-            "out vec3 diffuse;\n"
-            "out vec3 specular;\n"
-            "void main()\n"
+            "#version 300 es                                                                \n"
+            "precision mediump float;                                                       \n"
+            "layout(location = 0) in vec4 a_position;                                       \n"
+            "layout(location = 1) in vec2 a_texCoord;                                       \n"
+            "layout(location = 2) in vec3 a_normal;                                         \n"
+            "uniform mat4 u_MVPMatrix;                                                      \n"
+            "uniform mat4 u_ModelMatrix;                                                    \n"
+            "uniform vec3 lightPos;                                                         \n"
+            "uniform vec3 lightColor;                                                       \n"
+            "uniform vec3 viewPos;                                                          \n"
+            "out vec2 v_texCoord;                                                           \n"
+            "out vec3 ambient;                                                              \n"
+            "out vec3 diffuse;                                                              \n"
+            "out vec3 specular;                                                             \n"
+            "void main()                                                                    \n"
             "{\n"
-            "    gl_Position = u_MVPMatrix * a_position;\n"
-            "    vec3 fragPos = vec3(u_ModelMatrix * a_position);\n"
+            "    gl_Position = u_MVPMatrix * a_position;                                    \n"
+            "    vec3 fragPos = vec3(u_ModelMatrix * a_position);                           \n"
             "\n"
-            "    // Ambient\n"
-            "    float ambientStrength = 0.2;\n"
-            "    ambient = ambientStrength * lightColor;\n"
+            "    // Ambient                                                                 \n"
+            "    float ambientStrength = 0.2;                                               \n"
+            "    ambient = ambientStrength * lightColor;                                    \n"
             "\n"
-            "    // Diffuse\n"
-            "    vec3 unitNormal = normalize(vec3(u_ModelMatrix * vec4(a_normal, 1.0)));\n"
-            "    vec3 lightDir = normalize(lightPos - fragPos);\n"
-            "    float diff = max(dot(unitNormal, lightDir), 0.0);\n"
-            "    diffuse = diff * lightColor;\n"
+            "    // Diffuse                                                                 \n"
+            "    vec3 unitNormal = normalize(vec3(u_ModelMatrix * vec4(a_normal, 1.0)));    \n"
+            "    vec3 lightDir = normalize(lightPos - fragPos);                             \n"
+            "    float diff = max(dot(unitNormal, lightDir), 0.0);                          \n"
+            "    diffuse = diff * lightColor;                                               \n"
             "\n"
-            "    // Specular\n"
-            "    float specularStrength = 0.9;\n"
-            "    vec3 viewDir = normalize(viewPos - fragPos);\n"
-            "    vec3 reflectDir = reflect(-lightDir, unitNormal);\n"
-            "    float spec = pow(max(dot(unitNormal, reflectDir), 0.0), 16.0);\n"
-            "    specular = specularStrength * spec * lightColor;\n"
-            "    v_texCoord = a_texCoord;\n"
+            "    // Specular                                                                \n"
+            "    float specularStrength = 0.9;                                              \n"
+            "    vec3 viewDir = normalize(viewPos - fragPos);                               \n"
+            "    vec3 reflectDir = reflect(-lightDir, unitNormal);                          \n"
+            "    float spec = pow(max(dot(unitNormal, reflectDir), 0.0), 16.0);             \n"
+            "    specular = specularStrength * spec * lightColor;                           \n"
+            "    v_texCoord = a_texCoord;                                                   \n"
             "}";
 
     char fShaderStr[] =
-            "#version 300 es\n"
-            "precision mediump float;\n"
-            "in vec2 v_texCoord;\n"
-            "in vec3 ambient;\n"
-            "in vec3 diffuse;\n"
-            "in vec3 specular;\n"
-            "layout(location = 0) out vec4 outColor;\n"
-            "uniform sampler2D s_TextureMap;\n"
-            "void main()\n"
+            "#version 300 es                                                            \n"
+            "precision mediump float;                                                   \n"
+            "in vec2 v_texCoord;                                                        \n"
+            "in vec3 ambient;                                                           \n"
+            "in vec3 diffuse;                                                           \n"
+            "in vec3 specular;                                                          \n"
+            "layout(location = 0) out vec4 outColor;                                    \n"
+            "uniform sampler2D s_TextureMap;                                            \n"
+            "void main()                                                                \n"
             "{\n"
-            "    vec4 objectColor = texture(s_TextureMap, v_texCoord);\n"
-            "    vec3 finalColor = (ambient + diffuse + specular) * vec3(objectColor);\n"
-            "    outColor = vec4(finalColor, 1.0);\n"
+            "    vec4 objectColor = texture(s_TextureMap, v_texCoord);                  \n"
+            "    vec3 finalColor = (ambient + diffuse + specular) * vec3(objectColor);  \n"
+            "    outColor = vec4(finalColor, 1.0);                                      \n"
             "}";
 
-    //GLchar const *varyings[] = {"outVec0", "outVec1"};
     m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr, m_VertexShader, m_FragmentShader);
-
     if (m_ProgramObj) {
         m_SamplerLoc = glGetUniformLocation(m_ProgramObj, "s_TextureMap");
         m_MVPMatLoc = glGetUniformLocation(m_ProgramObj, "u_MVPMatrix");
@@ -108,6 +106,9 @@ void BasicLightingSample::Init() {
         LOGCATE("BasicLightingSample::Init create program fail");
         return;
     }
+
+
+    //glTransformFeedbackVaryings(m_ProgramObj, 1, Strings, GL_INTERLEAVED_ATTRIBS);
 
     GLfloat vertices[] = {
             //position            //texture coord  //normal
@@ -165,28 +166,30 @@ void BasicLightingSample::Init() {
 
     glBindBuffer(GL_ARRAY_BUFFER, m_VBOIds[0]);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
-                          8 * sizeof(GLfloat), (const void *) 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (const void *) 0);
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE,
-                          8 * sizeof(GLfloat), (const void *) (3 * sizeof(GLfloat)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
+                          (const void *) (3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE,
-                          8 * sizeof(GLfloat), (const void *) (5 * sizeof(GLfloat)));
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
+                          (const void *) (5 * sizeof(GLfloat)));
     glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
 
     glBindVertexArray(GL_NONE);
 
-    /*glGenBuffers(1, &m_TfoBufId);
-    glBindBuffer(GL_ARRAY_BUFFER, m_TfoBufId);
-    glBufferData(GL_ARRAY_BUFFER, 6 * 36 * sizeof(GLfloat), NULL, GL_STATIC_READ);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    glGenTransformFeedbacks(1, &m_TfoId);
-    glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, m_TfoId);
-    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_TfoBufId); // Specify the index of the binding point within the array specified by target.
-    glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
-    glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, 0);*/
+//	glGenBuffers(1, &m_TfoBufId);
+//	glBindBuffer(GL_ARRAY_BUFFER, m_TfoBufId);
+//	glBufferData(GL_ARRAY_BUFFER, 6 * 36 * sizeof(GLfloat), NULL, GL_STATIC_READ);
+//	glBindBuffer(GL_ARRAY_BUFFER, 0);
+//
+//	glGenTransformFeedbacks(1, &m_TfoId);
+//	glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, m_TfoId);
+//	glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_TfoBufId); // Specify the index of the binding point within the array specified by target.
+//	glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
+//	glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
+
+
 }
 
 void BasicLightingSample::LoadImage(NativeImage *pImage) {
@@ -197,6 +200,7 @@ void BasicLightingSample::LoadImage(NativeImage *pImage) {
         m_RenderImage.format = pImage->format;
         NativeImageUtil::CopyNativeImage(pImage, &m_RenderImage);
     }
+
 }
 
 void BasicLightingSample::Draw(int screenW, int screenH) {
@@ -231,41 +235,38 @@ void BasicLightingSample::Draw(int screenW, int screenH) {
     glBindTexture(GL_TEXTURE_2D, m_TextureId);
     glUniform1i(m_SamplerLoc, 0);
 
-    /*glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, m_TfoId);
-    glBeginTransformFeedback(GL_TRIANGLES);
-    GO_CHECK_GL_ERROR();
-
     glDrawArrays(GL_TRIANGLES, 0, 36);
     GO_CHECK_GL_ERROR();
 
-    glEndTransformFeedback();
-    GO_CHECK_GL_ERROR();
-    glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
-    GO_CHECK_GL_ERROR();
-
-    glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, m_TfoBufId);
-    GO_CHECK_GL_ERROR();
-    void *rawData = glMapBufferRange(GL_TRANSFORM_FEEDBACK_BUFFER, 0, 6 * 36 * sizeof(GLfloat),
-                                     GL_MAP_READ_BIT);
-    GO_CHECK_GL_ERROR();
-
-    float *p = (float *) rawData;
-    for (int i = 0; i < 36; i++) {
-        LOGCATE("BasicLightingSample::Draw() outVec0[%d] = [%f, %f, %f], outVec1[%d] = [%f, %f, %f]",
-                i, p[i * 6], p[i * 6 + 1], p[i * 6 + 2], i, p[i * 6 + 3], p[i * 6 + 4],
-                p[i * 6 + 5]);
-    }
-
-    glUnmapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER);
-    glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, 0);*/
+//	glEndTransformFeedback();
+//	GO_CHECK_GL_ERROR();
+//	glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
+//	GO_CHECK_GL_ERROR();
+//
+//	glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, m_TfoBufId);
+//	GO_CHECK_GL_ERROR();
+//	void* rawData = glMapBufferRange(GL_TRANSFORM_FEEDBACK_BUFFER, 0,  6 * 36 * sizeof(GLfloat), GL_MAP_READ_BIT);
+//	GO_CHECK_GL_ERROR();
+//
+//	float *p = (float*)rawData;
+//	for(int i=0; i< 36; i++)
+//	{
+//		LOGCATE("BasicLightingSample::Draw() outVec0[%d] = [%f, %f, %f], outVec1[%d] = [%f, %f, %f]", i, p[i * 6], p[i * 6 + 1], p[i * 6 + 2], i, p[i * 6 + 3], p[i * 6 + 4], p[i * 6 + 5]);
+//	}
+//
+//
+//	glUnmapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER);
+//	glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
 }
 
 void BasicLightingSample::Destroy() {
-    /*if (m_ProgramObj) {
-        glDeleteProgram(m_ProgramObj);
-        glDeleteBuffers(3, m_VBOIds);
-        glDeleteVertexArrays(1, &m_VAOId);
-    }*/
+//	if (m_ProgramObj)
+//	{
+//		glDeleteProgram(m_ProgramObj);
+//		glDeleteBuffers(3, m_VboIds);
+//		glDeleteVertexArrays(1, &m_VaoId);
+//	}
+
 }
 
 void
@@ -279,7 +280,8 @@ BasicLightingSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angle
     float radiansX = static_cast<float>(MATH_PI / 180.0f * angleX);
     float radiansY = static_cast<float>(MATH_PI / 180.0f * angleY);
 
-// Projection matrix
+
+    // Projection matrix
     //glm::mat4 Projection = glm::ortho(-ratio, ratio, -1.0f, 1.0f, 0.0f, 100.0f);
     //glm::mat4 Projection = glm::frustum(-ratio, ratio, -1.0f, 1.0f, 4.0f, 100.0f);
     glm::mat4 Projection = glm::perspective(45.0f, ratio, 0.1f, 100.f);
@@ -301,6 +303,7 @@ BasicLightingSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angle
     m_ModelMatrix = Model;
 
     mvpMatrix = Projection * View * Model;
+
 }
 
 void BasicLightingSample::SetParamsInt(int paramType, int value0, int value1) {

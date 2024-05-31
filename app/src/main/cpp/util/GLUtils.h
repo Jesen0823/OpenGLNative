@@ -21,8 +21,9 @@ public:
 
     static void CheckGLError(const char *pGLOperation);
 
-    static GLuint CreateProgramWithFeedback(const char *pVertexShaderSource, const char *pFragShaderSource, GLuint &vertexShaderHandle,
-                                            GLuint &fragShaderHandle, const GLchar **varying, int varyingCount);
+    static GLuint CreateProgramWithFeedback(const char *pVertexShaderSource, const char *pFragShaderSource,
+                              GLuint &vertexShaderHandle,
+                              GLuint &fragShaderHandle, const GLchar **varying, int varyingCount);
 };
 
 
