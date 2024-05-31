@@ -4,7 +4,7 @@
 
 #include "GLUtils.h"
 #include "LogUtil.h"
-#include <stdio.h>
+#include <stdlib.h>
 
 GLuint GLUtils::LoadShader(GLenum shaderType, const char *pSource) {
     GLuint shader = 0;

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.jesen.openglnative.Constants.IMAGE_FORMAT_RGBA
 import com.jesen.openglnative.databinding.ActivityMainBinding
 import com.jesen.openglnative.egl.EGLActivity
 import java.nio.ByteBuffer
@@ -32,19 +33,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadRGBAImage(resId: Int) {
-        resources.openRawResource(resId).use {
-            val bitmap = BitmapFactory.decodeStream(it)
-            val bytes = bitmap.byteCount
-            val byteBuf = ByteBuffer.allocate(bytes)
-            bitmap.copyPixelsFromBuffer(byteBuf)
-            val byteArray = byteBuf.array()
-            mGLSurfaceView.getNativeRender()
-                .native_SetImageData(
-                    Constants.IMAGE_FORMAT_RGBA,
-                    bitmap.width,
-                    bitmap.height,
-                    byteArray
-                )
+        resources.openRawResource(resId).use {ins->
+            val bitmap = BitmapFactory.decodeStream(ins)
+            bitmap?.let { bp->
+                val buf = ByteBuffer.allocate(bp.byteCount)
+                bp.copyPixelsToBuffer(buf)
+                val byteArray = buf.array()
+                mGLSurfaceView.getNativeRender()
+                    .native_SetImageData(IMAGE_FORMAT_RGBA, bp.width, bp.height, byteArray)
+            }
         }
     }
 
@@ -84,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                     .native_SetParamsInt(Constants.SAMPLE_TYPE, position + Constants.SAMPLE_TYPE, 0)
                 when (position + Constants.SAMPLE_TYPE) {
                     Constants.SAMPLE_TYPE_TRIANGLE,
-                    Constants.SAMPLE_TYPE_TEXTURE_MAP -> loadRGBAImage(R.raw.dzzz)
+                    Constants.SAMPLE_TYPE_TEXTURE_MAP -> loadRGBAImage(R.drawable.dzzz)
 
                     Constants.SAMPLE_TYPE_YUV_TEXTURE_MAP -> loadNV21Image()
                     Constants.SAMPLE_TYPE_VAO -> {}

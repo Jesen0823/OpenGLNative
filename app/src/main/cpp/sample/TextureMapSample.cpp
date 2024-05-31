@@ -54,8 +54,9 @@ void TextureMapSample::Init() {
 }
 
 void TextureMapSample::Draw(int width,int height) {
-    LOGCATE("TextureMapSample::Draw()");
+    LOGCATE("TextureMapSample::Draw(), m_ProgramObj = %d, m_TextureId = %d",m_ProgramObj,m_TextureId);
     if (m_ProgramObj == GL_NONE || m_TextureId == GL_NONE) {
+        LOGCATE("TextureMapSample::Draw, NONE! return ");
         return;
     }
 
@@ -78,7 +79,8 @@ void TextureMapSample::Draw(int width,int height) {
     //upload RGBA image data
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_TextureId);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_RenderImage.width, m_RenderImage.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_RenderImage.ppPlane[0]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_RenderImage.width,
+                 m_RenderImage.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_RenderImage.ppPlane[0]);
     glBindTexture(GL_TEXTURE_2D, GL_NONE);
 
     // Use the program object

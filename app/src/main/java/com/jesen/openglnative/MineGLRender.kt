@@ -1,11 +1,11 @@
 package com.jesen.openglnative
 
-import android.opengl.GLSurfaceView.Renderer
+import android.opengl.GLSurfaceView
 import android.util.Log
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class MineGLRender(val nativeRender: MineNativeRender) :Renderer {
+class MineGLRender(val nativeRender: MineNativeRender) :GLSurfaceView.Renderer {
     private val TAG = "MineGLRender"
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         Log.d(TAG, "onSurfaceCreated() called with: gl = [$gl], config = [$config]");

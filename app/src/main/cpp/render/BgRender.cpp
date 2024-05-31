@@ -54,12 +54,13 @@ const char fShaderStr1[] =
         "    if (remX == 0 && remY == 0)                     \n"
         "    tlPos = cPos;                                   \n"
         "    vec2 blPos = tlPos;                             \n"
-        "    blPos.y += (size - 1.0);\n"
+        "    blPos.y += (size - 1.0);                        \n"
         "    if ((remX == remY) || (((int(cPos.x) - int(blPos.x)) == (int(blPos.y) - int(cPos.y))))) {\n"
-        "        if (invert == 1)                            \n"
-        "        color = vec4(0.2, 0.15, 0.05, 1.0);         \n"
-        "        else                                        \n"
-        "        color = texture(s_TextureMap, tlPos * vec2(1.0 / u_texSize.x, 1.0 / u_texSize.y)) * 1.4;\n"
+        "        if (invert == 1){                           \n"
+        "           color = vec4(0.2, 0.15, 0.05, 1.0);      \n"
+        "        }else{                                      \n"
+        "           color = texture(s_TextureMap, tlPos * vec2(1.0 / u_texSize.x, 1.0 / u_texSize.y)) * 1.4;\n"
+        "        }                                           \n"
         "    } else {                                        \n"
         "        if (invert == 1)                            \n"
         "        color = texture(s_TextureMap, tlPos * vec2(1.0 / u_texSize.x, 1.0 / u_texSize.y)) * 1.4;\n"
@@ -178,12 +179,15 @@ BgRender::BgRender() {
     m_VBOIds[3] = {GL_NONE};
     m_ImageTextureId = GL_NONE;
     m_FBOTextureId = GL_NONE;
+    m_TexSizeLoc = GL_NONE;
     m_SamplerLoc = GL_NONE;
     m_FBOId = GL_NONE;
     m_ProgramObj = GL_NONE;
     m_VertexShader = GL_NONE;
     m_FragShader = GL_NONE;
+
     m_IsGLContextReady = false;
+    m_ShaderIndex = 0;
 }
 
 BgRender::~BgRender() {
@@ -417,12 +421,12 @@ void BgRender::SetImageData(uint8_t *pData, int width, int height) {
     }
 }
 
-void BgRender::SetIntParams(int paramType, int param0,int param1) {
-    LOGCATE("BgRender::SetIntParams paramType = %d, param0 = %d, param1 = %d", paramType, param0,param1);
+void BgRender::SetIntParams(int paramType, int param) {
+    LOGCATE("BgRender::SetIntParams paramType = %d, param0 = %d", paramType, param);
     switch (paramType) {
         case PARAM_TYPE_SHADER_INDEX: {
-            if (param0 >= 0) {
-                m_ShaderIndex = param0 % 5;
+            if (param >= 0) {
+                m_ShaderIndex = param % 5;
 
                 if (m_ProgramObj) {
                     glDeleteProgram(m_ProgramObj);

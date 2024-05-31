@@ -25,7 +25,7 @@ public:
 
     void SetImageData(uint8_t *pData, int width, int height);
 
-    void SetIntParams(int paramType, int param0,int param1);
+    void SetIntParams(int paramType, int param);
 
     void Draw();
 

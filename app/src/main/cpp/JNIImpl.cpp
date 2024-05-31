@@ -40,8 +40,8 @@ native_SetImageData(JNIEnv *env, jobject thiz,
 extern "C"
 JNIEXPORT void JNICALL
 native_SetParamsInt(JNIEnv *env, jobject thiz,
-                    jint param_type, jint value0,jint value1) {
-    MineGlRenderContext::GetInstance()->SetParamsInt(param_type, value0,value1);
+                    jint param_type, jint value0, jint value1) {
+    MineGlRenderContext::GetInstance()->SetParamsInt(param_type, value0, value1);
 }
 
 extern "C"
@@ -69,14 +69,13 @@ static JNINativeMethod g_NativeMethods[] = {
         {"native_OnInit",           "()V",      (void *) (native_OnInit)},
         {"native_OnUnInit",         "()V",      (void *) (native_OnUnInit)},
         {"native_SetImageData",     "(III[B)V", (void *) (native_SetImageData)},
-        {"native_SetParamsInt",     "(III)V",    (void *) (native_SetParamsInt)},
+        {"native_SetParamsInt",     "(III)V",   (void *) (native_SetParamsInt)},
         {"native_OnSurfaceCreated", "()V",      (void *) (native_OnSurfaceCreated)},
         {"native_OnSurfaceChanged", "(II)V",    (void *) (native_OnSurfaceChanged)},
         {"native_OnDrawFrame",      "()V",      (void *) (native_OnDrawFrame)},
 };
 
-static int
-RegisterNativeMethods(JNIEnv *env, const char *className, JNINativeMethod *methods, int methodNum) {
+static int RegisterNativeMethods(JNIEnv *env, const char *className, JNINativeMethod *methods, int methodNum) {
     LOGCATE("====RegisterNativeMethods===");
     jclass clazz = env->FindClass(className);
     if (clazz == nullptr) {
@@ -93,11 +92,11 @@ RegisterNativeMethods(JNIEnv *env, const char *className, JNINativeMethod *metho
 static void UnregisterNativeMethods(JNIEnv *env, const char *className) {
     LOGCATE("UnregisterNativeMethods");
     jclass clazz = env->FindClass(className);
-    if (clazz == NULL) {
+    if (clazz == nullptr) {
         LOGCATE("UnregisterNativeMethods fail. clazz == NULL");
         return;
     }
-    if (env != NULL) {
+    if (env != nullptr) {
         env->UnregisterNatives(clazz);
     }
 }
@@ -123,8 +122,8 @@ native_BgRenderSetImageData(JNIEnv *env, jobject thiz, jbyteArray data, jint wid
 
 extern "C"
 JNIEXPORT void JNICALL
-native_BgRenderSetIntParams(JNIEnv *env,jobject thiz,jint param_type,jint param0,jint param1) {
-    BgRender::GetInstance()->SetIntParams(param_type,param0,param1);
+native_BgRenderSetIntParams(JNIEnv *env, jobject thiz, jint param_type, jint param) {
+    BgRender::GetInstance()->SetIntParams(param_type, param);
 }
 
 extern "C"
@@ -142,7 +141,7 @@ native_BgRenderUnInit(JNIEnv *env, jobject thiz) {
 static JNINativeMethod g_BgRenderMethods[] = {
         {"native_BgRenderInit",         "()V",     (void *) (native_BgRenderInit)},
         {"native_BgRenderSetImageData", "([BII)V", (void *) (native_BgRenderSetImageData)},
-        {"native_BgRenderSetIntParams", "(III)V",   (void *) (native_BgRenderSetIntParams)},
+        {"native_BgRenderSetIntParams", "(II)V",  (void *) (native_BgRenderSetIntParams)},
         {"native_BgRenderDraw",         "()V",     (void *) (native_BgRenderDraw)},
         {"native_BgRenderUnInit",       "()V",     (void *) (native_BgRenderUnInit)},
 };

@@ -56,7 +56,7 @@ class EGLActivity : AppCompatActivity() {
             else -> {}
         }
 
-        nativeBgRender.native_BgRenderSetIntParams(PARAM_TYPE_SHADER_INDEX, shaderIndex,0)
+        nativeBgRender.native_BgRenderSetIntParams(PARAM_TYPE_SHADER_INDEX, shaderIndex)
         startBgRender()
         binding.button.setText(R.string.btn_txt_reset)
         return true
