@@ -57,6 +57,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_MULTI_LIGHTS:
                 m_Sample = new MultiLightsSample();
                 break;
+            case SAMPLE_TYPE_KEY_DEPTH_TESTING:
+                m_Sample = new DepthTestingSample();
+                break;
             default:
                 break;
         }

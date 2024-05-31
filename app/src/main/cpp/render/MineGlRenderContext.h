@@ -17,6 +17,7 @@
 #include "BasicLightingSample.h"
 #include "TransformFeedbackSample.h"
 #include "MultiLightsSample.h"
+#include "DepthTestingSample.h"
 
 class MineGlRenderContext {
 public:

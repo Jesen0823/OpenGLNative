@@ -34,9 +34,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadRGBAImage(resId: Int) {
-        resources.openRawResource(resId).use {ins->
+        resources.openRawResource(resId).use { ins ->
             val bitmap = BitmapFactory.decodeStream(ins)
-            bitmap?.let { bp->
+            bitmap?.let { bp ->
                 val buf = ByteBuffer.allocate(bp.byteCount)
                 bp.copyPixelsToBuffer(buf)
                 val byteArray = buf.array()
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         adapter.setSelectIndex(mSampleSelectedIndex)
         adapter.addOnItemClickListener(object : OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                Log.i("MainActivity","---OnItemClick, position = $position")
+                Log.i("MainActivity", "---OnItemClick, position = $position")
                 val selectIndex = adapter.getSelectIndex()
                 adapter.apply {
                     setSelectIndex(position)
@@ -94,9 +94,11 @@ class MainActivity : AppCompatActivity() {
 
                     Constants.SAMPLE_TYPE_FBO_LEG -> loadRGBAImage(R.raw.java)
                     Constants.SAMPLE_TYPE_COORD_SYSTEM, Constants.SAMPLE_TYPE_BASIC_LIGHTING,
-                    Constants.SAMPLE_TYPE_TRANS_FEEDBACK, Constants.SAMPLE_TYPE_MULTI_LIGHTS -> {
+                    Constants.SAMPLE_TYPE_TRANS_FEEDBACK, Constants.SAMPLE_TYPE_MULTI_LIGHTS,
+                    Constants.SAMPLE_TYPE_DEPTH_TESTING -> {
                         loadRGBAImage(R.raw.java)
                     }
+
                     else -> {}
                 }
                 mGLSurfaceView.requestRender()
