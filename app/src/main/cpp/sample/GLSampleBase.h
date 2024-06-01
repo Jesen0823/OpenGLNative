@@ -25,6 +25,7 @@
 #define SAMPLE_TYPE_KEY_TRANSFORM_FEEDBACK          SAMPLE_TYPE+9
 #define SAMPLE_TYPE_KEY_MULTI_LIGHTS                SAMPLE_TYPE+10
 #define SAMPLE_TYPE_KEY_DEPTH_TESTING               SAMPLE_TYPE+11
+#define SAMPLE_TYPE_KEY_INSTANCING                  SAMPLE_TYPE + 12
 
 class GLSampleBase {
 protected:
@@ -43,7 +44,7 @@ public:
 
     virtual void Init() = 0;
 
-    virtual void LoadImage(NativeImage *pImage) = 0;
+    virtual void LoadImage(NativeImage *pImage){}
 
     virtual void Draw(int width, int height) = 0;
 

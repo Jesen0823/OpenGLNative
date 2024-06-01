@@ -10,23 +10,19 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
     private val TAG = "MineGLSurfaceView"
     private val TOUCH_SCALE_FACTOR = 180.0f / 320
     private var mGLRender: MineGLRender
-    private var mNativeRender: MineNativeRender
     private var mPreviousY = 0f
     private var mPreviousX = 0f
     private var mXAngle = 0f
     private var mYAngle = 0f
-    private var mRatioWidth = 0
-    private var mRatioHeight = 0
 
     init {
         this.setEGLContextClientVersion(3)
-        mNativeRender = MineNativeRender()
-        mGLRender = MineGLRender(mNativeRender)
+        mGLRender = MineGLRender()
         setRenderer(mGLRender)
         renderMode = RENDERMODE_WHEN_DIRTY
     }
 
-    fun getNativeRender(): MineNativeRender = mNativeRender
+    fun getEGLRender(): MineGLRender = mGLRender
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val x = event.x
@@ -43,37 +39,24 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
         }
         mPreviousX = x
         mPreviousY = y
-        mNativeRender.native_SetParamsInt(
-            Constants.PARAM_TYPE_ROTATE_ANGLE,
-            mXAngle.toInt(),
-            mYAngle.toInt()
-        )
-        requestRender()
+        when (mGLRender.getSampleType()) {
+            Constants.SAMPLE_TYPE_FBO_LEG,
+            Constants.SAMPLE_TYPE_COORD_SYSTEM,
+            Constants.SAMPLE_TYPE_BASIC_LIGHTING,
+            Constants.SAMPLE_TYPE_TRANS_FEEDBACK,
+            Constants.SAMPLE_TYPE_MULTI_LIGHTS,
+            Constants.SAMPLE_TYPE_DEPTH_TESTING,
+            Constants.SAMPLE_TYPE_INSTANCING -> {
+                mGLRender.setParamsInt(
+                    Constants.PARAM_TYPE_ROTATE_ANGLE,
+                    mXAngle.toInt(),
+                    mYAngle.toInt()
+                )
+                requestRender()
+            }
+        }
         return true
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val width = MeasureSpec.getSize(widthMeasureSpec)
-        val height = MeasureSpec.getSize(heightMeasureSpec)
 
-        if (0 == mRatioWidth || 0 == mRatioHeight) {
-            setMeasuredDimension(width, height)
-        } else {
-            if (width < height * mRatioWidth / mRatioHeight) {
-                setMeasuredDimension(width, width * mRatioHeight / mRatioWidth)
-            } else {
-                setMeasuredDimension(height * mRatioWidth / mRatioHeight, height)
-            }
-        }
-    }
-
-    fun setAspectRatio(width: Int, height: Int) {
-        if (width < 0 || height < 0) {
-            throw IllegalArgumentException("Size cannot be negative.");
-        }
-        mRatioWidth = width;
-        mRatioHeight = height;
-        requestLayout();
-    }
 }

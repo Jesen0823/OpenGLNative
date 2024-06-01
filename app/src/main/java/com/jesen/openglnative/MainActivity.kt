@@ -29,8 +29,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.mineGlSurfaceView.getNativeRender().native_OnInit()
         mGLSurfaceView = binding.mineGlSurfaceView
+        mGLSurfaceView.getEGLRender().init()
     }
 
     private fun loadRGBAImage(resId: Int) {
@@ -40,9 +40,8 @@ class MainActivity : AppCompatActivity() {
                 val buf = ByteBuffer.allocate(bp.byteCount)
                 bp.copyPixelsToBuffer(buf)
                 val byteArray = buf.array()
-                mGLSurfaceView.setAspectRatio(bp.width, bp.height)
-                mGLSurfaceView.getNativeRender()
-                    .native_SetImageData(IMAGE_FORMAT_RGBA, bp.width, bp.height, byteArray)
+                mGLSurfaceView.getEGLRender()
+                    .setImageData(IMAGE_FORMAT_RGBA, bp.width, bp.height, byteArray)
             }
         }
     }
@@ -52,8 +51,8 @@ class MainActivity : AppCompatActivity() {
             val length = it.available()
             val buffer = ByteArray(length)
             it.read(buffer)
-            mGLSurfaceView.getNativeRender()
-                .native_SetImageData(Constants.IMAGE_FORMAT_NV21, 840, 1074, buffer)
+            mGLSurfaceView.getEGLRender()
+                .setImageData(Constants.IMAGE_FORMAT_NV21, 840, 1074, buffer)
         }
     }
 
@@ -80,8 +79,8 @@ class MainActivity : AppCompatActivity() {
                 }
                 mSampleSelectedIndex = position
 
-                mGLSurfaceView.getNativeRender()
-                    .native_SetParamsInt(Constants.SAMPLE_TYPE, position + Constants.SAMPLE_TYPE, 0)
+                mGLSurfaceView.getEGLRender()
+                    .setParamsInt(Constants.SAMPLE_TYPE, position + Constants.SAMPLE_TYPE, 0)
                 when (position + Constants.SAMPLE_TYPE) {
                     Constants.SAMPLE_TYPE_TRIANGLE,
                     Constants.SAMPLE_TYPE_TEXTURE_MAP -> loadRGBAImage(R.drawable.dzzz)
@@ -99,6 +98,8 @@ class MainActivity : AppCompatActivity() {
                     Constants.SAMPLE_TYPE_DEPTH_TESTING -> {
                         loadRGBAImage(R.raw.java)
                     }
+
+                    Constants.SAMPLE_TYPE_INSTANCING -> loadRGBAImage(R.drawable.dzzz)
 
                     else -> {}
                 }
@@ -131,6 +132,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mGLSurfaceView.getNativeRender().native_OnUnInit()
+        mGLSurfaceView.getEGLRender().unInit()
     }
 }

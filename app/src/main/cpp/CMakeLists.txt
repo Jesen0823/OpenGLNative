@@ -39,6 +39,8 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         sample/TransformFeedbackSample.cpp
         sample/MultiLightsSample.cpp
         sample/DepthTestingSample.cpp
+        sample/InstancingSample.cpp
+        sample/Instancing3DSample.cpp
         # List C/C++ source files with relative paths to this CMakeLists.txt.
         ${src_files})
 
