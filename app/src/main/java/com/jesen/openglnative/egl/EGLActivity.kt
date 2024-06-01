@@ -53,6 +53,7 @@ class EGLActivity : AppCompatActivity() {
             R.id.action_shader2 -> shaderIndex = 2
             R.id.action_shader3 -> shaderIndex = 3
             R.id.action_shader4 -> shaderIndex = 4
+            R.id.action_shader5 -> shaderIndex = 5
             else -> {}
         }
 

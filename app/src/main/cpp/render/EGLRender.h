@@ -5,6 +5,8 @@
 #ifndef OPENGLNATIVE_EGLRENDER_H
 #define OPENGLNATIVE_EGLRENDER_H
 
+#define EGL_FEATURE_NUM 6
+
 #include <stdint.h>
 #include <GLES3/gl3.h>
 #include <EGL/egl.h>
@@ -67,7 +69,7 @@ private:
     EGLContext m_eglCtx;
     EGLDisplay m_eglDisplay;
     bool m_IsGLContextReady;
-    const char*m_fShaderStrs[5];
+    const char*m_fShaderStrs[EGL_FEATURE_NUM];
     int m_ShaderIndex;
 };
 
