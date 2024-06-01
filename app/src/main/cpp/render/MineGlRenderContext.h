@@ -20,6 +20,7 @@
 #include "DepthTestingSample.h"
 #include "Instancing3DSample.h"
 #include "StencilTestingSample.h"
+#include "BlendingSample.h"
 
 class MineGlRenderContext {
 public:
@@ -32,6 +33,8 @@ public:
     void UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY);
 
     void SetImageData(int format, int width, int height, uint8_t *pData);
+
+    void SetImageDataWithIndex(int index, int format, int width, int height, uint8_t *pData);
 
     void OnSurfaceCreated();
 

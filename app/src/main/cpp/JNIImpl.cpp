@@ -52,6 +52,18 @@ JNIEXPORT void JNICALL native_UpdateTransformMatrix
 }
 
 extern "C"
+JNIEXPORT void JNICALL native_SetImageDataWithIndex
+        (JNIEnv *env, jobject instance, jint index, jint format, jint width, jint height, jbyteArray imageData)
+{
+    int len = env->GetArrayLength (imageData);
+    uint8_t* buf = new uint8_t[len];
+    env->GetByteArrayRegion(imageData, 0, len, reinterpret_cast<jbyte*>(buf));
+    MineGlRenderContext::GetInstance()->SetImageDataWithIndex(index, format, width, height, buf);
+    delete[] buf;
+    env->DeleteLocalRef(imageData);
+}
+
+extern "C"
 JNIEXPORT void JNICALL
 native_OnSurfaceCreated(JNIEnv *env, jobject thiz) {
     MineGlRenderContext::GetInstance()->OnSurfaceCreated();
@@ -77,6 +89,7 @@ static JNINativeMethod g_NativeMethods[] = {
         {"native_OnUnInit",              "()V",      (void *) (native_OnUnInit)},
         {"native_SetImageData",          "(III[B)V", (void *) (native_SetImageData)},
         {"native_SetParamsInt",          "(III)V",   (void *) (native_SetParamsInt)},
+        {"native_SetImageDataWithIndex", "(IIII[B)V", (void *)(native_SetImageDataWithIndex)},
         {"native_UpdateTransformMatrix", "(FFFF)V",  (void *) (native_UpdateTransformMatrix)},
         {"native_OnSurfaceCreated",      "()V",      (void *) (native_OnSurfaceCreated)},
         {"native_OnSurfaceChanged",      "(II)V",    (void *) (native_OnSurfaceChanged)},

@@ -45,6 +45,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    private fun loadRGBAImage(resId: Int,index:Int) {
+        resources.openRawResource(resId).use { ins ->
+            val bitmap = BitmapFactory.decodeStream(ins)
+            bitmap?.let { bp ->
+                val buf = ByteBuffer.allocate(bp.byteCount)
+                bp.copyPixelsToBuffer(buf)
+                val byteArray = buf.array()
+                mGLSurfaceView.getEGLRender()
+                    .setImageDataWithIndex(index,IMAGE_FORMAT_RGBA, bp.width, bp.height, byteArray)
+            }
+        }
+    }
 
     private fun loadNV21Image() {
         assets.open("YUV_Image_840x1074.NV21").use {
@@ -82,7 +94,7 @@ class MainActivity : AppCompatActivity() {
                 mGLSurfaceView.getEGLRender()
                     .setParamsInt(Constants.SAMPLE_TYPE, position + Constants.SAMPLE_TYPE, 0)
                 when (position + Constants.SAMPLE_TYPE) {
-                    Constants.SAMPLE_TYPE_TRIANGLE,
+                    Constants.SAMPLE_TYPE_TRIANGLE->{}
                     Constants.SAMPLE_TYPE_TEXTURE_MAP -> loadRGBAImage(R.drawable.dzzz)
 
                     Constants.SAMPLE_TYPE_YUV_TEXTURE_MAP -> loadNV21Image()
@@ -91,16 +103,18 @@ class MainActivity : AppCompatActivity() {
                     Constants.SAMPLE_TYPE_EGL -> {
                         startActivity(Intent(this@MainActivity, EGLActivity::class.java))
                     }
-
                     Constants.SAMPLE_TYPE_FBO_LEG -> loadRGBAImage(R.drawable.leg)
                     Constants.SAMPLE_TYPE_COORD_SYSTEM, Constants.SAMPLE_TYPE_BASIC_LIGHTING,
                     Constants.SAMPLE_TYPE_TRANS_FEEDBACK, Constants.SAMPLE_TYPE_MULTI_LIGHTS,
-                    Constants.SAMPLE_TYPE_DEPTH_TESTING, Constants.SAMPLE_TYPE_STENCIL_TESTING -> {
-                        loadRGBAImage(R.raw.java)
+                    Constants.SAMPLE_TYPE_DEPTH_TESTING,Constants.SAMPLE_TYPE_INSTANCING,
+                    Constants.SAMPLE_TYPE_STENCIL_TESTING -> {
+                        loadRGBAImage(R.drawable.board_texture)
                     }
-
-                    Constants.SAMPLE_TYPE_INSTANCING -> loadRGBAImage(R.drawable.dzzz)
-
+                    Constants.SAMPLE_TYPE_BLENDING->{
+                        loadRGBAImage(R.drawable.board_texture,0)
+                        loadRGBAImage(R.drawable.floor,1)
+                        loadRGBAImage(R.drawable.window,2)
+                    }
                     else -> {}
                 }
                 mGLSurfaceView.requestRender()

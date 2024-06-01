@@ -5,7 +5,7 @@
 #ifndef OPENGLNATIVE_EGLRENDER_H
 #define OPENGLNATIVE_EGLRENDER_H
 
-#define EGL_FEATURE_NUM 6
+#define EGL_FEATURE_NUM   7
 
 #include <stdint.h>
 #include <GLES3/gl3.h>

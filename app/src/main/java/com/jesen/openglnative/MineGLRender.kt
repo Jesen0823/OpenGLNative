@@ -41,6 +41,10 @@ class MineGLRender() :GLSurfaceView.Renderer {
         nativeRender.native_SetImageData(format, width, height, bytes)
     }
 
+    fun setImageDataWithIndex(index: Int, format: Int, width: Int, height: Int, bytes: ByteArray) {
+        nativeRender.native_SetImageDataWithIndex(index, format, width, height, bytes)
+    }
+
     fun init() {
         nativeRender.native_OnInit()
     }

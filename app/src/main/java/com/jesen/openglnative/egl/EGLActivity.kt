@@ -31,7 +31,7 @@ class EGLActivity : AppCompatActivity() {
         binding.button.setOnClickListener {
             val btn = it as Button
             if(btn.text ==resources.getString(R.string.btn_txt_reset)){
-                binding.imageView.setImageResource(R.drawable.java)
+                binding.imageView.setImageResource(R.drawable.leg)
                 btn.setText(R.string.bg_render_txt)
             }else{
                 startEglRender()
@@ -54,6 +54,7 @@ class EGLActivity : AppCompatActivity() {
             R.id.action_shader3 -> shaderIndex = 3
             R.id.action_shader4 -> shaderIndex = 4
             R.id.action_shader5 -> shaderIndex = 5
+            R.id.action_shader6 -> shaderIndex = 6
             else -> {}
         }
 
@@ -64,9 +65,9 @@ class EGLActivity : AppCompatActivity() {
     }
 
     private fun startEglRender(){
-        loadRGBAImage(R.drawable.java, nativeEglRender);
+        loadRGBAImage(R.drawable.leg, nativeEglRender);
         nativeEglRender.native_EglRenderDraw();
-        binding.imageView.setImageBitmap(createBitmapFromGLSurface(0, 0, 421, 586));
+        binding.imageView.setImageBitmap(createBitmapFromGLSurface(0, 0, 933, 1400));
     }
 
     private fun loadRGBAImage(resId: Int, render: NativeEglRender) {
