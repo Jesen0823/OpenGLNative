@@ -60,6 +60,12 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_DEPTH_TESTING:
                 m_Sample = new DepthTestingSample();
                 break;
+            case SAMPLE_TYPE_KEY_INSTANCING:
+                m_Sample = new Instancing3DSample();
+                break;
+            case SAMPLE_TYPE_KEY_STENCIL_TESTING:
+                m_Sample = new StencilTestingSample();
+                break;
             default:
                 break;
         }

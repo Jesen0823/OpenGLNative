@@ -15,12 +15,13 @@ public interface Constants {
     public static final int SAMPLE_TYPE_FBO_LEG = SAMPLE_TYPE + 6;
     public static final int SAMPLE_TYPE_COORD_SYSTEM = SAMPLE_TYPE + 7;
     public static final int SAMPLE_TYPE_BASIC_LIGHTING = SAMPLE_TYPE + 8;
-    public static final int SAMPLE_TYPE_TRANS_FEEDBACK  = SAMPLE_TYPE + 9;
-    public static final int SAMPLE_TYPE_MULTI_LIGHTS    = SAMPLE_TYPE + 10;
-    public static final int SAMPLE_TYPE_DEPTH_TESTING   = SAMPLE_TYPE + 11;
+    public static final int SAMPLE_TYPE_TRANS_FEEDBACK = SAMPLE_TYPE + 9;
+    public static final int SAMPLE_TYPE_MULTI_LIGHTS = SAMPLE_TYPE + 10;
+    public static final int SAMPLE_TYPE_DEPTH_TESTING = SAMPLE_TYPE + 11;
     public static final int SAMPLE_TYPE_INSTANCING = SAMPLE_TYPE + 12;
+    public static final int SAMPLE_TYPE_STENCIL_TESTING = SAMPLE_TYPE + 13;
 
-    public static final int PARAM_TYPE_ROTATE_ANGLE = 300;
+    public static final int PARAM_TYPE_ROTATE = 300;
 
     public static final int IMAGE_FORMAT_RGBA = 0x01;
     public static final int IMAGE_FORMAT_NV21 = 0x02;
@@ -36,7 +37,8 @@ public interface Constants {
             "EGL Background Rendering",*/
             "绘制三角形", "纹理映射", "YUV 渲染", "VAO&VBO",
             "FBO 离屏渲染", "EGL 后台渲染", "FBO 拉伸", "坐标系统",
-            "基础光照", "TransformFeedback", "MultiLights","深度测试","Instancing"
+            "基础光照", "TransformFeedback", "MultiLights", "深度测试",
+            "Instancing", "Stencil Testing",
     };
 
 }

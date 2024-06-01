@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                     Constants.SAMPLE_TYPE_FBO_LEG -> loadRGBAImage(R.drawable.leg)
                     Constants.SAMPLE_TYPE_COORD_SYSTEM, Constants.SAMPLE_TYPE_BASIC_LIGHTING,
                     Constants.SAMPLE_TYPE_TRANS_FEEDBACK, Constants.SAMPLE_TYPE_MULTI_LIGHTS,
-                    Constants.SAMPLE_TYPE_DEPTH_TESTING -> {
+                    Constants.SAMPLE_TYPE_DEPTH_TESTING, Constants.SAMPLE_TYPE_STENCIL_TESTING -> {
                         loadRGBAImage(R.raw.java)
                     }
 

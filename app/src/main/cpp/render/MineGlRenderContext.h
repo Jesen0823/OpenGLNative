@@ -18,6 +18,8 @@
 #include "TransformFeedbackSample.h"
 #include "MultiLightsSample.h"
 #include "DepthTestingSample.h"
+#include "Instancing3DSample.h"
+#include "StencilTestingSample.h"
 
 class MineGlRenderContext {
 public:

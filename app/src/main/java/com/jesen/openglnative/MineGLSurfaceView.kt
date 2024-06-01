@@ -16,8 +16,9 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
     private var mYAngle = 0f
 
     init {
-        this.setEGLContextClientVersion(3)
+        this.setEGLContextClientVersion(2)
         mGLRender = MineGLRender()
+        setEGLConfigChooser(8,8,8,8,16,8);
         setRenderer(mGLRender)
         renderMode = RENDERMODE_WHEN_DIRTY
     }
@@ -48,7 +49,7 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
             Constants.SAMPLE_TYPE_DEPTH_TESTING,
             Constants.SAMPLE_TYPE_INSTANCING -> {
                 mGLRender.setParamsInt(
-                    Constants.PARAM_TYPE_ROTATE_ANGLE,
+                    Constants.PARAM_TYPE_ROTATE,
                     mXAngle.toInt(),
                     mYAngle.toInt()
                 )
