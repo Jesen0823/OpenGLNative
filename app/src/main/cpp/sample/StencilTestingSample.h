@@ -1,0 +1,16 @@
+//
+// Created by xie_s on 2024/6/1.
+//
+
+#ifndef OPENGLNATIVE_STENCILTESTINGSAMPLE_H
+#define OPENGLNATIVE_STENCILTESTINGSAMPLE_H
+
+
+
+class StencilTestingSample {
+
+};
+
+
+
+#endif //OPENGLNATIVE_STENCILTESTINGSAMPLE_H
