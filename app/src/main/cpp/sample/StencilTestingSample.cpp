@@ -245,7 +245,7 @@ void StencilTestingSample::Draw(int screenW, int screenH) {
     if (m_ProgramObj == GL_NONE || m_TextureId == GL_NONE) return;
 
     float ratio = (float) screenW / screenH;
-    glClear(GL_STENCIL_BUFFER_BIT);
+    glClear(GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_STENCIL_TEST);
     GO_CHECK_GL_ERROR();
@@ -282,7 +282,7 @@ void StencilTestingSample::Draw(int screenW, int screenH) {
     glUniform1f(glGetUniformLocation(m_ProgramObj, "light.quadratic"), 0.032);
 
     UpdateMatrix(m_MVPMatrix, m_ModelMatrix, m_AngleX, m_AngleY,
-                 1.0, glm::vec3(0.0f, 0.0f, 0.0f),ratio);
+                 1.0, glm::vec3(0.0f, 0.0f, 0.0f), ratio);
     glUniformMatrix4fv(m_MVPMatLoc, 1, GL_FALSE, &m_MVPMatrix[0][0]);
     glUniformMatrix4fv(m_ModelMatrixLoc, 1, GL_FALSE, &m_ModelMatrix[0][0]);
     glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -305,7 +305,6 @@ void StencilTestingSample::Draw(int screenW, int screenH) {
 
     glStencilMask(0xFF);
     glEnable(GL_DEPTH_TEST);
-    glDisable(GL_STENCIL_TEST);
 }
 
 void StencilTestingSample::Destroy() {

@@ -21,6 +21,7 @@
 #include "Instancing3DSample.h"
 #include "StencilTestingSample.h"
 #include "BlendingSample.h"
+#include "ParticlesSample.h"
 
 class MineGlRenderContext {
 public:

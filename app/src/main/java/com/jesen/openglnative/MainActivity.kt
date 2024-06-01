@@ -2,6 +2,7 @@ package com.jesen.openglnative
 
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -91,6 +92,8 @@ class MainActivity : AppCompatActivity() {
                 }
                 mSampleSelectedIndex = position
 
+                mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
+
                 mGLSurfaceView.getEGLRender()
                     .setParamsInt(Constants.SAMPLE_TYPE, position + Constants.SAMPLE_TYPE, 0)
                 when (position + Constants.SAMPLE_TYPE) {
@@ -115,6 +118,7 @@ class MainActivity : AppCompatActivity() {
                         loadRGBAImage(R.drawable.floor,1)
                         loadRGBAImage(R.drawable.window,2)
                     }
+                    Constants.SAMPLE_TYPE_PARTICLES->loadRGBAImage(R.drawable.board_texture)
                     else -> {}
                 }
                 mGLSurfaceView.requestRender()

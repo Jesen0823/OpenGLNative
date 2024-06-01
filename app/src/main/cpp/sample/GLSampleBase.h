@@ -24,9 +24,11 @@
 #define SAMPLE_TYPE_KEY_TRANSFORM_FEEDBACK          SAMPLE_TYPE+9
 #define SAMPLE_TYPE_KEY_MULTI_LIGHTS                SAMPLE_TYPE+10
 #define SAMPLE_TYPE_KEY_DEPTH_TESTING               SAMPLE_TYPE+11
-#define SAMPLE_TYPE_KEY_INSTANCING                  SAMPLE_TYPE + 12
-#define SAMPLE_TYPE_KEY_STENCIL_TESTING             SAMPLE_TYPE + 13
-#define SAMPLE_TYPE_KEY_BLENDING                    SAMPLE_TYPE + 14
+#define SAMPLE_TYPE_KEY_INSTANCING                  SAMPLE_TYPE+12
+#define SAMPLE_TYPE_KEY_STENCIL_TESTING             SAMPLE_TYPE+13
+#define SAMPLE_TYPE_KEY_BLENDING                    SAMPLE_TYPE+14
+#define SAMPLE_TYPE_KEY_PARTICLES                   SAMPLE_TYPE+15
+
 class GLSampleBase {
 protected:
     GLuint m_VertexShader;
@@ -44,12 +46,11 @@ public:
 
     virtual void Init() = 0;
 
-    virtual void LoadImage(NativeImage *pImage){}
+    virtual void LoadImage(NativeImage *pImage) {}
 
-    virtual void UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY)
-    {};
-    virtual void LoadMultiImageWithIndex(int index, NativeImage *pImage)
-    {};
+    virtual void UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY) {};
+
+    virtual void LoadMultiImageWithIndex(int index, NativeImage *pImage) {};
 
     virtual void Draw(int width, int height) = 0;
 

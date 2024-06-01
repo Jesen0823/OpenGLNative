@@ -5,10 +5,6 @@ import android.opengl.GLSurfaceView
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
-import com.jesen.openglnative.Constants.SAMPLE_TYPE_BASIC_LIGHTING
-import com.jesen.openglnative.Constants.SAMPLE_TYPE_COORD_SYSTEM
-import com.jesen.openglnative.Constants.SAMPLE_TYPE_INSTANCING
-
 
 class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     GLSurfaceView(context, attrs),ScaleGestureDetector.OnScaleGestureListener {
@@ -60,7 +56,8 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
                     Constants.SAMPLE_TYPE_TRANS_FEEDBACK,
                     Constants.SAMPLE_TYPE_MULTI_LIGHTS,
                     Constants.SAMPLE_TYPE_DEPTH_TESTING,
-                    Constants.SAMPLE_TYPE_INSTANCING -> {
+                    Constants.SAMPLE_TYPE_INSTANCING,
+                    Constants.SAMPLE_TYPE_PARTICLES-> {
                         mGLRender.updateTransformMatrix(mXAngle,mYAngle,mCurScale,mCurScale)
                         requestRender()
                     }else->{}
@@ -74,7 +71,9 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
 
     override fun onScale(detector: ScaleGestureDetector): Boolean {
         when (mGLRender.getSampleType()) {
-            SAMPLE_TYPE_COORD_SYSTEM, SAMPLE_TYPE_BASIC_LIGHTING, SAMPLE_TYPE_INSTANCING -> {
+            Constants.SAMPLE_TYPE_COORD_SYSTEM,
+            Constants.SAMPLE_TYPE_BASIC_LIGHTING,
+            Constants.SAMPLE_TYPE_INSTANCING -> {
                 val preSpan = detector.previousSpan
                 val curSpan = detector.currentSpan
                 mCurScale = if (curSpan < preSpan) {
@@ -99,6 +98,4 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
         mPreScale = mCurScale
         mLastMultiTouchTime = System.currentTimeMillis()
     }
-
-
 }

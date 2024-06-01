@@ -69,6 +69,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_BLENDING:
                 m_Sample = new BasicLightingSample();
                 break;
+            case SAMPLE_TYPE_KEY_PARTICLES:
+                m_Sample = new ParticlesSample();
+                break;
             default:
                 break;
         }
