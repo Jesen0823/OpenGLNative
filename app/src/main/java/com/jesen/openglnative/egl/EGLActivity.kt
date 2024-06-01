@@ -15,7 +15,7 @@ import java.nio.ByteBuffer
 import java.nio.IntBuffer
 
 class EGLActivity : AppCompatActivity() {
-    private lateinit var nativeBgRender:NativeBgRender
+    private lateinit var nativeEglRender:NativeEglRender
     private lateinit var binding:ActivityEglactivityBinding
     private var PARAM_TYPE_SHADER_INDEX = 200
 
@@ -25,8 +25,8 @@ class EGLActivity : AppCompatActivity() {
         binding = ActivityEglactivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        nativeBgRender = NativeBgRender()
-        nativeBgRender.native_BgRenderInit()
+        nativeEglRender = NativeEglRender()
+        nativeEglRender.native_EglRenderInit()
 
         binding.button.setOnClickListener {
             val btn = it as Button
@@ -34,7 +34,7 @@ class EGLActivity : AppCompatActivity() {
                 binding.imageView.setImageResource(R.drawable.java)
                 btn.setText(R.string.bg_render_txt)
             }else{
-                startBgRender()
+                startEglRender()
                 btn.setText(R.string.btn_txt_reset)
             }
         }
@@ -56,19 +56,19 @@ class EGLActivity : AppCompatActivity() {
             else -> {}
         }
 
-        nativeBgRender.native_BgRenderSetIntParams(PARAM_TYPE_SHADER_INDEX, shaderIndex)
-        startBgRender()
+        nativeEglRender.native_EglRenderSetIntParams(PARAM_TYPE_SHADER_INDEX, shaderIndex)
+        startEglRender()
         binding.button.setText(R.string.btn_txt_reset)
         return true
     }
 
-    private fun startBgRender(){
-        loadRGBAImage(R.drawable.java, nativeBgRender);
-        nativeBgRender.native_BgRenderDraw();
+    private fun startEglRender(){
+        loadRGBAImage(R.drawable.java, nativeEglRender);
+        nativeEglRender.native_EglRenderDraw();
         binding.imageView.setImageBitmap(createBitmapFromGLSurface(0, 0, 421, 586));
     }
 
-    private fun loadRGBAImage(resId: Int, render: NativeBgRender) {
+    private fun loadRGBAImage(resId: Int, render: NativeEglRender) {
         resources.openRawResource(resId).use {
             val bitmap = BitmapFactory.decodeStream(it)
             bitmap?.let {
@@ -76,7 +76,7 @@ class EGLActivity : AppCompatActivity() {
                 val buf = ByteBuffer.allocate(bytes)
                 bitmap.copyPixelsFromBuffer(buf)
                 val byteArray = buf.array()
-                render.native_BgRenderSetImageData(byteArray,bitmap.width,bitmap.height)
+                render.native_EglRenderSetImageData(byteArray,bitmap.width,bitmap.height)
             }
         }
     }
@@ -112,6 +112,6 @@ class EGLActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        nativeBgRender.native_BgRenderUnInit();
+        nativeEglRender.native_EglRenderUnInit();
     }
 }

@@ -26,7 +26,7 @@ file(GLOB src_files
 add_library(${CMAKE_PROJECT_NAME} SHARED
         JNIImpl.cpp
         util/GLUtils.cpp
-        render/BgRender.cpp
+        render/EGLRender.cpp
         render/MineGlRenderContext.cpp
         sample/TriangleSample.cpp
         sample/TextureMapSample.cpp

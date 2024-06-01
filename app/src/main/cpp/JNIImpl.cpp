@@ -4,10 +4,10 @@
 #include "LogUtil.h"
 #include "MineGlRenderContext.h"
 #include "jni.h"
-#include "BgRender.h"
+#include "EGLRender.h"
 
 #define NATIVE_RENDER_CLASS_NAME "com/jesen/openglnative/MineNativeRender"
-#define NATIVE_BG_RENDER_CLASS_NAME "com/jesen/openglnative/egl/NativeBgRender"
+#define NATIVE_EGL_RENDER_CLASS_NAME "com/jesen/openglnative/egl/NativeEglRender"
 
 #ifdef __cplusplus
 extern "C" {
@@ -105,45 +105,45 @@ static void UnregisterNativeMethods(JNIEnv *env, const char *className) {
 ////////////////////////////////////////////////////////////////////
 extern "C"
 JNIEXPORT void JNICALL
-native_BgRenderInit(JNIEnv *env, jobject thiz) {
-    BgRender::GetInstance()->Init();
+native_EglRenderInit(JNIEnv *env, jobject thiz) {
+    EGLRender::GetInstance()->Init();
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-native_BgRenderSetImageData(JNIEnv *env, jobject thiz, jbyteArray data, jint width, jint height) {
+native_EglRenderSetImageData(JNIEnv *env, jobject thiz, jbyteArray data, jint width, jint height) {
     int len = env->GetArrayLength(data);
     uint8_t *buf = new uint8_t[len];
     env->GetByteArrayRegion(data, 0, len, reinterpret_cast<jbyte *>(buf));
-    BgRender::GetInstance()->SetImageData(buf, width, height);
+    EGLRender::GetInstance()->SetImageData(buf, width, height);
     delete[] buf;
     env->DeleteLocalRef(data);
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-native_BgRenderSetIntParams(JNIEnv *env, jobject thiz, jint param_type, jint param) {
-    BgRender::GetInstance()->SetIntParams(param_type, param);
+native_EglRenderSetIntParams(JNIEnv *env, jobject thiz, jint param_type, jint param) {
+    EGLRender::GetInstance()->SetIntParams(param_type, param);
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-native_BgRenderDraw(JNIEnv *env, jobject thiz) {
-    BgRender::GetInstance()->Draw();
+native_EglRenderDraw(JNIEnv *env, jobject thiz) {
+    EGLRender::GetInstance()->Draw();
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-native_BgRenderUnInit(JNIEnv *env, jobject thiz) {
-    BgRender::GetInstance()->UnInit();
+native_EglRenderUnInit(JNIEnv *env, jobject thiz) {
+    EGLRender::GetInstance()->UnInit();
 }
 
-static JNINativeMethod g_BgRenderMethods[] = {
-        {"native_BgRenderInit",         "()V",     (void *) (native_BgRenderInit)},
-        {"native_BgRenderSetImageData", "([BII)V", (void *) (native_BgRenderSetImageData)},
-        {"native_BgRenderSetIntParams", "(II)V",  (void *) (native_BgRenderSetIntParams)},
-        {"native_BgRenderDraw",         "()V",     (void *) (native_BgRenderDraw)},
-        {"native_BgRenderUnInit",       "()V",     (void *) (native_BgRenderUnInit)},
+static JNINativeMethod g_EglRenderMethods[] = {
+        {"native_EglRenderInit",         "()V",     (void *) (native_EglRenderInit)},
+        {"native_EglRenderSetImageData", "([BII)V", (void *) (native_EglRenderSetImageData)},
+        {"native_EglRenderSetIntParams", "(II)V",  (void *) (native_EglRenderSetIntParams)},
+        {"native_EglRenderDraw",         "()V",     (void *) (native_EglRenderDraw)},
+        {"native_EglRenderUnInit",       "()V",     (void *) (native_EglRenderUnInit)},
 };
 
 ///////////////////////////////////////////////////////
@@ -161,8 +161,8 @@ extern "C" jint JNI_OnLoad(JavaVM *jvm, void *p) {
         return JNI_ERR;
     }
 
-    regRet = RegisterNativeMethods(env, NATIVE_BG_RENDER_CLASS_NAME, g_BgRenderMethods,
-                                   sizeof(g_BgRenderMethods) / sizeof(g_BgRenderMethods[0]));
+    regRet = RegisterNativeMethods(env, NATIVE_EGL_RENDER_CLASS_NAME, g_EglRenderMethods,
+                                   sizeof(g_EglRenderMethods) / sizeof(g_EglRenderMethods[0]));
     if (regRet != JNI_TRUE) {
         return JNI_ERR;
     }
@@ -176,5 +176,5 @@ extern "C" void JNI_OnUnload(JavaVM *jvm, void *p) {
         return;
     }
     UnregisterNativeMethods(env, NATIVE_RENDER_CLASS_NAME);
-    UnregisterNativeMethods(env, NATIVE_BG_RENDER_CLASS_NAME);
+    UnregisterNativeMethods(env, NATIVE_EGL_RENDER_CLASS_NAME);
 }

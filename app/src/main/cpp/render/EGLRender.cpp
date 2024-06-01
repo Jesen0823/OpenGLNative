@@ -2,14 +2,14 @@
 // Created by xie_s on 2024/5/25.
 //
 
-#include "BgRender.h"
+#include "EGLRender.h"
 #include "LogUtil.h"
 #include "GLUtils.h"
 
 #define VERTEX_POS_LOC 0
 #define TEXTURE_POS_LOC 1
 
-BgRender *BgRender::m_Instance = nullptr;
+EGLRender *EGLRender::m_Instance = nullptr;
 
 #define PARAM_TYPE_SHADER_INDEX   200
 
@@ -174,7 +174,7 @@ const GLfloat vFboTexCoors[] = {
 
 const GLushort indices[] = {0, 1, 2, 1, 3, 2};
 
-BgRender::BgRender() {
+EGLRender::EGLRender() {
     m_VAOIds[2] = {GL_NONE};
     m_VBOIds[3] = {GL_NONE};
     m_ImageTextureId = GL_NONE;
@@ -190,15 +190,15 @@ BgRender::BgRender() {
     m_ShaderIndex = 0;
 }
 
-BgRender::~BgRender() {
+EGLRender::~EGLRender() {
     if (m_RenderImage.ppPlane[0]) {
         NativeImageUtil::FreeNativeImage(&m_RenderImage);
         m_RenderImage.ppPlane[0] = nullptr;
     }
 }
 
-void BgRender::Init() {
-    LOGCATE("BgRender::Init");
+void EGLRender::Init() {
+    LOGCATE("EGLRender::Init");
     if (CreateGlesEnv() == 0) {
         m_IsGLContextReady = true;
     }
@@ -231,7 +231,7 @@ void BgRender::Init() {
                                           m_FragShader);
     if (!m_ProgramObj) {
         GLUtils::CheckGLError("Create Program");
-        LOGCATE("BgRender::Init Could not create program.");
+        LOGCATE("EGLRender::Init Could not create program.");
         return;
     }
 
@@ -274,7 +274,7 @@ void BgRender::Init() {
     glBindVertexArray(GL_NONE);
 }
 
-int BgRender::CreateGlesEnv() {
+int EGLRender::CreateGlesEnv() {
 
     const EGLint confAttr[] =
             {
@@ -311,23 +311,23 @@ int BgRender::CreateGlesEnv() {
         m_eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
         if (m_eglDisplay == EGL_NO_DISPLAY) {
             //Unable to open connection to local windowing system
-            LOGCATE("BgRender::CreateGlesEnv Unable to open connection to local windowing system");
+            LOGCATE("EGLRender::CreateGlesEnv Unable to open connection to local windowing system");
             resultCode = -1;
             break;
         }
 
         if (!eglInitialize(m_eglDisplay, &eglMajVers, &eglMinVers)) {
             // Unable to initialize EGL. Handle and recover
-            LOGCATE("BgRender::CreateGlesEnv Unable to initialize EGL");
+            LOGCATE("EGLRender::CreateGlesEnv Unable to initialize EGL");
             resultCode = -1;
             break;
         }
 
-        LOGCATE("BgRender::CreateGlesEnv EGL init with version %d.%d", eglMajVers, eglMinVers);
+        LOGCATE("EGLRender::CreateGlesEnv EGL init with version %d.%d", eglMajVers, eglMinVers);
 
         // choose the first config, i.e. best config
         if (!eglChooseConfig(m_eglDisplay, confAttr, &m_eglConfig, 1, &numConfigs)) {
-            LOGCATE("BgRender::CreateGlesEnv some config is wrong");
+            LOGCATE("EGLRender::CreateGlesEnv some config is wrong");
             resultCode = -1;
             break;
         }
@@ -338,21 +338,21 @@ int BgRender::CreateGlesEnv() {
             switch (eglGetError()) {
                 case EGL_BAD_ALLOC:
                     // Not enough resources available. Handle and recover
-                    LOGCATE("BgRender::CreateGlesEnv Not enough resources available");
+                    LOGCATE("EGLRender::CreateGlesEnv Not enough resources available");
                     break;
                 case EGL_BAD_CONFIG:
                     // Verify that provided EGLConfig is valid
-                    LOGCATE("BgRender::CreateGlesEnv provided EGLConfig is invalid");
+                    LOGCATE("EGLRender::CreateGlesEnv provided EGLConfig is invalid");
                     break;
                 case EGL_BAD_PARAMETER:
                     // Verify that the EGL_WIDTH and EGL_HEIGHT are
                     // non-negative values
-                    LOGCATE("BgRender::CreateGlesEnv provided EGL_WIDTH and EGL_HEIGHT is invalid");
+                    LOGCATE("EGLRender::CreateGlesEnv provided EGL_WIDTH and EGL_HEIGHT is invalid");
                     break;
                 case EGL_BAD_MATCH:
                     // Check window and EGLConfig attributes to determine
                     // compatibility and pbuffer-texture parameters
-                    LOGCATE("BgRender::CreateGlesEnv Check window and EGLConfig attributes");
+                    LOGCATE("EGLRender::CreateGlesEnv Check window and EGLConfig attributes");
                     break;
             }
         }
@@ -362,29 +362,29 @@ int BgRender::CreateGlesEnv() {
             EGLint error = eglGetError();
             if (error == EGL_BAD_CONFIG) {
                 // Handle error and recover
-                LOGCATE("BgRender::CreateGlesEnv EGL_BAD_CONFIG");
+                LOGCATE("EGLRender::CreateGlesEnv EGL_BAD_CONFIG");
                 resultCode = -1;
                 break;
             }
         }
 
         if (!eglMakeCurrent(m_eglDisplay, m_eglSurface, m_eglSurface, m_eglCtx)) {
-            LOGCATE("BgRender::CreateGlesEnv MakeCurrent failed");
+            LOGCATE("EGLRender::CreateGlesEnv MakeCurrent failed");
             resultCode = -1;
             break;
         }
-        LOGCATE("BgRender::CreateGlesEnv initialize success!");
+        LOGCATE("EGLRender::CreateGlesEnv initialize success!");
     } while (false);
 
     if (resultCode != 0) {
-        LOGCATE("BgRender::CreateGlesEnv fail");
+        LOGCATE("EGLRender::CreateGlesEnv fail");
     }
 
     return resultCode;
 }
 
-void BgRender::SetImageData(uint8_t *pData, int width, int height) {
-    LOGCATE("BgRender::SetImageData pData = %p, [w,h] = [%d, %d]", pData, width, height);
+void EGLRender::SetImageData(uint8_t *pData, int width, int height) {
+    LOGCATE("EGLRender::SetImageData pData = %p, [w,h] = [%d, %d]", pData, width, height);
 
     if (pData && m_IsGLContextReady) {
         if (m_RenderImage.ppPlane[0]) {
@@ -413,7 +413,7 @@ void BgRender::SetImageData(uint8_t *pData, int width, int height) {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_RenderImage.width, m_RenderImage.height, 0,
                          GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
             if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-                LOGCATE("BgRender::SetImageData glCheckFramebufferStatus status != GL_FRAMEBUFFER_COMPLETE");
+                LOGCATE("EGLRender::SetImageData glCheckFramebufferStatus status != GL_FRAMEBUFFER_COMPLETE");
             }
             glBindTexture(GL_TEXTURE_2D, GL_NONE);
             glBindFramebuffer(GL_FRAMEBUFFER, GL_NONE);
@@ -421,8 +421,8 @@ void BgRender::SetImageData(uint8_t *pData, int width, int height) {
     }
 }
 
-void BgRender::SetIntParams(int paramType, int param) {
-    LOGCATE("BgRender::SetIntParams paramType = %d, param0 = %d", paramType, param);
+void EGLRender::SetIntParams(int paramType, int param) {
+    LOGCATE("EGLRender::SetIntParams paramType = %d, param0 = %d", paramType, param);
     switch (paramType) {
         case PARAM_TYPE_SHADER_INDEX: {
             if (param >= 0) {
@@ -438,7 +438,7 @@ void BgRender::SetIntParams(int paramType, int param) {
                                                       m_FragShader);
                 if (!m_ProgramObj) {
                     GLUtils::CheckGLError("Create Program");
-                    LOGCATE("BgRender::SetIntParams Could not create program.");
+                    LOGCATE("EGLRender::SetIntParams Could not create program.");
                     return;
                 }
 
@@ -452,8 +452,8 @@ void BgRender::SetIntParams(int paramType, int param) {
     }
 }
 
-void BgRender::Draw() {
-    LOGCATE("BgRender::Draw");
+void EGLRender::Draw() {
+    LOGCATE("EGLRender::Draw");
     if (m_ProgramObj == GL_NONE) return;
     glViewport(0, 0, m_RenderImage.width, m_RenderImage.height);
 
@@ -478,12 +478,9 @@ void BgRender::Draw() {
     GO_CHECK_GL_ERROR();
     glBindVertexArray(GL_NONE);
     glBindTexture(GL_TEXTURE_2D, GL_NONE);
-
-    //涓€鏃﹁В缁 FBO 鍚庨潰灏变笉鑳借皟鐢¨ readPixels
-    //glBindFramebuffer(GL_FRAMEBUFFER, GL_NONE);
 }
 
-void BgRender::DestroyGlesEnv() {
+void EGLRender::DestroyGlesEnv() {
     if (m_eglDisplay != EGL_NO_DISPLAY) {
         eglMakeCurrent(m_eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
         eglDestroyContext(m_eglDisplay, m_eglCtx);
@@ -497,8 +494,8 @@ void BgRender::DestroyGlesEnv() {
     m_eglCtx = EGL_NO_CONTEXT;
 }
 
-void BgRender::UnInit() {
-    LOGCATE("BgRender::UnInit");
+void EGLRender::UnInit() {
+    LOGCATE("EGLRender::UnInit");
     if (m_ProgramObj) {
         glDeleteProgram(m_ProgramObj);
         m_ProgramObj = GL_NONE;

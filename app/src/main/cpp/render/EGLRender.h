@@ -2,8 +2,8 @@
 // Created by xie_s on 2024/5/25.
 //
 
-#ifndef OPENGLNATIVE_BGRENDER_H
-#define OPENGLNATIVE_BGRENDER_H
+#ifndef OPENGLNATIVE_EGLRENDER_H
+#define OPENGLNATIVE_EGLRENDER_H
 
 #include <stdint.h>
 #include <GLES3/gl3.h>
@@ -13,11 +13,11 @@
 #include <GLES2/gl2ext.h>
 #include "ImageDef.h"
 
-class BgRender {
+class EGLRender {
 public:
-    BgRender();
+    EGLRender();
 
-    ~BgRender();
+    ~EGLRender();
 
     void Init();
 
@@ -33,9 +33,9 @@ public:
 
     void UnInit();
 
-    static BgRender *GetInstance() {
+    static EGLRender *GetInstance() {
         if (m_Instance == nullptr) {
-            m_Instance = new BgRender();
+            m_Instance = new EGLRender();
         }
         return m_Instance;
     }
@@ -48,7 +48,7 @@ public:
     }
 
 private:
-    static BgRender *m_Instance;
+    static EGLRender *m_Instance;
 
     GLuint m_ImageTextureId;
     GLuint m_FBOTextureId;
@@ -72,4 +72,4 @@ private:
 };
 
 
-#endif //OPENGLNATIVE_BGRENDER_H
+#endif //OPENGLNATIVE_EGLRENDER_H
