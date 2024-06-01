@@ -12,7 +12,6 @@
 //For PI define
 #define MATH_PI 3.1415926535897932384626433832802
 
-#define ROTATE_ANGLE_PARAM_TYPE                     300
 #define SAMPLE_TYPE                                 200
 #define SAMPLE_TYPE_KEY_TRIANGLE                    SAMPLE_TYPE+0
 #define SAMPLE_TYPE_KEY_TEXTURE_MAP                 SAMPLE_TYPE+1
@@ -46,6 +45,9 @@ public:
     virtual void Init() = 0;
 
     virtual void LoadImage(NativeImage *pImage){}
+
+    virtual void UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY)
+    {}
 
     virtual void Draw(int width, int height) = 0;
 

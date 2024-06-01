@@ -70,9 +70,7 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
                 break;
         }
     }
-    if (paramType == ROTATE_ANGLE_PARAM_TYPE && m_Sample) {
-        m_Sample->SetParamsInt(paramType, value0, value1);
-    }
+
 }
 
 void MineGlRenderContext::SetImageData(int format, int width, int height, uint8_t *pData) {
@@ -135,5 +133,14 @@ void MineGlRenderContext::DestroyInstance() {
     if (m_pContext) {
         delete m_pContext;
         m_pContext = nullptr;
+    }
+}
+
+void MineGlRenderContext::UpdateTransformMatrix(float rotateX, float rotateY, float scaleX,
+                                                float scaleY) {
+    LOGCATE("MineGlRenderContext::UpdateTransformMatrix [rotateX, rotateY, scaleX, scaleY] = [%f, %f, %f, %f]",
+            rotateX, rotateY, scaleX, scaleY);
+    if (m_Sample) {
+        m_Sample->UpdateTransformMatrix(rotateX, rotateY, scaleX, scaleY);
     }
 }

@@ -21,8 +21,6 @@ public interface Constants {
     public static final int SAMPLE_TYPE_INSTANCING = SAMPLE_TYPE + 12;
     public static final int SAMPLE_TYPE_STENCIL_TESTING = SAMPLE_TYPE + 13;
 
-    public static final int PARAM_TYPE_ROTATE = 300;
-
     public static final int IMAGE_FORMAT_RGBA = 0x01;
     public static final int IMAGE_FORMAT_NV21 = 0x02;
     public static final int IMAGE_FORMAT_NV12 = 0x03;

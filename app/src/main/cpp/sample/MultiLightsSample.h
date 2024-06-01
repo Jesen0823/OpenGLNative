@@ -22,7 +22,7 @@ public:
 
     virtual void Draw(int screenW, int screenH);
 
-    virtual void SetParamsInt(int paramType, int value0, int value1);
+    virtual void UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY);
 
     virtual void Destroy();
 

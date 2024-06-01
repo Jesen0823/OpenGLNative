@@ -17,7 +17,7 @@ public:
 
     virtual void Init();
     virtual void LoadImage(NativeImage *pImage);
-    virtual void SetParamsInt(int paramType, int value0, int value1);
+    virtual void UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY);
     virtual void Draw(int screenW,int screenH);
     virtual void Destroy();
 
@@ -47,6 +47,9 @@ private:
 
     int m_AngleX;
     int m_AngleY;
+
+    float m_ScaleX;
+    float m_ScaleY;
 
 };
 

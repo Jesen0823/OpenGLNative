@@ -15,6 +15,8 @@ CoordSystemSample::CoordSystemSample() {
 
     m_AngleX = 0;
     m_AngleY = 0;
+    m_ScaleX = 1.0f;
+    m_ScaleY = 1.0f;
 }
 
 CoordSystemSample::~CoordSystemSample() {
@@ -109,7 +111,7 @@ void CoordSystemSample::Init() {
 
 void CoordSystemSample::LoadImage(NativeImage *pImage) {
     LOGCATE("CoordSystemSample::LoadImage pImage = %p", pImage->ppPlane[0]);
-    if (pImage){
+    if (pImage) {
         m_RenderImage.width = pImage->width;
         m_RenderImage.height = pImage->height;
         m_RenderImage.format = pImage->format;
@@ -120,9 +122,9 @@ void CoordSystemSample::LoadImage(NativeImage *pImage) {
 void CoordSystemSample::Draw(int screenW, int screenH) {
     LOGCATE("CoordSystemSample::Draw()");
 
-    if(m_ProgramObj == GL_NONE || m_TextureId == GL_NONE) return;
+    if (m_ProgramObj == GL_NONE || m_TextureId == GL_NONE) return;
 
-    UpdateMVPMatrix(m_MVPMatrix, m_AngleX, m_AngleY, (float)screenW / screenH);
+    UpdateMVPMatrix(m_MVPMatrix, m_AngleX, m_AngleY, (float) screenW / screenH);
 
     //upload RGBA image data
     glActiveTexture(GL_TEXTURE0);
@@ -133,7 +135,7 @@ void CoordSystemSample::Draw(int screenW, int screenH) {
     glBindTexture(GL_TEXTURE_2D, GL_NONE);
 
     // Use the program object
-    glUseProgram (m_ProgramObj);
+    glUseProgram(m_ProgramObj);
 
     glBindVertexArray(m_VAOId);
 
@@ -144,16 +146,7 @@ void CoordSystemSample::Draw(int screenW, int screenH) {
     glBindTexture(GL_TEXTURE_2D, m_TextureId);
     glUniform1i(m_SamplerLoc, 0);
 
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, (const void *)0);
-}
-
-void CoordSystemSample::SetParamsInt(int paramType, int value0, int value1) {
-    LOGCATE("CoordSystemSample::SetParamsInt paramType = %d, value0 = %d", paramType, value0);
-    GLSampleBase::SetParamsInt(paramType, value0, value1);
-    if (paramType == ROTATE_ANGLE_PARAM_TYPE){
-        m_AngleX = value0;
-        m_AngleY = value1;
-    }
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, (const void *) 0);
 }
 
 void CoordSystemSample::Destroy() {
@@ -161,7 +154,8 @@ void CoordSystemSample::Destroy() {
 }
 
 void CoordSystemSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio) {
-    LOGCATE("CoordSystemSample::UpdateMVPMatrix angleX = %d, angleY = %d, ratio = %f", angleX, angleY, ratio);
+    LOGCATE("CoordSystemSample::UpdateMVPMatrix angleX = %d, angleY = %d, ratio = %f", angleX,
+            angleY, ratio);
     angleX = angleX % 360;
     angleY = angleY % 360;
 
@@ -173,7 +167,7 @@ void CoordSystemSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int an
     // Projection matrix
     //glm::mat4 Projection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 1.0f);
     //glm::mat4 Projection = glm::frustum(-ratio, ratio, -1.0f, 1.0f, 4.0f, 100.0f);
-    glm::mat4 Projection = glm::perspective(45.0f,ratio, 0.1f,100.f);
+    glm::mat4 Projection = glm::perspective(45.0f, ratio, 0.1f, 100.f);
 
     // View matrix
     glm::mat4 View = glm::lookAt(
@@ -184,10 +178,19 @@ void CoordSystemSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int an
 
     // Model matrix
     glm::mat4 Model = glm::mat4(1.0f);
-    Model = glm::scale(Model, glm::vec3(1.0f, 1.0f, 1.0f));
+    Model = glm::scale(Model, glm::vec3(m_ScaleX, m_ScaleY, 1.0f));
     Model = glm::rotate(Model, radiansX, glm::vec3(1.0f, 0.0f, 0.0f));
     Model = glm::rotate(Model, radiansY, glm::vec3(0.0f, 1.0f, 0.0f));
     Model = glm::translate(Model, glm::vec3(0.0f, 0.0f, 0.0f));
 
     mvpMatrix = Projection * View * Model;
+}
+
+void
+CoordSystemSample::UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY) {
+    GLSampleBase::UpdateTransformMatrix(rotateX, rotateY, scaleX, scaleY);
+    m_AngleX = static_cast<int>(rotateX);
+    m_AngleY = static_cast<int>(rotateY);
+    m_ScaleX = scaleX;
+    m_ScaleY = scaleY;
 }

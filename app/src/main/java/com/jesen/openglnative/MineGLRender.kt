@@ -33,6 +33,10 @@ class MineGLRender() :GLSurfaceView.Renderer {
         nativeRender.native_SetParamsInt(paramType, value0, value1)
     }
 
+    fun updateTransformMatrix(rotateX: Float, rotateY: Float, scaleX: Float, scaleY: Float) {
+        nativeRender.native_UpdateTransformMatrix(rotateX, rotateY, scaleX, scaleY)
+    }
+
     fun setImageData(format: Int, width: Int, height: Int, bytes: ByteArray) {
         nativeRender.native_SetImageData(format, width, height, bytes)
     }

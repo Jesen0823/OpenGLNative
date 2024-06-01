@@ -29,6 +29,8 @@ public:
 
     void SetParamsInt(int paramType, int value0, int value1);
 
+    void UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY);
+
     void SetImageData(int format, int width, int height, uint8_t *pData);
 
     void OnSurfaceCreated();

@@ -45,6 +45,13 @@ native_SetParamsInt(JNIEnv *env, jobject thiz,
 }
 
 extern "C"
+JNIEXPORT void JNICALL native_UpdateTransformMatrix
+        (JNIEnv *env, jobject instance, jfloat rotateX, jfloat rotateY, jfloat scaleX,
+         jfloat scaleY) {
+    MineGlRenderContext::GetInstance()->UpdateTransformMatrix(rotateX, rotateY, scaleX, scaleY);
+}
+
+extern "C"
 JNIEXPORT void JNICALL
 native_OnSurfaceCreated(JNIEnv *env, jobject thiz) {
     MineGlRenderContext::GetInstance()->OnSurfaceCreated();
@@ -66,16 +73,18 @@ native_OnDrawFrame(JNIEnv *env, jobject thiz) {
 #endif
 
 static JNINativeMethod g_NativeMethods[] = {
-        {"native_OnInit",           "()V",      (void *) (native_OnInit)},
-        {"native_OnUnInit",         "()V",      (void *) (native_OnUnInit)},
-        {"native_SetImageData",     "(III[B)V", (void *) (native_SetImageData)},
-        {"native_SetParamsInt",     "(III)V",   (void *) (native_SetParamsInt)},
-        {"native_OnSurfaceCreated", "()V",      (void *) (native_OnSurfaceCreated)},
-        {"native_OnSurfaceChanged", "(II)V",    (void *) (native_OnSurfaceChanged)},
-        {"native_OnDrawFrame",      "()V",      (void *) (native_OnDrawFrame)},
+        {"native_OnInit",                "()V",      (void *) (native_OnInit)},
+        {"native_OnUnInit",              "()V",      (void *) (native_OnUnInit)},
+        {"native_SetImageData",          "(III[B)V", (void *) (native_SetImageData)},
+        {"native_SetParamsInt",          "(III)V",   (void *) (native_SetParamsInt)},
+        {"native_UpdateTransformMatrix", "(FFFF)V",  (void *) (native_UpdateTransformMatrix)},
+        {"native_OnSurfaceCreated",      "()V",      (void *) (native_OnSurfaceCreated)},
+        {"native_OnSurfaceChanged",      "(II)V",    (void *) (native_OnSurfaceChanged)},
+        {"native_OnDrawFrame",           "()V",      (void *) (native_OnDrawFrame)},
 };
 
-static int RegisterNativeMethods(JNIEnv *env, const char *className, JNINativeMethod *methods, int methodNum) {
+static int
+RegisterNativeMethods(JNIEnv *env, const char *className, JNINativeMethod *methods, int methodNum) {
     LOGCATE("====RegisterNativeMethods===");
     jclass clazz = env->FindClass(className);
     if (clazz == nullptr) {
@@ -141,7 +150,7 @@ native_EglRenderUnInit(JNIEnv *env, jobject thiz) {
 static JNINativeMethod g_EglRenderMethods[] = {
         {"native_EglRenderInit",         "()V",     (void *) (native_EglRenderInit)},
         {"native_EglRenderSetImageData", "([BII)V", (void *) (native_EglRenderSetImageData)},
-        {"native_EglRenderSetIntParams", "(II)V",  (void *) (native_EglRenderSetIntParams)},
+        {"native_EglRenderSetIntParams", "(II)V",   (void *) (native_EglRenderSetIntParams)},
         {"native_EglRenderDraw",         "()V",     (void *) (native_EglRenderDraw)},
         {"native_EglRenderUnInit",       "()V",     (void *) (native_EglRenderUnInit)},
 };

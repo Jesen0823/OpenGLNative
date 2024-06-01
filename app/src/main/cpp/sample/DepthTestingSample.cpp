@@ -198,17 +198,6 @@ void DepthTestingSample::Draw(int screenW, int screenH) {
     }
 }
 
-void DepthTestingSample::SetParamsInt(int paramType, int value0, int value1) {
-    LOGCATE("DepthTestingSample::SetParamsInt paramType = %d, value0 = %d", paramType, value0);
-    GLSampleBase::SetParamsInt(paramType, value0, value1);
-    //no implement
-    if (paramType == ROTATE_ANGLE_PARAM_TYPE)
-    {
-        m_AngleX = value0;
-        m_AngleY = value1;
-    }
-}
-
 void
 DepthTestingSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio) {
 
@@ -261,4 +250,11 @@ void DepthTestingSample::Destroy() {
         m_VAOId = GL_NONE;
         m_TextureId = GL_NONE;
     }
+}
+
+void DepthTestingSample::UpdateTransformMatrix(float rotateX, float rotateY, float scaleX,
+                                               float scaleY) {
+    GLSampleBase::UpdateTransformMatrix(rotateX, rotateY, scaleX, scaleY);
+    m_AngleX = static_cast<int>(rotateX);
+    m_AngleY = static_cast<int>(rotateY);
 }
