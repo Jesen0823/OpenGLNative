@@ -44,6 +44,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         sample/StencilTestingSample.cpp
         sample/BlendingSample.cpp
         sample/ParticlesSample.cpp
+        sample/SkyBoxSample.cpp
         # List C/C++ source files with relative paths to this CMakeLists.txt.
         ${src_files})
 

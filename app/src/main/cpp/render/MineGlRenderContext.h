@@ -22,6 +22,7 @@
 #include "StencilTestingSample.h"
 #include "BlendingSample.h"
 #include "ParticlesSample.h"
+#include "SkyBoxSample.h"
 
 class MineGlRenderContext {
 public:
@@ -49,7 +50,8 @@ public:
 
 private:
     static MineGlRenderContext *m_pContext;
-    GLSampleBase *m_Sample;
+    GLSampleBase *m_pBeforeSample;
+    GLSampleBase *m_pCurSample;
     int m_ScreenW;
     int m_ScreenH;
 };

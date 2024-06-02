@@ -22,6 +22,8 @@ public interface Constants {
     public static final int SAMPLE_TYPE_STENCIL_TESTING = SAMPLE_TYPE + 13;
     public static final int SAMPLE_TYPE_BLENDING = SAMPLE_TYPE + 14;
     public static final int SAMPLE_TYPE_PARTICLES = SAMPLE_TYPE + 15;
+    public static final int SAMPLE_TYPE_SKYBOX = SAMPLE_TYPE + 16;
+
     public static final int IMAGE_FORMAT_RGBA = 0x01;
     public static final int IMAGE_FORMAT_NV21 = 0x02;
     public static final int IMAGE_FORMAT_NV12 = 0x03;
@@ -38,6 +40,7 @@ public interface Constants {
             "FBO 离屏渲染", "EGL 后台渲染", "FBO 拉伸", "坐标系统",
             "基础光照", "TransformFeedback", "MultiLights", "深度测试",
             "Instancing", "Stencil Testing","Blending","Particles",
+            "SkyBox",
     };
 
 }

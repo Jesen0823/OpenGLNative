@@ -57,7 +57,8 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
                     Constants.SAMPLE_TYPE_MULTI_LIGHTS,
                     Constants.SAMPLE_TYPE_DEPTH_TESTING,
                     Constants.SAMPLE_TYPE_INSTANCING,
-                    Constants.SAMPLE_TYPE_PARTICLES-> {
+                    Constants.SAMPLE_TYPE_PARTICLES,
+                    Constants.SAMPLE_TYPE_SKYBOX-> {
                         mGLRender.updateTransformMatrix(mXAngle,mYAngle,mCurScale,mCurScale)
                         requestRender()
                     }else->{}

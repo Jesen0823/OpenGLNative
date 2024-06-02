@@ -119,6 +119,14 @@ class MainActivity : AppCompatActivity() {
                         loadRGBAImage(R.drawable.window,2)
                     }
                     Constants.SAMPLE_TYPE_PARTICLES->loadRGBAImage(R.drawable.board_texture)
+                    Constants.SAMPLE_TYPE_SKYBOX->{
+                        loadRGBAImage(R.drawable.right,0)
+                        loadRGBAImage(R.drawable.left,1)
+                        loadRGBAImage(R.drawable.top,2)
+                        loadRGBAImage(R.drawable.bottom,3)
+                        loadRGBAImage(R.drawable.back,4)
+                        loadRGBAImage(R.drawable.front,5)
+                    }
                     else -> {}
                 }
                 mGLSurfaceView.requestRender()
