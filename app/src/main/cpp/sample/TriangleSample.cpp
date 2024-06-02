@@ -38,7 +38,7 @@ void TriangleSample::Init() {
     m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr, m_VertexShader, m_FragmentShader);
 }
 
-void TriangleSample::Draw(int width,int height) {
+void TriangleSample::Draw(int width, int height) {
     LOGCATE("TriangleSample::Draw");
     GLfloat vVertices[] = {
             0.0f, 0.5f, 0.0f,
@@ -64,5 +64,6 @@ void TriangleSample::LoadImage(NativeImage *pImage) {
 void TriangleSample::Destroy() {
     if (m_ProgramObj) {
         glDeleteProgram(m_ProgramObj);
+        m_ProgramObj = GL_NONE;
     }
 }

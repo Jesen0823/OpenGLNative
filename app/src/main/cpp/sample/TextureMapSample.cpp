@@ -131,5 +131,6 @@ void TextureMapSample::Destroy() {
     if (m_ProgramObj) {
         glDeleteProgram(m_ProgramObj);
         glDeleteTextures(1, &m_TextureId);
+        m_ProgramObj = GL_NONE;
     }
 }

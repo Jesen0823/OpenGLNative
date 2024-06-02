@@ -23,6 +23,7 @@
 #include "BlendingSample.h"
 #include "ParticlesSample.h"
 #include "SkyBoxSample.h"
+#include "Model3DSample.h"
 
 class MineGlRenderContext {
 public:

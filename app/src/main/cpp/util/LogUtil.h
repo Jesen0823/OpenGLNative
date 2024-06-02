@@ -23,11 +23,12 @@
     long long t1 = GetSysCurrentTime(); \
     LOGCATE("%s:%s cost time %ldms", __FILE__, FUN, (long)(t1-t0));}
 
-static long long GetSysCurrentTime()
-{
+#define DEBUG_LOGCATE(...) LOGCATE("DEBUG_LOGCATE %s line = %d", __FUNCTION__, __LINE__)
+
+static long long GetSysCurrentTime() {
     struct timeval time;
     gettimeofday(&time, NULL);
-    long long curTime = ((long long)(time.tv_sec))*1000+time.tv_usec/1000;
+    long long curTime = ((long long) (time.tv_sec)) * 1000 + time.tv_usec / 1000;
     return curTime;
 }
 

@@ -229,13 +229,12 @@ void BasicLightingSample::Draw(int screenW, int screenH) {
 }
 
 void BasicLightingSample::Destroy() {
-//	if (m_ProgramObj)
-//	{
-//		glDeleteProgram(m_ProgramObj);
-//		glDeleteBuffers(3, m_VboIds);
-//		glDeleteVertexArrays(1, &m_VaoId);
-//	}
-
+    if (m_ProgramObj) {
+        glDeleteProgram(m_ProgramObj);
+        glDeleteBuffers(1, m_VBOIds);
+        glDeleteVertexArrays(1, &m_VAOId);
+        glDeleteTextures(1, &m_TextureId);
+    }
 }
 
 void

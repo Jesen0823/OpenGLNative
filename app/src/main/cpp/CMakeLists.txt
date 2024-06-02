@@ -3,11 +3,17 @@ cmake_minimum_required(VERSION 3.22.1)
 
 project("openglnative")
 
+set(jnilibs "${CMAKE_SOURCE_DIR}/../jniLibs")
+
 include_directories(
         util
         render
         sample
         glm
+        inc
+        inc/assimp
+        model
+        opencv_3_0_0
 )
 
 find_library(
@@ -45,12 +51,21 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         sample/BlendingSample.cpp
         sample/ParticlesSample.cpp
         sample/SkyBoxSample.cpp
+        sample/Model3DSample.cpp
         # List C/C++ source files with relative paths to this CMakeLists.txt.
         ${src_files})
+
+add_library(assimp SHARED IMPORTED)
+set_target_properties(assimp PROPERTIES IMPORTED_LOCATION ${jnilibs}/${ANDROID_ABI}/libassimp.so)
+
+add_library(opencv_java3 SHARED IMPORTED)
+set_target_properties(opencv_java3 PROPERTIES IMPORTED_LOCATION ${jnilibs}/${ANDROID_ABI}/libopencv_java3.so)
 
 target_link_libraries(${CMAKE_PROJECT_NAME}
         # List libraries link to the target library
         ${log-lib}
         ${android-lib}
+        assimp
+        opencv_java3
         GLESv3
         EGL)

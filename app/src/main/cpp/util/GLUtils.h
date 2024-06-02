@@ -17,11 +17,11 @@ public:
                                 GLuint &vertexShaderHandle,
                                 GLuint &fragShaderHandle);
 
+    static GLuint CreateProgram(const char *pVertexShaderSource, const char *pFragShaderSource);
+
     static void DeleteProgram(GLuint &program);
 
     static void CheckGLError(const char *pGLOperation);
-
-    static GLuint loadDDS(const char *imagePath);
 
     static GLuint
     CreateProgramWithFeedback(const char *pVertexShaderSource, const char *pFragShaderSource,

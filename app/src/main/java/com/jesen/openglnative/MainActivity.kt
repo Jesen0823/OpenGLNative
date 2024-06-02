@@ -3,13 +3,17 @@ package com.jesen.openglnative
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.opengl.GLSurfaceView
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jesen.openglnative.Constants.IMAGE_FORMAT_RGBA
 import com.jesen.openglnative.databinding.ActivityMainBinding
 import com.jesen.openglnative.egl.EGLActivity
+import com.jesen.openglnative.utils.FileUtil
+import com.jesen.openglnative.utils.PermissionHelper
 import java.nio.ByteBuffer
 
 class MainActivity : AppCompatActivity() {
@@ -24,8 +30,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var mSampleSelectedIndex = 0
 
+    private val permissionHelper = PermissionHelper()
+
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        permissionHelper.checkPermission(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

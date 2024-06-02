@@ -58,7 +58,8 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
                     Constants.SAMPLE_TYPE_DEPTH_TESTING,
                     Constants.SAMPLE_TYPE_INSTANCING,
                     Constants.SAMPLE_TYPE_PARTICLES,
-                    Constants.SAMPLE_TYPE_SKYBOX-> {
+                    Constants.SAMPLE_TYPE_SKYBOX,
+                    Constants.SAMPLE_TYPE_3D_MODEL-> {
                         mGLRender.updateTransformMatrix(mXAngle,mYAngle,mCurScale,mCurScale)
                         requestRender()
                     }else->{}
@@ -74,15 +75,16 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
         when (mGLRender.getSampleType()) {
             Constants.SAMPLE_TYPE_COORD_SYSTEM,
             Constants.SAMPLE_TYPE_BASIC_LIGHTING,
-            Constants.SAMPLE_TYPE_INSTANCING -> {
+            Constants.SAMPLE_TYPE_INSTANCING,
+            Constants.SAMPLE_TYPE_3D_MODEL-> {
                 val preSpan = detector.previousSpan
                 val curSpan = detector.currentSpan
                 mCurScale = if (curSpan < preSpan) {
-                    mPreScale - (preSpan - curSpan) / 500
+                    mPreScale - (preSpan - curSpan) / 200
                 } else {
-                    mPreScale + (curSpan - preSpan) / 500
+                    mPreScale + (curSpan - preSpan) / 200
                 }
-                mCurScale = 0.1f.coerceAtLeast(mCurScale.coerceAtMost(5.0f))
+                mCurScale = 0.05f.coerceAtLeast(mCurScale.coerceAtMost(80.0f))
                 mGLRender.updateTransformMatrix(mXAngle, mYAngle, mCurScale, mCurScale)
                 requestRender()
             }

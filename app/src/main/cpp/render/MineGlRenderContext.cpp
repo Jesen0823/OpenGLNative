@@ -78,6 +78,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_SKYBOX:
                 m_pCurSample = new SkyBoxSample();
                 break;
+            case SAMPLE_TYPE_KEY_3D_MODEL:
+                m_pCurSample = new Model3DSample();
+                break;
             default:
                 break;
         }
@@ -125,7 +128,7 @@ void MineGlRenderContext::OnSurfaceChanged(int width, int height) {
 void MineGlRenderContext::OnDrawFrame() {
     LOGCATE("MineGLRenderContext::OnDrawFrame");
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-    if(m_pBeforeSample){
+    if (m_pBeforeSample) {
         delete m_pBeforeSample;
         m_pBeforeSample = nullptr;
     }
