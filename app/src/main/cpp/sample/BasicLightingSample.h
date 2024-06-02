@@ -13,7 +13,7 @@
 class BasicLightingSample :public GLSampleBase{
 public:
     BasicLightingSample();
-    ~BasicLightingSample();
+    virtual ~BasicLightingSample();
 
     virtual void Init();
     virtual void LoadImage(NativeImage *pImage);

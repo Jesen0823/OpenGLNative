@@ -44,7 +44,7 @@ class ParticlesSample : public GLSampleBase {
 public:
     ParticlesSample();
 
-    ~ParticlesSample();
+    virtual ~ParticlesSample();
 
     virtual void Init();
 

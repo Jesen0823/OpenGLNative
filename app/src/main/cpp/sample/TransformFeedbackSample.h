@@ -11,7 +11,7 @@
 class TransformFeedbackSample:public GLSampleBase {
 public:
     TransformFeedbackSample();
-    ~TransformFeedbackSample();
+    virtual ~TransformFeedbackSample();
 
     virtual void Init();
     virtual void LoadImage(NativeImage *pImage);

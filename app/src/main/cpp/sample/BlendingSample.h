@@ -18,7 +18,7 @@ class BlendingSample : public GLSampleBase {
 public:
     BlendingSample();
 
-    ~BlendingSample();
+    virtual ~BlendingSample();
 
     virtual void Init();
 
