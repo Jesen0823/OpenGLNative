@@ -28,6 +28,7 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
 
     if (paramType == SAMPLE_TYPE) {
         m_pBeforeSample = m_pCurSample;
+        LOGCATE("MineGLREnderContext::SetParamsInt 0 m_pBeforeSample = %p", m_pBeforeSample);
 
         switch (value0) {
             case SAMPLE_TYPE_KEY_TRIANGLE:
@@ -82,8 +83,10 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
                 m_pCurSample = new Model3DSample();
                 break;
             default:
+                m_pCurSample = nullptr;
                 break;
         }
+        LOGCATE("MineGlRenderContext::SetParamsInt m_pBeforeSample = %p, m_pCurSample=%p", m_pBeforeSample, m_pCurSample);
     }
 
 }
@@ -129,13 +132,13 @@ void MineGlRenderContext::OnDrawFrame() {
     LOGCATE("MineGLRenderContext::OnDrawFrame");
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     if (m_pBeforeSample) {
+        m_pBeforeSample->Destroy();
         delete m_pBeforeSample;
         m_pBeforeSample = nullptr;
     }
     if (m_pCurSample) {
         m_pCurSample->Init();
         m_pCurSample->Draw(m_ScreenW, m_ScreenH);
-        m_pCurSample->Destroy();
     }
 }
 

@@ -109,7 +109,7 @@ void FBOLegLengthSample::Init() {
 
     m_StretchRect.left = 0.0f;
     m_StretchRect.right = m_RenderImage.width;
-    m_StretchRect.top = 0.5* m_RenderImage.height;
+    m_StretchRect.top = 0.5 * m_RenderImage.height;
     m_StretchRect.bottom = m_RenderImage.height;
 
     if (m_bIsVerticalMode) {
@@ -761,41 +761,33 @@ void FBOLegLengthSample::Draw(int screenW, int screenH) {
 }
 
 void FBOLegLengthSample::Destroy() {
-//	if (m_ProgramObj)
-//	{
-//		glDeleteProgram(m_ProgramObj);
-//	}
-//
-//	if (m_FBOProgramObj)
-//	{
-//		glDeleteProgram(m_FBOProgramObj);
-//	}
-//
-//	if (m_ImageTextureId)
-//	{
-//		glDeleteTextures(1, &m_ImageTextureId);
-//	}
-//
-//	if (m_FBOTextureId)
-//	{
-//		glDeleteTextures(1, &m_FBOTextureId);
-//	}
-//
-//	if (m_VboIds[0])
-//	{
-//		glDeleteBuffers(5, m_VboIds);
-//	}
-//
-//	if (m_VAOIds[0])
-//	{
-//		glDeleteVertexArrays(2, m_VAOIds);
-//	}
-//
-//	if (m_FBOId)
-//	{
-//		glDeleteFramebuffers(1, &m_FBOId);
-//	}
+    if (m_ProgramObj) {
+        glDeleteProgram(m_ProgramObj);
+    }
 
+    if (m_FBOProgramObj) {
+        glDeleteProgram(m_FBOProgramObj);
+    }
+
+    if (m_ImageTextureId) {
+        glDeleteTextures(1, &m_ImageTextureId);
+    }
+
+    if (m_FBOTextureId) {
+        glDeleteTextures(1, &m_FBOTextureId);
+    }
+
+    if (m_VBOIds[0]) {
+        glDeleteBuffers(6, m_VBOIds);
+    }
+
+    if (m_VAOIds[0]) {
+        glDeleteVertexArrays(2, m_VAOIds);
+    }
+
+    if (m_FBOId) {
+        glDeleteFramebuffers(1, &m_FBOId);
+    }
 }
 
 bool FBOLegLengthSample::CreateFrameBufferObj() {

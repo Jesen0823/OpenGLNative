@@ -243,7 +243,7 @@ DepthTestingSample::UpdateMatrix(glm::mat4 &mvpMatrix, glm::mat4 &modelMatrix, i
 void DepthTestingSample::Destroy() {
     if (m_ProgramObj) {
         glDeleteProgram(m_ProgramObj);
-        glDeleteBuffers(3, m_VBOIds);
+        glDeleteBuffers(1, m_VBOIds);
         glDeleteVertexArrays(1, &m_VAOId);
         glDeleteTextures(1, &m_TextureId);
         m_ProgramObj = GL_NONE;

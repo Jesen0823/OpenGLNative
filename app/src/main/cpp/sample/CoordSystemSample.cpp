@@ -150,7 +150,12 @@ void CoordSystemSample::Draw(int screenW, int screenH) {
 }
 
 void CoordSystemSample::Destroy() {
-
+    if(m_ProgramObj){
+        glDeleteProgram(m_ProgramObj);
+        glDeleteBuffers(3,m_VBOIds);
+        glDeleteVertexArrays(1,&m_VAOId);
+        glDeleteTextures(1,&m_TextureId);
+    }
 }
 
 void CoordSystemSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio) {

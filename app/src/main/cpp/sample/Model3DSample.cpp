@@ -47,7 +47,7 @@ void Model3DSample::Init() {
             "    vec3 fragPos = vec3(u_ModelMatrix * position);\n"
             "\n"
             "    // Ambient\n"
-            "    float ambientStrength = 0.4;\n"
+            "    float ambientStrength = 0.25;\n"
             "    ambient = ambientStrength * lightColor;\n"
             "\n"
             "    // Diffuse\n"
@@ -58,7 +58,7 @@ void Model3DSample::Init() {
             "    diffuse = diffuseStrength * diff * lightColor;\n"
             "\n"
             "    // Specular\n"
-            "    float specularStrength = 0.4;\n"
+            "    float specularStrength = 0.3;\n"
             "    vec3 viewDir = normalize(viewPos - fragPos);\n"
             "    vec3 reflectDir = reflect(-lightDir, unitNormal);\n"
             "    float spec = pow(max(dot(unitNormal, reflectDir), 0.0), 16.0);\n"
@@ -140,6 +140,7 @@ void Model3DSample::Destroy() {
     }
 
     if (m_pShader != nullptr) {
+        m_pShader->Destroy();
         delete m_pShader;
         m_pShader = nullptr;
     }

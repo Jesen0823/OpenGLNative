@@ -257,12 +257,15 @@ void ParticlesSample::Draw(int screenW, int screenH) {
 }
 
 void ParticlesSample::Destroy() {
-//	if (m_ProgramObj)
-//	{
-//		glDeleteProgram(m_ProgramObj);
-//		glDeleteBuffers(3, m_VboIds);
-//		glDeleteVertexArrays(1, &m_VaoId);
-//	}
+    if (m_ProgramObj) {
+        glDeleteProgram(m_ProgramObj);
+        glDeleteVertexArrays(1, &m_VaoId);
+        glDeleteTextures(1, &m_TextureId);
+        glDeleteBuffers(1, &m_ParticlesPosVboId);
+        glDeleteBuffers(1, &m_ParticlesVertexVboId);
+        glDeleteBuffers(1, &m_ParticlesPosVboId);
+        m_ProgramObj = GL_NONE;
+    }
 }
 
 void ParticlesSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio) {
@@ -345,7 +348,8 @@ int ParticlesSample::UpdateParticles() {
             float delta = 0.1f;
             // Decrease life
             glm::vec3 speed = glm::vec3(p.dxSpeed, p.dySpeed, p.dzSpeed), pos = glm::vec3(p.dx,
-                                                                                          p.dy,p.dz);
+                                                                                          p.dy,
+                                                                                          p.dz);
             p.life -= delta;
             if (p.life > 0.0f) {
                 // Simulate simple physics : gravity only, no collisions

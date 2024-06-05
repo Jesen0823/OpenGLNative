@@ -28,19 +28,6 @@ SkyBoxSample::~SkyBoxSample() {
     for (NativeImage nativeImage: m_pSkyBoxRenderImg) {
         NativeImageUtil::FreeNativeImage(&nativeImage);
     }
-    if (m_ProgramObj) {
-        glDeleteProgram(m_ProgramObj);
-        glDeleteVertexArrays(1, &m_SkyBoxVaoId);
-        glDeleteBuffers(1, &m_SkyBoxVboId);
-        glDeleteTextures(1, &m_TextureId);
-        m_ProgramObj = GL_NONE;
-    }
-    if (m_CubeProgramObj) {
-        glDeleteProgram(m_CubeProgramObj);
-        glDeleteVertexArrays(1, &m_CubeVaoId);
-        glDeleteBuffers(1, &m_CubeVboId);
-        m_CubeProgramObj = GL_NONE;
-    }
 }
 
 void SkyBoxSample::Init() {
@@ -329,7 +316,19 @@ void SkyBoxSample::Draw(int width, int height) {
 }
 
 void SkyBoxSample::Destroy() {
-
+    if (m_ProgramObj) {
+        glDeleteProgram(m_ProgramObj);
+        glDeleteVertexArrays(1, &m_SkyBoxVaoId);
+        glDeleteBuffers(1, &m_SkyBoxVboId);
+        glDeleteTextures(1, &m_TextureId);
+        m_ProgramObj = GL_NONE;
+    }
+    if (m_CubeProgramObj) {
+        glDeleteProgram(m_CubeProgramObj);
+        glDeleteVertexArrays(1, &m_CubeVaoId);
+        glDeleteBuffers(1, &m_CubeVboId);
+        m_CubeProgramObj = GL_NONE;
+    }
 }
 
 void SkyBoxSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float scale,

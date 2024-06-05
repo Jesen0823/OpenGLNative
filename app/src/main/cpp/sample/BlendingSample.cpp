@@ -277,7 +277,13 @@ void BlendingSample::Draw(int screenW, int screenH) {
 }
 
 void BlendingSample::Destroy() {
-
+    if(m_ProgramObj){
+        glDeleteProgram(m_ProgramObj);
+        glDeleteBuffers(3,m_VboIds);
+        glDeleteVertexArrays(3,m_VaoIds);
+        glDeleteTextures(3,m_TextureIds);
+        m_ProgramObj = GL_NONE;
+    }
 }
 
 void
