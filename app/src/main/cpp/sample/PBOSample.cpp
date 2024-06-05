@@ -426,6 +426,8 @@ void PBOSample::DownloadPixels() {
                      pBuffer);
     FUN_END_TIME("DownloadPixels Normal glReadPixels")
 
+    NativeImageUtil::DumpNativeImage(&nativeImage,"/sdcard/DCIM","Normal");
+
     delete[]pBuffer;
 
     int index = m_FrameIndex % 2;
@@ -444,6 +446,8 @@ void PBOSample::DownloadPixels() {
                                                                   GL_MAP_READ_BIT));
 
         if (bufPtr) {
+            nativeImage.ppPlane[0] = bufPtr;
+            NativeImageUtil::DumpNativeImage(&nativeImage, "/sdcard/DCIM", "PBO");
             glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
         }
     FUN_END_TIME("DownloadPixels PBO glMapBufferRange")
