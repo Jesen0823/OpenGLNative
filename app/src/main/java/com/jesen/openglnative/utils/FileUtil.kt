@@ -7,8 +7,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.nio.channels.FileChannel
-import java.nio.file.Files
-import java.nio.file.Path
+
 
 object FileUtil {
     /**
@@ -19,13 +18,59 @@ object FileUtil {
      */
     @JvmStatic
     fun copyAssets(context: Context, assetsName: String, fileName: String): String {
-        val path = File("${Environment.getExternalStorageDirectory()}/model/poly/", fileName).absolutePath
+        val file = File("${Environment.getExternalStorageDirectory()}/model/poly/", fileName)
+        val path = file.absolutePath
+        if (!file.exists()) {
+            file.createNewFile()
+        }
         val assetFileDescriptor = context.applicationContext.assets.openFd(assetsName)
         val from = FileInputStream(assetFileDescriptor.fileDescriptor).channel
         val to: FileChannel = FileOutputStream(path).channel
         from.transferTo(assetFileDescriptor.startOffset, assetFileDescriptor.length, to)
         return path
     }
+
+    fun copyAssetsDirToSDCard(context: Context, assetsDirName: String, sdCardPath: String) {
+        var sdCardPath = sdCardPath
+        try {
+            val list = context.assets.list(assetsDirName)
+            if (list.isNullOrEmpty()) {
+                val inputStream = context.assets.open(assetsDirName)
+                val mByte = ByteArray(1024)
+                var bt = 0
+                val file = File(
+                    sdCardPath + File.separator
+                            + assetsDirName.substring(assetsDirName.lastIndexOf('/'))
+                )
+                if (!file.exists()) {
+                    file.createNewFile()
+                } else {
+                    return
+                }
+                val fos = FileOutputStream(file)
+                while ((inputStream.read(mByte).also { bt = it }) != -1) {
+                    fos.write(mByte, 0, bt)
+                }
+                fos.flush()
+                inputStream.close()
+                fos.close()
+            } else {
+                var subDirName = assetsDirName
+                if (assetsDirName.contains("/")) {
+                    subDirName = assetsDirName.substring(assetsDirName.lastIndexOf('/') + 1)
+                }
+                sdCardPath = sdCardPath + File.separator + subDirName
+                val file = File(sdCardPath)
+                if (!file.exists()) file.mkdirs()
+                for (s: String in list) {
+                    copyAssetsDirToSDCard(context, assetsDirName + File.separator + s, sdCardPath)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
 
     /**
      * 复制res/raw中的文件到指定目录
@@ -36,7 +81,7 @@ object FileUtil {
      * @param storagePath 目标文件夹的路径
      */
     @JvmStatic
-    fun copyFilesFromRaw(context: Context, rawRes: Int, fileName: String):String {
+    fun copyFilesFromRaw(context: Context, rawRes: Int, fileName: String): String {
         val inputStream = context.resources.openRawResource(rawRes)
         val path = File(Environment.getExternalStorageDirectory(), fileName).absolutePath
         readInputStream(path, inputStream)
