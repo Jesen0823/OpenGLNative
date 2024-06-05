@@ -85,6 +85,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_PBO:
                 m_pCurSample = new PBOSample();
                 break;
+            case SAMPLE_TYPE_KEY_BEATING_HEART:
+                m_pCurSample = new BeatingHeartSample();
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;

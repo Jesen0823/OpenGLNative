@@ -166,6 +166,9 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     Constants.SAMPLE_TYPE_PBO -> loadRGBAImage(R.drawable.front)
+                    Constants.SAMPLE_TYPE_KEY_BEATING_HEART->{
+                        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+                    }
                     else -> {}
                 }
                 mGLSurfaceView.requestRender()

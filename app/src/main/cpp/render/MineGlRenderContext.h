@@ -25,6 +25,7 @@
 #include "SkyBoxSample.h"
 #include "Model3DSample.h"
 #include "PBOSample.h"
+#include "BeatingHeartSample.h"
 
 class MineGlRenderContext {
 public:
