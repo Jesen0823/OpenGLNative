@@ -68,59 +68,68 @@ void PBOSample::Init() {
     GLushort indices[] = {0, 1, 2, 1, 3, 2};
 
     char vShaderStr[] =
-            "#version 300 es                             \n"
-            "layout(location = 0) in vec4 a_position;    \n"
-            "layout(location = 1) in vec2 a_texCoord;    \n"
-            "uniform mat4 u_MVPMatrix;                   \n"
-            "out vec2 v_texCoord;                        \n"
-            "void main(){                                \n"
-            "   al_Position = u_MVPMatrix * a_position;  \n"
-            "   v_texCoord = a_texCoord;                 \n"
-            "}";
-    // 用于普通渲染的片段着色器脚本，简单纹理映射
+            "#version 300 es                            \n"
+            "layout(location = 0) in vec4 a_position;   \n"
+            "layout(location = 1) in vec2 a_texCoord;   \n"
+            "uniform mat4 u_MVPMatrix;                  \n"
+            "out vec2 v_texCoord;                       \n"
+            "void main()                                \n"
+            "{                                          \n"
+            "   gl_Position = u_MVPMatrix * a_position; \n"
+            "   v_texCoord = a_texCoord;                \n"
+            "}                                          \n";
+
+    // 鐢ㄤ簬鏅®閫氭覆鏌撶殑鐗囨®电潃鑹插櫒鑴氭湰锛岀畝鍗曠汗鐞嗘槧灏
     char fShaderStr[] =
-            "#version 300 es                                   \n"
-            "precision mediump float;                          \n"
-            "in vec2 v_texCoord;                               \n"
-            "layout(location = 0) out vec4 outColor;           \n"
-            "uniform sampler2D s_TextureMap;                   \n"
-            "void main(){                                      \n"
-            "   outColor = texture(s_TextureMap, v_texCoord);  \n"
+            "#version 300 es\n"
+            "precision mediump float;\n"
+            "in vec2 v_texCoord;\n"
+            "layout(location = 0) out vec4 outColor;\n"
+            "uniform sampler2D s_TextureMap;\n"
+            "void main()\n"
+            "{\n"
+            "    outColor = texture(s_TextureMap, v_texCoord);\n"
             "}";
-    // 用于离屏渲染的顶点着色器脚本，不使用变换矩阵
+
+    // 鐢ㄤ簬绂诲睆娓叉煋鐨勯《鐐圭潃鑹插櫒鑴氭湰锛屼笉浣跨敤鍙樻崲鐭╅樀
     char vFboShaderStr[] =
-            "#version 300 es                                \n"
-            "layout(location = 0) in vec4 a_position;       \n"
-            "layout(location = 1) in vec2 a_texCoord;       \n"
-            "out vec2 v_texCoord;                           \n"
-            "void main(){                                   \n"
-            "    gl_Position = a_position;                  \n"
-            "    v_texCoord = a_texCoord;                   \n"
-            "}";
-    // 用于离屏渲染的片段着色器脚本，取每个像素的灰度值
+            "#version 300 es                            \n"
+            "layout(location = 0) in vec4 a_position;   \n"
+            "layout(location = 1) in vec2 a_texCoord;   \n"
+            "out vec2 v_texCoord;                       \n"
+            "void main()                                \n"
+            "{                                          \n"
+            "   gl_Position = a_position;               \n"
+            "   v_texCoord = a_texCoord;                \n"
+            "}                                          \n";
+
+    // 鐢ㄤ簬绂诲睆娓叉煋鐨勭墖娈电潃鑹插櫒鑴氭湰锛屽彇姣忎釜鍍忕礌鐨勭伆搴﹀€¼
     char fFboShaderStr[] =
-            "#version 300 es                                                   \n"
-            "precision mediump float;                                          \n"
-            "in vec2 v_texCoord;                                               \n"
-            "layout(location = 0) out vec4 outColor;                           \n"
-            "uniform sampler2D s_TextureMap;                                   \n"
-            "void main(){                                                      \n"
-            "   vec4 tempColor = texture(s_TextureMap, v_texCoord);            \n"
-            "   float luminance = tempColor.r * 0.299 + tempColor.g * 0.587 + tempColor.b * 0.114;\n"
-            "   outColor = vec4(vec3(luminance),tempColor.a);                  \n"
+            "#version 300 es\n"
+            "precision mediump float;\n"
+            "in vec2 v_texCoord;\n"
+            "layout(location = 0) out vec4 outColor;\n"
+            "uniform sampler2D s_TextureMap;\n"
+            "void main()\n"
+            "{\n"
+            "    vec4 tempColor = texture(s_TextureMap, v_texCoord);\n"
+            "    float luminance = tempColor.r * 0.299 + tempColor.g * 0.587 + tempColor.b * 0.114;\n"
+            "    outColor = vec4(vec3(luminance), tempColor.a);\n"
             "}";
 
     // 编译链接用于普通渲染的着色器程序
     m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr, m_VertexShader, m_FragmentShader);
+
     // 编译链接用于离屏渲染的着色器程序
     m_FboProgramObj = GLUtils::CreateProgram(vFboShaderStr, fFboShaderStr, m_FboVertexShader,
                                              m_FboFragmentShader);
+
     if (m_ProgramObj == GL_NONE || m_FboProgramObj == GL_NONE) {
-        LOGCATE("PBOSample::Init(), m_ProgramObj == GL_NONE || m_FboProgramObj == GL_NONE");
+        LOGCATE("PBOSample::Init m_ProgramObj == GL_NONE");
         return;
     }
-    m_MVPMatrixLoc = glGetUniformLocation(m_ProgramObj, "u_MVPMatrix");
     m_SamplerLoc = glGetUniformLocation(m_ProgramObj, "s_TextureMap");
+    m_MVPMatrixLoc = glGetUniformLocation(m_ProgramObj, "u_MVPMatrix");
     m_FboSamplerLoc = glGetUniformLocation(m_FboProgramObj, "s_TextureMap");
 
     // 生成 VBO ，加载顶点数据和索引数据
@@ -138,10 +147,10 @@ void PBOSample::Init() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     GO_CHECK_GL_ERROR();
-    // 1.生成 2 个 VAO，一个用于普通渲染，另一个用于离屏渲染
+    // 1.生成 2 个 VAO，一个用于普通渲染，另一个用于离屏渲染    // Generate VAO Ids
     glGenVertexArrays(2, m_VaoIds);
 
-    // 1.1.1 初始化用于普通渲染的 VAO
+    /// 1.1.1 初始化用于普通渲染的 VAO
     glBindVertexArray(m_VaoIds[0]);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_VboIds[0]);
@@ -220,7 +229,7 @@ void PBOSample::Init() {
 }
 
 void PBOSample::LoadImage(NativeImage *pImage) {
-    LOGCATE("PBOSample::LoadImage() pImage = %p", pImage->ppPlane[0]);
+    LOGCATE("PBOSample::LoadImage pImage = %p", pImage->ppPlane[0]);
     if (pImage) {
         m_RenderImage.width = pImage->width;
         m_RenderImage.height = pImage->height;
@@ -230,7 +239,7 @@ void PBOSample::LoadImage(NativeImage *pImage) {
 }
 
 void PBOSample::Draw(int screenW, int screenH) {
-// 离屏渲染
+    // 离屏渲染
     glViewport(0, 0, m_RenderImage.width, m_RenderImage.height);
 
     //Upload
@@ -426,7 +435,7 @@ void PBOSample::DownloadPixels() {
                      pBuffer);
     FUN_END_TIME("DownloadPixels Normal glReadPixels")
 
-    NativeImageUtil::DumpNativeImage(&nativeImage,"/sdcard/DCIM","Normal");
+    NativeImageUtil::DumpNativeImage(&nativeImage, "/sdcard/DCIM", "Normal");
 
     delete[]pBuffer;
 
@@ -444,7 +453,6 @@ void PBOSample::DownloadPixels() {
         GLubyte *bufPtr = static_cast<GLubyte *>(glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0,
                                                                   dataSize,
                                                                   GL_MAP_READ_BIT));
-
         if (bufPtr) {
             nativeImage.ppPlane[0] = bufPtr;
             NativeImageUtil::DumpNativeImage(&nativeImage, "/sdcard/DCIM", "PBO");

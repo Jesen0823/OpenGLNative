@@ -5,13 +5,11 @@
 #ifndef OPENGLNATIVE_PBOSAMPLE_H
 #define OPENGLNATIVE_PBOSAMPLE_H
 
-#include "../glm/detail/type_mat.hpp"
+#include <detail/type_mat.hpp>
 #include "GLSampleBase.h"
 #include "../util/ImageDef.h"
-#include "../util/GLUtils.h"
 
 class PBOSample : public GLSampleBase {
-
 public:
     PBOSample();
 
