@@ -23,6 +23,14 @@
     long long t1 = GetSysCurrentTime(); \
     LOGCATE("%s:%s func cost time %ldms", __FILE__, FUN, (long)(t1-t0));}
 
+#define BEGIN_TIME(FUN) {\
+    LOGCATE("%s func start", FUN); \
+    long long t0 = GetSysCurrentTime();
+
+#define END_TIME(FUN) \
+    long long t1 = GetSysCurrentTime(); \
+    LOGCATE("%s func cost time %ldms", FUN, (long)(t1-t0));}
+
 #define DEBUG_LOGCATE(...) LOGCATE("DEBUG_LOGCATE %s line = %d", __FUNCTION__, __LINE__)
 
 static long long GetSysCurrentTime() {
