@@ -82,6 +82,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_3D_MODEL:
                 m_pCurSample = new Model3DSample();
                 break;
+            case SAMPLE_TYPE_KEY_PBO:
+                m_pCurSample = new PBOSample();
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;

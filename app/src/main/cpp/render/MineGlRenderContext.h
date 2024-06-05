@@ -24,6 +24,7 @@
 #include "ParticlesSample.h"
 #include "SkyBoxSample.h"
 #include "Model3DSample.h"
+#include "PBOSample.h"
 
 class MineGlRenderContext {
 public:

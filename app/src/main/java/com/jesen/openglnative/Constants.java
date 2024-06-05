@@ -24,6 +24,7 @@ public interface Constants {
     public static final int SAMPLE_TYPE_PARTICLES = SAMPLE_TYPE + 15;
     public static final int SAMPLE_TYPE_SKYBOX = SAMPLE_TYPE + 16;
     public static final int SAMPLE_TYPE_3D_MODEL = SAMPLE_TYPE + 17;
+    public static final int SAMPLE_TYPE_PBO = SAMPLE_TYPE + 18;
 
     public static final int IMAGE_FORMAT_RGBA = 0x01;
     public static final int IMAGE_FORMAT_NV21 = 0x02;
@@ -41,7 +42,7 @@ public interface Constants {
             "FBO 离屏渲染", "EGL 后台渲染", "FBO 拉伸", "坐标系统",
             "基础光照", "TransformFeedback", "MultiLights", "深度测试",
             "Instancing", "Stencil Testing","Blending","Particles",
-            "SkyBox","Assimp Load 3D Model",
+            "SkyBox","Assimp Load 3D Model","PBO"
     };
 
 }
