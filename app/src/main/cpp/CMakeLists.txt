@@ -54,6 +54,8 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         sample/Model3DSample.cpp
         sample/PBOSample.cpp
         sample/BeatingHeartSample.cpp
+        sample/ShockWaveSample.cpp
+        sample/CloudSample.cpp
         # List C/C++ source files with relative paths to this CMakeLists.txt.
         ${src_files})
 

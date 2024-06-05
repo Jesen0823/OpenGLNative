@@ -165,8 +165,19 @@ class MainActivity : AppCompatActivity() {
                         loadRGBAImage(R.drawable.front, 5)
                     }
 
-                    Constants.SAMPLE_TYPE_PBO -> loadRGBAImage(R.drawable.front)
+                    Constants.SAMPLE_TYPE_PBO -> {
+                        loadRGBAImage(R.drawable.front)
+                        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+                    }
                     Constants.SAMPLE_TYPE_KEY_BEATING_HEART->{
+                        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+                    }
+                    Constants.SAMPLE_TYPE_KEY_CLOUD ->{
+                        loadRGBAImage(R.drawable.noise)
+                        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+                    }
+                    Constants.SAMPLE_TYPE_KEY_SHOCK_WAVE ->{
+                        loadRGBAImage(R.drawable.front)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
                     else -> {}

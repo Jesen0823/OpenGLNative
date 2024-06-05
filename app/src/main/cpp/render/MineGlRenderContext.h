@@ -26,6 +26,8 @@
 #include "Model3DSample.h"
 #include "PBOSample.h"
 #include "BeatingHeartSample.h"
+#include "CloudSample.h"
+#include "ShockWaveSample.h"
 
 class MineGlRenderContext {
 public:

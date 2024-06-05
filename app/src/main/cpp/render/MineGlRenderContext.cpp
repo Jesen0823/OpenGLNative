@@ -88,11 +88,17 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_BEATING_HEART:
                 m_pCurSample = new BeatingHeartSample();
                 break;
+            case SAMPLE_TYPE_KEY_CLOUD:
+                m_pCurSample = new CloudSample();
+                break;
+            case SAMPLE_TYPE_KEY_SHOCK_WAVE:
+                m_pCurSample = new ShockWaveSample();
             default:
                 m_pCurSample = nullptr;
                 break;
         }
-        LOGCATE("MineGlRenderContext::SetParamsInt m_pBeforeSample = %p, m_pCurSample=%p", m_pBeforeSample, m_pCurSample);
+        LOGCATE("MineGlRenderContext::SetParamsInt m_pBeforeSample = %p, m_pCurSample=%p",
+                m_pBeforeSample, m_pCurSample);
     }
 
 }
