@@ -24,13 +24,13 @@ find_library(
         android-lib
         android)
 
-file(GLOB src_files
+#[[file(GLOB src_files
         JNIImpl.cpp
         ${CMAKE_SOURCE_DIR}/util/*.cpp
         ${CMAKE_SOURCE_DIR}/render/*.cpp
-        ${CMAKE_SOURCE_DIR}/sample/*.cpp)
+        ${CMAKE_SOURCE_DIR}/sample/*.cpp)]]
 
-#[[set(src_files
+set(src_files
         JNIImpl.cpp
         util/GLUtils.cpp
         render/EGLRender.cpp
@@ -59,7 +59,8 @@ file(GLOB src_files
         sample/CloudSample.cpp
         sample/BezierCurveSample.cpp
         sample/FaceSlenderSample.cpp
-        sample/BigEyesSample.cpp)]]
+        sample/BigEyesSample.cpp
+        sample/BigHeadSample.cpp)
 
 add_library(
         ${CMAKE_PROJECT_NAME}

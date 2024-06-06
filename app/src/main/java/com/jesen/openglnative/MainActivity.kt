@@ -208,6 +208,11 @@ class MainActivity : AppCompatActivity() {
                         mGLSurfaceView.setAspectRatio(bitmap.width,bitmap.height)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
+                    Constants.SAMPLE_TYPE_KEY_BIG_HEAD ->{
+                        val bitmap = loadRGBAImage(R.drawable.huge)
+                        mGLSurfaceView.setAspectRatio(bitmap.width,bitmap.height)
+                        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+                    }
 
                     else -> {}
                 }

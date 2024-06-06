@@ -31,6 +31,7 @@
 #include "BezierCurveSample.h"
 #include "FaceSlenderSample.h"
 #include "BigEyesSample.h"
+#include "BigHeadSample.h"
 
 class MineGlRenderContext {
 public:
