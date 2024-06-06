@@ -53,18 +53,21 @@ void TextureMapSample::Init() {
     }
 }
 
-void TextureMapSample::Draw(int width,int height) {
-    LOGCATE("TextureMapSample::Draw(), m_ProgramObj = %d, m_TextureId = %d",m_ProgramObj,m_TextureId);
+void TextureMapSample::Draw(int width, int height) {
+    LOGCATE("TextureMapSample::Draw(), m_ProgramObj = %d, m_TextureId = %d", m_ProgramObj,
+            m_TextureId);
     if (m_ProgramObj == GL_NONE || m_TextureId == GL_NONE) {
         LOGCATE("TextureMapSample::Draw, NONE! return ");
         return;
     }
+    glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(1.0, 1.0, 1.0, 1.0);
 
     GLfloat verticesCoords[] = {
-            -1.0f,  0.5f, 0.0f,  // Position 0
+            -1.0f, 0.5f, 0.0f,  // Position 0
             -1.0f, -0.5f, 0.0f,  // Position 1
             1.0f, -0.5f, 0.0f,  // Position 2
-            1.0f,  0.5f, 0.0f,  // Position 3
+            1.0f, 0.5f, 0.0f,  // Position 3
     };
 
     GLfloat textureCoords[] = {

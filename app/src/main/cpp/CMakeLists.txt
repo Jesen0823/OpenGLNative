@@ -25,11 +25,12 @@ find_library(
         android)
 
 file(GLOB src_files
+        JNIImpl.cpp
         ${CMAKE_SOURCE_DIR}/util/*.cpp
         ${CMAKE_SOURCE_DIR}/render/*.cpp
         ${CMAKE_SOURCE_DIR}/sample/*.cpp)
 
-add_library(${CMAKE_PROJECT_NAME} SHARED
+#[[set(src_files
         JNIImpl.cpp
         util/GLUtils.cpp
         render/EGLRender.cpp
@@ -58,8 +59,11 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         sample/CloudSample.cpp
         sample/BezierCurveSample.cpp
         sample/FaceSlenderSample.cpp
-        sample/BigEyesSample.cpp
-        # List C/C++ source files with relative paths to this CMakeLists.txt.
+        sample/BigEyesSample.cpp)]]
+
+add_library(
+        ${CMAKE_PROJECT_NAME}
+        SHARED
         ${src_files})
 
 add_library(assimp SHARED IMPORTED)
@@ -68,11 +72,14 @@ set_target_properties(assimp PROPERTIES IMPORTED_LOCATION ${jnilibs}/${ANDROID_A
 add_library(opencv_java3 SHARED IMPORTED)
 set_target_properties(opencv_java3 PROPERTIES IMPORTED_LOCATION ${jnilibs}/${ANDROID_ABI}/libopencv_java3.so)
 
+set(third-party-libs
+        assimp
+        opencv_java3)
+
 target_link_libraries(${CMAKE_PROJECT_NAME}
         # List libraries link to the target library
         ${log-lib}
         ${android-lib}
-        assimp
-        opencv_java3
+        ${third-party-libs}
         GLESv3
         EGL)
