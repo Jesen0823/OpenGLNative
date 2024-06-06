@@ -34,6 +34,7 @@
 #define SAMPLE_TYPE_KEY_BEATING_HEART               SAMPLE_TYPE+19
 #define SAMPLE_TYPE_KEY_CLOUD                       SAMPLE_TYPE+20
 #define SAMPLE_TYPE_KEY_SHOCK_WAVE                  SAMPLE_TYPE+21
+#define SAMPLE_TYPE_KEY_BEZIER_CURVE                SAMPLE_TYPE+22
 
 class GLSampleBase {
 protected:
@@ -58,7 +59,7 @@ public:
 
     virtual void LoadMultiImageWithIndex(int index, NativeImage *pImage) {};
 
-    virtual void Draw(int width, int height) = 0;
+    virtual void Draw(int screenW, int screenH) = 0;
 
     virtual void Destroy() = 0;
 

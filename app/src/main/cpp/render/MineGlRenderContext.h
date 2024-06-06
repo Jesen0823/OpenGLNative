@@ -28,6 +28,7 @@
 #include "BeatingHeartSample.h"
 #include "CloudSample.h"
 #include "ShockWaveSample.h"
+#include "BezierCurveSample.h"
 
 class MineGlRenderContext {
 public:

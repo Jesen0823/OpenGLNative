@@ -7,7 +7,7 @@
 MineGlRenderContext *MineGlRenderContext::m_pContext = nullptr;
 
 MineGlRenderContext::MineGlRenderContext() {
-    m_pCurSample = new TriangleSample();
+    m_pCurSample = new BezierCurveSample();
     m_pBeforeSample = nullptr;
 }
 
@@ -93,6 +93,10 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
                 break;
             case SAMPLE_TYPE_KEY_SHOCK_WAVE:
                 m_pCurSample = new ShockWaveSample();
+                break;
+            case SAMPLE_TYPE_KEY_BEZIER_CURVE:
+                m_pCurSample = new BezierCurveSample();
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;

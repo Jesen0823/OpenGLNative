@@ -28,7 +28,8 @@ import java.nio.ByteBuffer
 class MainActivity : AppCompatActivity() {
     private lateinit var mGLSurfaceView: MineGLSurfaceView
     private lateinit var binding: ActivityMainBinding
-    private var mSampleSelectedIndex = 0
+    private var mSampleSelectedIndex =
+        Constants.SAMPLE_TYPE_KEY_BEATING_HEART - Constants.SAMPLE_TYPE
 
     private val permissionHelper = PermissionHelper()
     private var sharedPre: SharedPreferences? = null
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         mGLSurfaceView = binding.mineGlSurfaceView
         mGLSurfaceView.getEGLRender().init()
+        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
@@ -169,17 +171,25 @@ class MainActivity : AppCompatActivity() {
                         loadRGBAImage(R.drawable.front)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
-                    Constants.SAMPLE_TYPE_KEY_BEATING_HEART->{
+
+                    Constants.SAMPLE_TYPE_KEY_BEATING_HEART -> {
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
-                    Constants.SAMPLE_TYPE_KEY_CLOUD ->{
+
+                    Constants.SAMPLE_TYPE_KEY_CLOUD -> {
                         loadRGBAImage(R.drawable.noise)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
-                    Constants.SAMPLE_TYPE_KEY_SHOCK_WAVE ->{
+
+                    Constants.SAMPLE_TYPE_KEY_SHOCK_WAVE -> {
                         loadRGBAImage(R.drawable.front)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
+
+                    Constants.SAMPLE_TYPE_KEY_BEZIER_CURVE -> {
+                        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+                    }
+
                     else -> {}
                 }
                 mGLSurfaceView.requestRender()
@@ -192,7 +202,7 @@ class MainActivity : AppCompatActivity() {
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         recycler.layoutManager = layoutManager
         recycler.adapter = adapter
-
+        recycler.scrollToPosition(mSampleSelectedIndex)
         dialog.show()
         dialog.window?.setContentView(viewRoot)
     }

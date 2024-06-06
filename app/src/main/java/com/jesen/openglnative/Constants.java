@@ -28,7 +28,7 @@ public interface Constants {
     public static final int SAMPLE_TYPE_KEY_BEATING_HEART = SAMPLE_TYPE + 19;
     public static final int SAMPLE_TYPE_KEY_CLOUD = SAMPLE_TYPE + 20;
     public static final int SAMPLE_TYPE_KEY_SHOCK_WAVE = SAMPLE_TYPE + 21;
-
+    public static final int SAMPLE_TYPE_KEY_BEZIER_CURVE = SAMPLE_TYPE + 22;
 
     public static final int IMAGE_FORMAT_RGBA = 0x01;
     public static final int IMAGE_FORMAT_NV21 = 0x02;
@@ -47,7 +47,7 @@ public interface Constants {
             "基础光照", "TransformFeedback", "MultiLights", "深度测试",
             "Instancing", "Stencil Testing", "Blending", "Particles",
             "SkyBox", "Assimp Load 3D Model", "PBO", "Beating Heart",
-            "Cloud", "Shock Wave",
+            "Cloud", "Shock Wave","Bezier Curve",
     };
 
 }
