@@ -202,15 +202,18 @@ class MainActivity : AppCompatActivity() {
                     Constants.SAMPLE_TYPE_KEY_BEZIER_CURVE -> {
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
+
                     Constants.SAMPLE_TYPE_KEY_FACE_SLENDER,
-                    Constants.SAMPLE_TYPE_KEY_BIG_EYES-> {
+                    Constants.SAMPLE_TYPE_KEY_BIG_EYES -> {
                         val bitmap = loadRGBAImage(R.drawable.yifei)
-                        mGLSurfaceView.setAspectRatio(bitmap.width,bitmap.height)
+                        mGLSurfaceView.setAspectRatio(bitmap.width, bitmap.height)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
-                    Constants.SAMPLE_TYPE_KEY_BIG_HEAD ->{
+
+                    Constants.SAMPLE_TYPE_KEY_BIG_HEAD,
+                    Constants.SAMPLE_TYPE_KEY_ROTARY_HEAD -> {
                         val bitmap = loadRGBAImage(R.drawable.huge)
-                        mGLSurfaceView.setAspectRatio(bitmap.width,bitmap.height)
+                        mGLSurfaceView.setAspectRatio(bitmap.width, bitmap.height)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
 

@@ -106,6 +106,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_BIG_HEAD:
                 m_pCurSample = new BigHeadSample();
                 break;
+            case SAMPLE_TYPE_KEY_ROTARY_HEAD:
+                m_pCurSample = new RotaryHeadSample;
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;

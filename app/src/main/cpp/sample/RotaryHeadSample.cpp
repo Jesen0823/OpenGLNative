@@ -1,8 +1,9 @@
 //
 // Created by xie_s on 2024/6/6.
 //
+
 #include <gtc/matrix_transform.hpp>
-#include "BigHeadSample.h"
+#include "RotaryHeadSample.h"
 #include "CommonDef.h"
 #include "GLUtils.h"
 
@@ -23,9 +24,11 @@ static float DotProduct(vec2 a, vec2 b) {
     return a.x * b.x + a.y * b.y;
 }
 
-BigHeadSample::BigHeadSample() {
+RotaryHeadSample::RotaryHeadSample() {
+
     m_SamplerLoc = GL_NONE;
     m_MVPMatLoc = GL_NONE;
+
     m_TextureId = GL_NONE;
 
     m_AngleX = 0;
@@ -37,49 +40,47 @@ BigHeadSample::BigHeadSample() {
     m_FrameIndex = 0;
 }
 
-BigHeadSample::~BigHeadSample() {
+RotaryHeadSample::~RotaryHeadSample() {
     NativeImageUtil::FreeNativeImage(&m_RenderImage);
 }
 
-void BigHeadSample::Init() {
+void RotaryHeadSample::Init() {
     if (m_ProgramObj)
         return;
 
     char vShaderStr[] =
-            "#version 300 es                                                          \n"
-            "layout(location = 0) in vec4 a_position;                                 \n"
-            "layout(location = 1) in vec2 a_texCoord;                                 \n"
-            "uniform mat4 u_MVPMatrix;                                                \n"
-            "out vec2 v_texCoord;                                                     \n"
-            "void main(){                                                             \n"
-            "    gl_Position = u_MVPMatrix * a_position;                              \n"
-            "    v_texCoord = a_texCoord;                                             \n"
-            "    gl_PointSize = 8.0;                                                  \n"
+            "#version 300 es                                           \n"
+            "layout(location = 0) in vec4 a_position;                  \n"
+            "layout(location = 1) in vec2 a_texCoord;                  \n"
+            "uniform mat4 u_MVPMatrix;                                 \n"
+            "out vec2 v_texCoord;                                      \n"
+            "void main(){                                              \n"
+            "    gl_Position = u_MVPMatrix * a_position;               \n"
+            "    v_texCoord = a_texCoord;                              \n"
+            "    gl_PointSize = 8.0;                                   \n"
             "}";
 
     char fShaderStr[] =
-            "#version 300 es                                                          \n"
-            "precision highp float;                                                   \n"
-            "layout(location = 0) out vec4 outColor;                                  \n"
-            "in vec2 v_texCoord;                                                      \n"
-            "uniform sampler2D s_TextureMap;                                          \n"
-            "uniform float u_type;                                                    \n"
-            "void main() {                                                            \n"
-            "    if(u_type == 0.0){                                                   \n"
-            "        outColor = texture(s_TextureMap, v_texCoord);                    \n"
-            "    }                                                                    \n"
-            "    else if(u_type == 1.0){                                              \n"
-            "        outColor = vec4(1.0, 0.0, 0.0, 1.0);                             \n"
-            "    }                                                                    \n"
+            "#version 300 es                                           \n"
+            "precision highp float;                                    \n"
+            "layout(location = 0) out vec4 outColor;                   \n"
+            "in vec2 v_texCoord;                                       \n"
+            "uniform sampler2D s_TextureMap;                           \n"
+            "uniform float u_type;                                     \n"
+            "void main() {                                             \n"
+            "    if(u_type == 0.0){                                    \n"
+            "        outColor = texture(s_TextureMap, v_texCoord);     \n"
+            "    }else if(u_type == 1.0){                              \n"
+            "        outColor = vec4(1.0, 0.0, 0.0, 1.0);              \n"
+            "    }                                                     \n"
             "}";
 
-    m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr,
-                                          m_VertexShader, m_FragmentShader);
+    m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr, m_VertexShader, m_FragmentShader);
     if (m_ProgramObj) {
         m_SamplerLoc = glGetUniformLocation(m_ProgramObj, "s_TextureMap");
         m_MVPMatLoc = glGetUniformLocation(m_ProgramObj, "u_MVPMatrix");
     } else {
-        LOGCATE("BigHeadSample::Init create program fail");
+        LOGCATE("RotaryHeadSample::Init create program fail");
     }
 
     CalculateMesh(0);
@@ -111,8 +112,8 @@ void BigHeadSample::Init() {
     glBindVertexArray(GL_NONE);
 }
 
-void BigHeadSample::LoadImage(NativeImage *pImage) {
-    LOGCATE("BigHeadSample::LoadImage pImage = %p", pImage->ppPlane[0]);
+void RotaryHeadSample::LoadImage(NativeImage *pImage) {
+    LOGCATE("RotaryHeadSample::LoadImage pImage = %p", pImage->ppPlane[0]);
     if (pImage) {
         ScopedSyncLock lock(&m_Lock);
         m_RenderImage.width = pImage->width;
@@ -120,10 +121,11 @@ void BigHeadSample::LoadImage(NativeImage *pImage) {
         m_RenderImage.format = pImage->format;
         NativeImageUtil::CopyNativeImage(pImage, &m_RenderImage);
     }
+
 }
 
-void BigHeadSample::Draw(int screenW, int screenH) {
-    LOGCATE("BigHeadSample::Draw() [w,h]=[%d,%d]", screenW, screenH);
+void RotaryHeadSample::Draw(int screenW, int screenH) {
+    LOGCATE("RotaryHeadSample::Draw() [w,h]=[%d,%d]", screenW, screenH);
 
     if (m_ProgramObj == GL_NONE) return;
 
@@ -139,6 +141,7 @@ void BigHeadSample::Draw(int screenW, int screenH) {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_RenderImage.width, m_RenderImage.height, 0,
                          GL_RGBA, GL_UNSIGNED_BYTE, m_RenderImage.ppPlane[0]);
             glBindTexture(GL_TEXTURE_2D, GL_NONE);
+            GO_CHECK_GL_ERROR();
         }
         return;
     }
@@ -147,17 +150,15 @@ void BigHeadSample::Draw(int screenW, int screenH) {
     m_FrameIndex++;
     UpdateMVPMatrix(m_MVPMatrix, m_AngleX, m_AngleY, (float) screenW / screenH);
 
+
     float ratio = (m_FrameIndex % 100) * 1.0f / 100;
-    ratio = (m_FrameIndex / 100) % 2 == 1 ? (1 - ratio) : ratio;
+    //ratio = (m_FrameIndex / 100) % 2 == 1 ? (1 - ratio) : ratio;
 
-    CalculateMesh(ratio - 0.5f);
-
+    CalculateMesh(static_cast<float>(ratio * 2 * MATH_PI));
+    glUseProgram(m_ProgramObj);
+    glBindVertexArray(m_VaoId);
     glBindBuffer(GL_ARRAY_BUFFER, m_VboIds[0]);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(m_Vertices), m_Vertices);
-
-    glUseProgram(m_ProgramObj);
-
-    glBindVertexArray(m_VaoId);
     glUniformMatrix4fv(m_MVPMatLoc, 1, GL_FALSE, &m_MVPMatrix[0][0]);
 
     glActiveTexture(GL_TEXTURE0);
@@ -168,12 +169,12 @@ void BigHeadSample::Draw(int screenW, int screenH) {
     glDrawArrays(GL_TRIANGLES, 0, TRIANGLE_COUNT * 3);
 
     GLUtils::setFloat(m_ProgramObj, "u_type", 1);
-
     // 画线
     glDrawArrays(GL_LINE_STRIP, 0, TRIANGLE_COUNT * 3);
+
 }
 
-void BigHeadSample::Destroy() {
+void RotaryHeadSample::Destroy() {
     if (m_ProgramObj) {
         glDeleteProgram(m_ProgramObj);
         glDeleteTextures(1, &m_TextureId);
@@ -183,12 +184,19 @@ void BigHeadSample::Destroy() {
     }
 }
 
-void BigHeadSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio) {
-    LOGCATE("BigHeadSample::UpdateMVPMatrix angleX = %d, angleY = %d, ratio = %f", angleX, angleY,
-            ratio);
+
+/**
+ * @param angleX 绕X轴旋转度数
+ * @param angleY 绕Y轴旋转度数
+ * @param ratio 宽高比
+ * */
+void RotaryHeadSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio) {
+    LOGCATE("RotaryHeadSample::UpdateMVPMatrix angleX = %d, angleY = %d, ratio = %f", angleX,
+            angleY, ratio);
     angleX = angleX % 360;
     angleY = angleY % 360;
 
+    //转化为弧度角
     float radiansX = static_cast<float>(MATH_PI / 180.0f * angleX);
     float radiansY = static_cast<float>(MATH_PI / 180.0f * angleY);
 
@@ -213,10 +221,11 @@ void BigHeadSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY
     Model = glm::translate(Model, glm::vec3(0.0f, 0.0f, 0.0f));
 
     mvpMatrix = Projection * View * Model;
+
 }
 
 void
-BigHeadSample::UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY) {
+RotaryHeadSample::UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY) {
     GLSampleBase::UpdateTransformMatrix(rotateX, rotateY, scaleX, scaleY);
     m_AngleX = static_cast<int>(rotateX);
     m_AngleY = static_cast<int>(rotateY);
@@ -224,19 +233,19 @@ BigHeadSample::UpdateTransformMatrix(float rotateX, float rotateY, float scaleX,
     m_ScaleY = scaleY;
 }
 
-void BigHeadSample::CalculateMesh(float warpLevel) {
+void RotaryHeadSample::CalculateMesh(float rotaryAngle) {
 
     vec2 centerPoint(KEY_POINTS[16] / m_RenderImage.width, KEY_POINTS[17] / m_RenderImage.height);
+    //centerPoint = RotaryKeyPoint(centerPoint, rotaryAngle);
     m_KeyPointsInts[8] = centerPoint;
-    m_KeyPoints[8] = centerPoint;
-    vec2 warpKeyPoints[KEY_POINTS_COUNT];
-    warpKeyPoints[8] = centerPoint;
+    m_KeyPoints[8] = RotaryKeyPoint(centerPoint, rotaryAngle);
     for (int i = 0; i < KEY_POINTS_COUNT - 1; ++i) {
         vec2 inputPoint(KEY_POINTS[i * 2] / m_RenderImage.width,
                         KEY_POINTS[i * 2 + 1] / m_RenderImage.height);
-        m_KeyPoints[i] = WarpKeyPoint(inputPoint, centerPoint, warpLevel);
+        //inputPoint = RotaryKeyPoint(inputPoint, rotaryAngle);
+        m_KeyPoints[i] = RotaryKeyPoint(inputPoint, rotaryAngle);;
         m_KeyPointsInts[i] = CalculateIntersection(inputPoint, centerPoint);
-        LOGCATE("BigHeadSample::CalculateMesh index=%d, input[x,y]=[%f, %f], interscet[x, y]=[%f, %f]",
+        LOGCATE("RotaryHeadSample::CalculateMesh index=%d, input[x,y]=[%f, %f], interscet[x, y]=[%f, %f]",
                 i,
                 m_KeyPoints[i].x, m_KeyPoints[i].y, m_KeyPointsInts[i].x, m_KeyPointsInts[i].y);
     }
@@ -248,14 +257,14 @@ void BigHeadSample::CalculateMesh(float warpLevel) {
     m_MeshPoints[16] = m_KeyPointsInts[0];
     m_MeshPoints[17] = m_KeyPoints[0];
 
-    // 周围
+    //周围
     for (int i = 2; i < KEY_POINTS_COUNT * 2; ++i) {
         m_TexCoords[(i - 2) * 3] = m_MeshPoints[i - 2];
         m_TexCoords[(i - 2) * 3 + 1] = m_MeshPoints[i - 1];
         m_TexCoords[(i - 2) * 3 + 2] = m_MeshPoints[i];
     }
 
-    // 中心
+    //中心
     for (int i = 0; i < KEY_POINTS_COUNT - 2; ++i) {
         m_TexCoords[(i + 16) * 3] = m_KeyPoints[i];
         m_TexCoords[(i + 16) * 3 + 1] = m_KeyPoints[i + 1];
@@ -265,7 +274,7 @@ void BigHeadSample::CalculateMesh(float warpLevel) {
     m_TexCoords[23 * 3 + 1] = m_KeyPoints[8];
     m_TexCoords[23 * 3 + 0] = m_KeyPoints[0];
 
-    // 四角
+    //处理四个角
     m_TexCoords[24 * 3] = vec2(0, 0);
     m_TexCoords[24 * 3 + 1] = m_KeyPointsInts[0];
     m_TexCoords[24 * 3 + 2] = m_KeyPointsInts[1];
@@ -299,15 +308,15 @@ void BigHeadSample::CalculateMesh(float warpLevel) {
     m_TexCoords[31 * 3 + 2] = m_KeyPointsInts[0];
 
     for (int i = 0; i < TRIANGLE_COUNT * 3; ++i) {
-        LOGCATE("m_TexCoords[%d]=(%f, %f)", i, m_TexCoords[i].x, m_TexCoords[i].y);
+        //LOGCATE("m_TexCoords[%d]=(%f, %f)", i, m_TexCoords[i].x, m_TexCoords[i].y);
         m_Vertices[i] = vec3(m_TexCoords[i].x * 2 - 1, 1 - 2 * m_TexCoords[i].y, 0);
     }
 }
 
-vec2 BigHeadSample::CalculateIntersection(vec2 inputPoint, vec2 centerPoint) {
+vec2 RotaryHeadSample::CalculateIntersection(vec2 inputPoint, vec2 centerPoint) {
     vec2 outputPoint;
-    //直线与 y 轴平行
-    if (inputPoint.x == centerPoint.x) {
+    if (inputPoint.x == centerPoint.x) //直线与 y 轴平行
+    {
         vec2 pointA(inputPoint.x, 0);
         vec2 pointB(inputPoint.x, 1);
 
@@ -316,8 +325,9 @@ vec2 BigHeadSample::CalculateIntersection(vec2 inputPoint, vec2 centerPoint) {
         outputPoint = dA > dB ? pointB : pointA;
         return outputPoint;
     }
-    //直线与 x 轴平行
-    if (inputPoint.y == centerPoint.y) {
+
+    if (inputPoint.y == centerPoint.y) //直线与 x 轴平行
+    {
         vec2 pointA(0, inputPoint.y);
         vec2 pointB(1, inputPoint.y);
 
@@ -334,7 +344,8 @@ vec2 BigHeadSample::CalculateIntersection(vec2 inputPoint, vec2 centerPoint) {
 
     c = inputPoint.y - a * inputPoint.x;
 
-    //x=0, x=1, y=0, y=1  四条线交点
+    //x=0, x=1, y=0, y=1 四条线交点
+
     //x=0
     vec2 point_0(0, c);
     float d0 = DotProduct((centerPoint - inputPoint), (centerPoint - point_0));
@@ -366,9 +377,6 @@ vec2 BigHeadSample::CalculateIntersection(vec2 inputPoint, vec2 centerPoint) {
     return outputPoint;
 }
 
-vec2 BigHeadSample::WarpKeyPoint(vec2 input, vec2 centerPoint, float level) {
-    vec2 output;
-    vec2 direct_vec = centerPoint - input;
-    output = input + level * direct_vec * 0.3f;
-    return output;
+vec2 RotaryHeadSample::RotaryKeyPoint(vec2 input, float rotaryAngle) {
+    return input + vec2(cos(rotaryAngle), sin(rotaryAngle)) * 0.02f;
 }

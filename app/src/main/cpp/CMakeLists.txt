@@ -60,7 +60,8 @@ set(src_files
         sample/BezierCurveSample.cpp
         sample/FaceSlenderSample.cpp
         sample/BigEyesSample.cpp
-        sample/BigHeadSample.cpp)
+        sample/BigHeadSample.cpp
+        sample/RotaryHeadSample.cpp)
 
 add_library(
         ${CMAKE_PROJECT_NAME}

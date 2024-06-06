@@ -32,6 +32,7 @@
 #include "FaceSlenderSample.h"
 #include "BigEyesSample.h"
 #include "BigHeadSample.h"
+#include "RotaryHeadSample.h"
 
 class MineGlRenderContext {
 public:

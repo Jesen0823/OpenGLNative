@@ -32,6 +32,7 @@ public interface Constants {
     public static final int SAMPLE_TYPE_KEY_FACE_SLENDER = SAMPLE_TYPE + 23;
     public static final int SAMPLE_TYPE_KEY_BIG_EYES = SAMPLE_TYPE + 24;
     public static final int SAMPLE_TYPE_KEY_BIG_HEAD = SAMPLE_TYPE + 25;
+    public static final int SAMPLE_TYPE_KEY_ROTARY_HEAD = SAMPLE_TYPE + 26;
 
     public static final int IMAGE_FORMAT_RGBA = 0x01;
     public static final int IMAGE_FORMAT_NV21 = 0x02;
@@ -51,7 +52,7 @@ public interface Constants {
             "Instancing", "Stencil Testing", "Blending", "Particles",
             "SkyBox", "Assimp Load 3D Model", "PBO", "Beating Heart",
             "Cloud", "Shock Wave","Bezier Curve","Face Slender", "Big Eyes",
-            "Big Head"
+            "Big Head","Rotary Head",
     };
 
 }
