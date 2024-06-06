@@ -100,6 +100,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_FACE_SLENDER:
                 m_pCurSample = new FaceSlenderSample();
                 break;
+            case SAMPLE_TYPE_KEY_BIG_EYES:
+                m_pCurSample = new BigEyesSample();
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;
@@ -107,7 +110,6 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
         LOGCATE("MineGlRenderContext::SetParamsInt m_pBeforeSample = %p, m_pCurSample=%p",
                 m_pBeforeSample, m_pCurSample);
     }
-
 }
 
 void MineGlRenderContext::SetImageData(int format, int width, int height, uint8_t *pData) {

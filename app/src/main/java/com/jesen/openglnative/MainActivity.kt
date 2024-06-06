@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -28,6 +29,7 @@ import java.nio.ByteBuffer
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mGLSurfaceView: MineGLSurfaceView
+    private lateinit var mRootView: ViewGroup
     private lateinit var binding: ActivityMainBinding
     private var mSampleSelectedIndex =
         Constants.SAMPLE_TYPE_KEY_BEATING_HEART - Constants.SAMPLE_TYPE
@@ -53,6 +55,8 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        mRootView = binding.rootView
 
         mGLSurfaceView = binding.mineGlSurfaceView
         mGLSurfaceView.getEGLRender().init()
@@ -133,6 +137,12 @@ class MainActivity : AppCompatActivity() {
 
                 mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
 
+                if (mRootView.width != mGLSurfaceView.width
+                    || mRootView.height != mGLSurfaceView.height
+                ) {
+                    mGLSurfaceView.setAspectRatio(mRootView.width, mRootView.height);
+                }
+
                 mGLSurfaceView.getEGLRender()
                     .setParamsInt(Constants.SAMPLE_TYPE, position + Constants.SAMPLE_TYPE, 0)
                 when (position + Constants.SAMPLE_TYPE) {
@@ -192,9 +202,10 @@ class MainActivity : AppCompatActivity() {
                     Constants.SAMPLE_TYPE_KEY_BEZIER_CURVE -> {
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
-
-                    Constants.SAMPLE_TYPE_KEY_FACE_SLENDER -> {
+                    Constants.SAMPLE_TYPE_KEY_FACE_SLENDER,
+                    Constants.SAMPLE_TYPE_KEY_BIG_EYES-> {
                         val bitmap = loadRGBAImage(R.drawable.yifei)
+                        mGLSurfaceView.setAspectRatio(bitmap.width,bitmap.height)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
 

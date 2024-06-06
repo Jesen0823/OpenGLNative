@@ -3,11 +3,13 @@ package com.jesen.openglnative
 import android.content.Context
 import android.opengl.GLSurfaceView
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 
+
 class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    GLSurfaceView(context, attrs),ScaleGestureDetector.OnScaleGestureListener {
+    GLSurfaceView(context, attrs), ScaleGestureDetector.OnScaleGestureListener {
     private val TAG = "MineGLSurfaceView"
     private val TOUCH_SCALE_FACTOR = 180.0f / 320
     private var mGLRender: MineGLRender
@@ -19,22 +21,24 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
     private var mPreScale = 1.0f
     private var mCurScale = 1.0f
     private var mLastMultiTouchTime: Long = 0L
+    private var mRatioWidth = 0
+    private var mRatioHeight = 0
 
     init {
         this.setEGLContextClientVersion(2)
         mGLRender = MineGLRender()
-        setEGLConfigChooser(8,8,8,8,16,8);
+        setEGLConfigChooser(8, 8, 8, 8, 16, 8);
         setRenderer(mGLRender)
         renderMode = RENDERMODE_WHEN_DIRTY
-        mScaleGestureDetector = ScaleGestureDetector(context,this)
+        mScaleGestureDetector = ScaleGestureDetector(context, this)
     }
 
     fun getEGLRender(): MineGLRender = mGLRender
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if(event.pointerCount == 1){
+        if (event.pointerCount == 1) {
             val currentTimeMillis = System.currentTimeMillis()
-            if(currentTimeMillis - mLastMultiTouchTime >200){
+            if (currentTimeMillis - mLastMultiTouchTime > 200) {
                 val x = event.x
                 val y = event.y
                 when (event.action) {
@@ -60,16 +64,41 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
                     Constants.SAMPLE_TYPE_PARTICLES,
                     Constants.SAMPLE_TYPE_SKYBOX,
                     Constants.SAMPLE_TYPE_3D_MODEL,
-                    Constants.SAMPLE_TYPE_PBO-> {
-                        mGLRender.updateTransformMatrix(mXAngle,mYAngle,mCurScale,mCurScale)
+                    Constants.SAMPLE_TYPE_PBO -> {
+                        mGLRender.updateTransformMatrix(mXAngle, mYAngle, mCurScale, mCurScale)
                         requestRender()
-                    }else->{}
+                    }
+
+                    else -> {}
                 }
             }
-        }else{
+        } else {
             mScaleGestureDetector.onTouchEvent(event)
         }
         return true
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val wSize = MeasureSpec.getSize(widthMeasureSpec)
+        val hSize = MeasureSpec.getSize(heightMeasureSpec)
+        if (mRatioWidth == 0 || mRatioHeight == 0) {
+            setMeasuredDimension(wSize, hSize)
+        } else {
+            if (wSize < wSize * mRatioWidth / mRatioHeight) {
+                setMeasuredDimension(wSize, wSize * mRatioHeight / mRatioWidth)
+            } else {
+                setMeasuredDimension(hSize * mRatioWidth / mRatioHeight, hSize)
+            }
+        }
+    }
+
+    fun setAspectRatio(w: Int, h: Int) {
+        Log.d(TAG, "setAspectRatio() called with: width = [$w], height = [$h]")
+        require(!(w < 0 || h < 0)) { "Size cannot be negative." }
+        mRatioWidth = w
+        mRatioHeight = h
+        requestLayout()
     }
 
     override fun onScale(detector: ScaleGestureDetector): Boolean {
@@ -77,7 +106,7 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
             Constants.SAMPLE_TYPE_COORD_SYSTEM,
             Constants.SAMPLE_TYPE_BASIC_LIGHTING,
             Constants.SAMPLE_TYPE_INSTANCING,
-            Constants.SAMPLE_TYPE_3D_MODEL-> {
+            Constants.SAMPLE_TYPE_3D_MODEL -> {
                 val preSpan = detector.previousSpan
                 val curSpan = detector.currentSpan
                 mCurScale = if (curSpan < preSpan) {
@@ -89,6 +118,7 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
                 mGLRender.updateTransformMatrix(mXAngle, mYAngle, mCurScale, mCurScale)
                 requestRender()
             }
+
             else -> {}
         }
         return false

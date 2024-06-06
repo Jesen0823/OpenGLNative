@@ -37,6 +37,7 @@
 #define SAMPLE_TYPE_KEY_SHOCK_WAVE                  SAMPLE_TYPE+21
 #define SAMPLE_TYPE_KEY_BEZIER_CURVE                SAMPLE_TYPE+22
 #define SAMPLE_TYPE_KEY_FACE_SLENDER                SAMPLE_TYPE+23
+#define SAMPLE_TYPE_KEY_BIG_EYES                    SAMPLE_TYPE+24
 
 class GLSampleBase {
 protected:

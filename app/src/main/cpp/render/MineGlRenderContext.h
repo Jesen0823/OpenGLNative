@@ -30,6 +30,7 @@
 #include "ShockWaveSample.h"
 #include "BezierCurveSample.h"
 #include "FaceSlenderSample.h"
+#include "BigEyesSample.h"
 
 class MineGlRenderContext {
 public:
