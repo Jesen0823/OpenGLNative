@@ -57,6 +57,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         sample/ShockWaveSample.cpp
         sample/CloudSample.cpp
         sample/BezierCurveSample.cpp
+        sample/FaceSlenderSample.cpp
         # List C/C++ source files with relative paths to this CMakeLists.txt.
         ${src_files})
 

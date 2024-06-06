@@ -2,6 +2,7 @@ package com.jesen.openglnative
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.opengl.GLSurfaceView
 import android.os.Build
@@ -69,10 +70,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadRGBAImage(resId: Int) {
+    private fun loadRGBAImage(resId: Int): Bitmap {
+        var bitmap: Bitmap
         resources.openRawResource(resId).use { ins ->
-            val bitmap = BitmapFactory.decodeStream(ins)
-            bitmap?.let { bp ->
+            bitmap = BitmapFactory.decodeStream(ins)
+            bitmap.let { bp ->
                 val buf = ByteBuffer.allocate(bp.byteCount)
                 bp.copyPixelsToBuffer(buf)
                 val byteArray = buf.array()
@@ -80,6 +82,7 @@ class MainActivity : AppCompatActivity() {
                     .setImageData(IMAGE_FORMAT_RGBA, bp.width, bp.height, byteArray)
             }
         }
+        return bitmap
     }
 
     private fun loadRGBAImage(resId: Int, index: Int) {
@@ -187,6 +190,11 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     Constants.SAMPLE_TYPE_KEY_BEZIER_CURVE -> {
+                        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+                    }
+
+                    Constants.SAMPLE_TYPE_KEY_FACE_SLENDER -> {
+                        val bitmap = loadRGBAImage(R.drawable.yifei)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
 
