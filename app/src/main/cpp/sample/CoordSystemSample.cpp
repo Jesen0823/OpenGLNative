@@ -107,6 +107,14 @@ void CoordSystemSample::Init() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_VBOIds[2]);
 
     glBindVertexArray(GL_NONE);
+
+    // upload RGBA image data
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_TextureId);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_RenderImage.width,
+                 m_RenderImage.height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 m_RenderImage.ppPlane[0]);
+    glBindTexture(GL_TEXTURE_2D, GL_NONE);
 }
 
 void CoordSystemSample::LoadImage(NativeImage *pImage) {
@@ -150,11 +158,11 @@ void CoordSystemSample::Draw(int screenW, int screenH) {
 }
 
 void CoordSystemSample::Destroy() {
-    if(m_ProgramObj){
+    if (m_ProgramObj) {
         glDeleteProgram(m_ProgramObj);
-        glDeleteBuffers(3,m_VBOIds);
-        glDeleteVertexArrays(1,&m_VAOId);
-        glDeleteTextures(1,&m_TextureId);
+        glDeleteBuffers(3, m_VBOIds);
+        glDeleteVertexArrays(1, &m_VAOId);
+        glDeleteTextures(1, &m_TextureId);
     }
 }
 
