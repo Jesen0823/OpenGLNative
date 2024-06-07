@@ -6,13 +6,14 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
+import com.jesen.openglnative.Constants.SAMPLE_TYPE_KEY_SCRATCH_CARD
 
-
-class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+class MineGLSurfaceView(context: Context, mineGLRender: MineGLRender?, attrs: AttributeSet?) :
     GLSurfaceView(context, attrs), ScaleGestureDetector.OnScaleGestureListener {
+
     private val TAG = "MineGLSurfaceView"
     private val TOUCH_SCALE_FACTOR = 180.0f / 320
-    private var mGLRender: MineGLRender
+    private var mMineGLRender: MineGLRender
     private var mPreviousY = 0f
     private var mPreviousX = 0f
     private var mXAngle = 0f
@@ -24,19 +25,22 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
     private var mRatioWidth = 0
     private var mRatioHeight = 0
 
+    constructor(context: Context, mineGLRender: MineGLRender?) : this(context, mineGLRender, null)
+
     init {
         this.setEGLContextClientVersion(2)
-        mGLRender = MineGLRender()
+        mMineGLRender = mineGLRender ?: MineGLRender()
         setEGLConfigChooser(8, 8, 8, 8, 16, 8);
-        setRenderer(mGLRender)
+        setRenderer(mMineGLRender)
         renderMode = RENDERMODE_WHEN_DIRTY
         mScaleGestureDetector = ScaleGestureDetector(context, this)
     }
 
-    fun getEGLRender(): MineGLRender = mGLRender
+    fun getEGLRender(): MineGLRender = mMineGLRender
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (event.pointerCount == 1) {
+            consumeTouchEvent(event)
             val currentTimeMillis = System.currentTimeMillis()
             if (currentTimeMillis - mLastMultiTouchTime > 200) {
                 val x = event.x
@@ -53,7 +57,7 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
                 }
                 mPreviousX = x
                 mPreviousY = y
-                when (mGLRender.getSampleType()) {
+                when (mMineGLRender.getSampleType()) {
                     Constants.SAMPLE_TYPE_FBO_LEG,
                     Constants.SAMPLE_TYPE_COORD_SYSTEM,
                     Constants.SAMPLE_TYPE_BASIC_LIGHTING,
@@ -65,8 +69,8 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
                     Constants.SAMPLE_TYPE_SKYBOX,
                     Constants.SAMPLE_TYPE_3D_MODEL,
                     Constants.SAMPLE_TYPE_PBO,
-                    Constants.SAMPLE_TYPE_KEY_VISUALIZE_AUDIO-> {
-                        mGLRender.updateTransformMatrix(mXAngle, mYAngle, mCurScale, mCurScale)
+                    Constants.SAMPLE_TYPE_KEY_VISUALIZE_AUDIO -> {
+                        mMineGLRender.updateTransformMatrix(mXAngle, mYAngle, mCurScale, mCurScale)
                         requestRender()
                     }
 
@@ -103,12 +107,12 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     override fun onScale(detector: ScaleGestureDetector): Boolean {
-        when (mGLRender.getSampleType()) {
+        when (mMineGLRender.getSampleType()) {
             Constants.SAMPLE_TYPE_COORD_SYSTEM,
             Constants.SAMPLE_TYPE_BASIC_LIGHTING,
             Constants.SAMPLE_TYPE_INSTANCING,
             Constants.SAMPLE_TYPE_3D_MODEL,
-            Constants.SAMPLE_TYPE_KEY_VISUALIZE_AUDIO-> {
+            Constants.SAMPLE_TYPE_KEY_VISUALIZE_AUDIO -> {
                 val preSpan = detector.previousSpan
                 val curSpan = detector.currentSpan
                 mCurScale = if (curSpan < preSpan) {
@@ -117,7 +121,7 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
                     mPreScale + (curSpan - preSpan) / 200
                 }
                 mCurScale = 0.05f.coerceAtLeast(mCurScale.coerceAtMost(80.0f))
-                mGLRender.updateTransformMatrix(mXAngle, mYAngle, mCurScale, mCurScale)
+                mMineGLRender.updateTransformMatrix(mXAngle, mYAngle, mCurScale, mCurScale)
                 requestRender()
             }
 
@@ -133,5 +137,29 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
     override fun onScaleEnd(detector: ScaleGestureDetector) {
         mPreScale = mCurScale
         mLastMultiTouchTime = System.currentTimeMillis()
+    }
+
+    fun consumeTouchEvent(e: MotionEvent) {
+        var touchX = -1f
+        var touchY = -1f
+        when (e.action) {
+            MotionEvent.ACTION_MOVE -> {
+                touchX = e.x
+                touchY = e.y
+            }
+
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                touchX = -1f
+                touchY = -1f
+            }
+        }
+        when (mMineGLRender.getSampleType()) {
+            SAMPLE_TYPE_KEY_SCRATCH_CARD -> {
+                mMineGLRender.setTouchLoc(touchX, touchY)
+                requestRender()
+            }
+
+            else -> {}
+        }
     }
 }

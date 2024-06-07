@@ -7,10 +7,10 @@
     android:id="@+id/root_view"
     tools:context=".MainActivity">
 
-    <com.jesen.openglnative.MineGLSurfaceView
+    <!--<com.jesen.openglnative.MineGLSurfaceView
         android:id="@+id/mine_gl_surface_view"
         android:layout_centerInParent="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" />-->
 
 </RelativeLayout>

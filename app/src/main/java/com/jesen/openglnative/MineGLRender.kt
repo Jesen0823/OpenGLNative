@@ -54,7 +54,12 @@ class MineGLRender() :GLSurfaceView.Renderer {
     }
 
     fun getSampleType() = mSampleType
+
     fun setAudioData(buffer: ShortArray) {
         nativeRender.native_SetAudioData(buffer)
+    }
+
+    fun setTouchLoc(x:Float,y:Float){
+        nativeRender.native_SetParamsFloat(Constants.SAMPLE_TYPE_SET_TOUCH_LOC,x,y)
     }
 }

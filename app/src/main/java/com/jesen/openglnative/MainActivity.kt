@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.opengl.GLSurfaceView
+import android.opengl.GLSurfaceView.RENDERMODE_CONTINUOUSLY
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -14,7 +15,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.Button
+import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -28,7 +31,9 @@ import com.jesen.openglnative.utils.FileUtil
 import com.jesen.openglnative.utils.PermissionHelper
 import java.nio.ByteBuffer
 
-class MainActivity : AppCompatActivity(),AudioCollector.Callback {
+
+class MainActivity : AppCompatActivity(), AudioCollector.Callback,
+    ViewTreeObserver.OnGlobalLayoutListener {
     private lateinit var mGLSurfaceView: MineGLSurfaceView
     private lateinit var mRootView: ViewGroup
     private lateinit var binding: ActivityMainBinding
@@ -39,6 +44,7 @@ class MainActivity : AppCompatActivity(),AudioCollector.Callback {
     private var sharedPre: SharedPreferences? = null
     private var editor: SharedPreferences.Editor? = null
     private var mAudioCollector: AudioCollector? = null
+    private val mMineGLRender: MineGLRender = MineGLRender()
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,10 +65,11 @@ class MainActivity : AppCompatActivity(),AudioCollector.Callback {
         setContentView(binding.root)
 
         mRootView = binding.rootView
+        mRootView.viewTreeObserver.addOnGlobalLayoutListener(this@MainActivity)
+        mMineGLRender.init()
 
-        mGLSurfaceView = binding.mineGlSurfaceView
-        mGLSurfaceView.getEGLRender().init()
-        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+        //mGLSurfaceView = binding.mineGlSurfaceView
+        //mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
@@ -84,24 +91,29 @@ class MainActivity : AppCompatActivity(),AudioCollector.Callback {
                 val buf = ByteBuffer.allocate(bp.byteCount)
                 bp.copyPixelsToBuffer(buf)
                 val byteArray = buf.array()
-                mGLSurfaceView.getEGLRender()
-                    .setImageData(IMAGE_FORMAT_RGBA, bp.width, bp.height, byteArray)
+                mMineGLRender.setImageData(IMAGE_FORMAT_RGBA, bp.width, bp.height, byteArray)
             }
         }
         return bitmap
     }
 
-    private fun loadRGBAImage(resId: Int, index: Int) {
+    private fun loadRGBAImage(resId: Int, index: Int): Bitmap {
+        var bitmap: Bitmap
         resources.openRawResource(resId).use { ins ->
-            val bitmap = BitmapFactory.decodeStream(ins)
-            bitmap?.let { bp ->
-                val buf = ByteBuffer.allocate(bp.byteCount)
-                bp.copyPixelsToBuffer(buf)
-                val byteArray = buf.array()
-                mGLSurfaceView.getEGLRender()
-                    .setImageDataWithIndex(index, IMAGE_FORMAT_RGBA, bp.width, bp.height, byteArray)
-            }
+            bitmap = BitmapFactory.decodeStream(ins)
+
+            val buf = ByteBuffer.allocate(bitmap.byteCount)
+            bitmap.copyPixelsToBuffer(buf)
+            val byteArray = buf.array()
+            mMineGLRender.setImageDataWithIndex(
+                index,
+                IMAGE_FORMAT_RGBA,
+                bitmap.width,
+                bitmap.height,
+                byteArray
+            )
         }
+        return bitmap
     }
 
     private fun loadNV21Image() {
@@ -109,8 +121,7 @@ class MainActivity : AppCompatActivity(),AudioCollector.Callback {
             val length = it.available()
             val buffer = ByteArray(length)
             it.read(buffer)
-            mGLSurfaceView.getEGLRender()
-                .setImageData(Constants.IMAGE_FORMAT_NV21, 840, 1074, buffer)
+            mMineGLRender.setImageData(Constants.IMAGE_FORMAT_NV21, 840, 1074, buffer)
         }
     }
 
@@ -129,6 +140,15 @@ class MainActivity : AppCompatActivity(),AudioCollector.Callback {
         adapter.addOnItemClickListener(object : OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 Log.i("MainActivity", "---OnItemClick, position = $position")
+
+                mRootView.removeView(mGLSurfaceView)
+                val lp = RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+                )
+                lp.addRule(RelativeLayout.CENTER_IN_PARENT)
+                mGLSurfaceView = MineGLSurfaceView(this@MainActivity, mMineGLRender)
+                mRootView.addView(mGLSurfaceView, lp)
+
                 val selectIndex = adapter.getSelectIndex()
                 adapter.apply {
                     setSelectIndex(position)
@@ -145,8 +165,11 @@ class MainActivity : AppCompatActivity(),AudioCollector.Callback {
                     mGLSurfaceView.setAspectRatio(mRootView.width, mRootView.height);
                 }
 
-                mGLSurfaceView.getEGLRender()
-                    .setParamsInt(Constants.SAMPLE_TYPE, position + Constants.SAMPLE_TYPE, 0)
+                mMineGLRender.setParamsInt(
+                    Constants.SAMPLE_TYPE,
+                    position + Constants.SAMPLE_TYPE,
+                    0
+                )
                 val sampleType = position + Constants.SAMPLE_TYPE
                 when (sampleType) {
                     Constants.SAMPLE_TYPE_TRIANGLE -> {}
@@ -173,7 +196,10 @@ class MainActivity : AppCompatActivity(),AudioCollector.Callback {
                         loadRGBAImage(R.drawable.window, 2)
                     }
 
-                    Constants.SAMPLE_TYPE_PARTICLES -> loadRGBAImage(R.drawable.board_texture)
+                    Constants.SAMPLE_TYPE_PARTICLES -> {
+                        loadRGBAImage(R.drawable.board_texture)
+                        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+                    }
                     Constants.SAMPLE_TYPE_SKYBOX -> {
                         loadRGBAImage(R.drawable.right, 0)
                         loadRGBAImage(R.drawable.left, 1)
@@ -219,20 +245,26 @@ class MainActivity : AppCompatActivity(),AudioCollector.Callback {
                         mGLSurfaceView.setAspectRatio(bitmap.width, bitmap.height)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
-                    Constants.SAMPLE_TYPE_KEY_VISUALIZE_AUDIO->{
-                        if(mAudioCollector == null){
-                            mAudioCollector = AudioCollector(this@MainActivity)
+
+                    Constants.SAMPLE_TYPE_KEY_VISUALIZE_AUDIO -> {
+                        if (mAudioCollector == null) {
+                            mAudioCollector = AudioCollector(applicationContext)
                         }
                         mAudioCollector!!.addCallback(this@MainActivity)
                         mAudioCollector!!.initAudio()
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
 
+                    Constants.SAMPLE_TYPE_KEY_SCRATCH_CARD -> {
+                        val bitmap = loadRGBAImage(R.drawable.yifei)
+                        mGLSurfaceView.setAspectRatio(bitmap.width, bitmap.height)
+                    }
+
                     else -> {}
                 }
                 mGLSurfaceView.requestRender()
 
-                if (sampleType != Constants.SAMPLE_TYPE_KEY_VISUALIZE_AUDIO && mAudioCollector!=null){
+                if (sampleType != Constants.SAMPLE_TYPE_KEY_VISUALIZE_AUDIO && mAudioCollector != null) {
                     mAudioCollector!!.unInitAudio()
                     mAudioCollector = null
                 }
@@ -270,11 +302,25 @@ class MainActivity : AppCompatActivity(),AudioCollector.Callback {
 
     override fun onDestroy() {
         super.onDestroy()
-        mGLSurfaceView.getEGLRender().unInit()
+        mMineGLRender.unInit()
     }
 
     override fun onAudioBufferCallback(buffer: ShortArray) {
-        Log.e("MainActivity", "onAudioBufferCallback() called with: buffer[0] = [" + buffer[0] + "]")
-        mGLSurfaceView.getEGLRender().setAudioData(buffer)
+        Log.e(
+            "MainActivity",
+            "onAudioBufferCallback() called with: buffer[0] = [" + buffer[0] + "]"
+        )
+        mMineGLRender.setAudioData(buffer)
+    }
+
+    override fun onGlobalLayout() {
+        mRootView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+        val lp = RelativeLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        lp.addRule(RelativeLayout.CENTER_IN_PARENT)
+        mGLSurfaceView = MineGLSurfaceView(this, mMineGLRender)
+        mRootView.addView(mGLSurfaceView, lp)
+        mGLSurfaceView.renderMode = RENDERMODE_CONTINUOUSLY
     }
 }

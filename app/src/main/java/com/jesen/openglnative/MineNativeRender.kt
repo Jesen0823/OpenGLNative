@@ -29,4 +29,6 @@ class MineNativeRender {
     external fun native_OnDrawFrame()
 
     external fun native_SetAudioData(audioData:ShortArray)
+
+    external fun native_SetParamsFloat(paramType: Int, value0: Float, value1: Float)
 }

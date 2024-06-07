@@ -24,11 +24,46 @@ find_library(
         android-lib
         android)
 
-file(GLOB src_files
+#[[file(GLOB src_files
         ${CMAKE_SOURCE_DIR}/*.cpp
         ${CMAKE_SOURCE_DIR}/util/*.cpp
         ${CMAKE_SOURCE_DIR}/render/*.cpp
-        ${CMAKE_SOURCE_DIR}/sample/*.cpp)
+        ${CMAKE_SOURCE_DIR}/sample/*.cpp)]]
+
+set(src_files
+        JNIImpl.cpp
+        util/GLUtils.cpp
+        render/EGLRender.cpp
+        render/MineGlRenderContext.cpp
+        sample/TriangleSample.cpp
+        sample/TextureMapSample.cpp
+        sample/NV21TextureMapSample.cpp
+        sample/VaoSample.cpp
+        sample/FBOSample.cpp
+        sample/FBOLegLengthSample.cpp
+        sample/CoordSystemSample.cpp
+        sample/BasicLightingSample.cpp
+        sample/TransformFeedbackSample.cpp
+        sample/MultiLightsSample.cpp
+        sample/DepthTestingSample.cpp
+        sample/InstancingSample.cpp
+        sample/Instancing3DSample.cpp
+        sample/StencilTestingSample.cpp
+        sample/BlendingSample.cpp
+        sample/ParticlesSample.cpp
+        sample/SkyBoxSample.cpp
+        sample/Model3DSample.cpp
+        sample/PBOSample.cpp
+        sample/BeatingHeartSample.cpp
+        sample/ShockWaveSample.cpp
+        sample/CloudSample.cpp
+        sample/BezierCurveSample.cpp
+        sample/FaceSlenderSample.cpp
+        sample/BigEyesSample.cpp
+        sample/BigHeadSample.cpp
+        sample/RotaryHeadSample.cpp
+        sample/VisualizeAudioSample.cpp
+        sample/ScratchCardSample.cpp)
 
 add_library(
         ${CMAKE_PROJECT_NAME}

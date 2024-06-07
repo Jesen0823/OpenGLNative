@@ -41,6 +41,9 @@
 #define SAMPLE_TYPE_KEY_BIG_HEAD                    SAMPLE_TYPE+25
 #define SAMPLE_TYPE_KEY_ROTARY_HEAD                 SAMPLE_TYPE+26
 #define SAMPLE_TYPE_KEY_VISUALIZE_AUDIO             SAMPLE_TYPE+27
+#define SAMPLE_TYPE_KEY_SCRATCH_CARD                SAMPLE_TYPE+28
+
+#define SAMPLE_TYPE_KEY_SET_TOUCH_LOC               SAMPLE_TYPE+999
 
 class GLSampleBase {
 protected:
@@ -48,12 +51,16 @@ protected:
     GLuint m_FragmentShader;
     GLuint m_ProgramObj;
     MySyncLock m_Lock;
+    int m_SurfaceWidth;
+    int m_SurfaceHeight;
 
 public:
     GLSampleBase() {
         this->m_FragmentShader = 0;
         this->m_VertexShader = 0;
         this->m_ProgramObj = 0;
+        this->m_SurfaceWidth = 0;
+        this->m_SurfaceHeight = 0;
     }
 
     virtual ~GLSampleBase() {}
@@ -70,7 +77,11 @@ public:
 
     virtual void Destroy() = 0;
 
-    virtual void LoadShortArrData(short *const pShortArr, int arrSize){
+    virtual void LoadShortArrData(short *const pShortArr, int arrSize) {
+
+    }
+
+    virtual void SetTouchLocation(float x, float y) {
 
     }
 };

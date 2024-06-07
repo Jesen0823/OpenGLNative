@@ -45,6 +45,13 @@ native_SetParamsInt(JNIEnv *env, jobject thiz,
 }
 
 extern "C"
+JNIEXPORT void JNICALL
+native_SetParamsFloat(JNIEnv *env, jobject thiz,
+                      jint param_type, jfloat value0, jfloat value1) {
+    MineGlRenderContext::GetInstance()->SetParamsFloat(param_type, value0, value1);
+}
+
+extern "C"
 JNIEXPORT void JNICALL native_UpdateTransformMatrix
         (JNIEnv *env, jobject instance, jfloat rotateX, jfloat rotateY, jfloat scaleX,
          jfloat scaleY) {
@@ -81,10 +88,10 @@ native_OnDrawFrame(JNIEnv *env, jobject thiz) {
 }
 
 extern "C"
-JNIEXPORT void JNICALL native_SetAudioData(JNIEnv *env,jobject instance,jshortArray data){
+JNIEXPORT void JNICALL native_SetAudioData(JNIEnv *env, jobject instance, jshortArray data) {
     int len = env->GetArrayLength(data);
     short *pShortBuf = new short[len];
-    env->GetShortArrayRegion(data,0,len,reinterpret_cast<jshort*>(pShortBuf));
+    env->GetShortArrayRegion(data, 0, len, reinterpret_cast<jshort *>(pShortBuf));
     MineGlRenderContext::GetInstance()->SetParamsShortArr(pShortBuf, len);
     delete[] pShortBuf;
     env->DeleteLocalRef(data);
@@ -99,6 +106,7 @@ static JNINativeMethod g_NativeMethods[] = {
         {"native_OnUnInit",              "()V",       (void *) (native_OnUnInit)},
         {"native_SetImageData",          "(III[B)V",  (void *) (native_SetImageData)},
         {"native_SetParamsInt",          "(III)V",    (void *) (native_SetParamsInt)},
+        {"native_SetParamsFloat",        "(IFF)V",    (void *) (native_SetParamsFloat)},
         {"native_SetImageDataWithIndex", "(IIII[B)V", (void *) (native_SetImageDataWithIndex)},
         {"native_UpdateTransformMatrix", "(FFFF)V",   (void *) (native_UpdateTransformMatrix)},
         {"native_OnSurfaceCreated",      "()V",       (void *) (native_OnSurfaceCreated)},

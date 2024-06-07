@@ -34,6 +34,7 @@
 #include "BigHeadSample.h"
 #include "RotaryHeadSample.h"
 #include "VisualizeAudioSample.h"
+#include "ScratchCardSample.h"
 
 class MineGlRenderContext {
 public:
@@ -42,6 +43,8 @@ public:
     ~MineGlRenderContext();
 
     void SetParamsInt(int paramType, int value0, int value1);
+
+    void SetParamsFloat(int paramType, float value0, float value1);
 
     void UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY);
 
