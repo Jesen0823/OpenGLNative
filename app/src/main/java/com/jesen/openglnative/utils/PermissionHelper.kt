@@ -25,15 +25,15 @@ class PermissionHelper {
             if (ActivityCompat.checkSelfPermission(
                     activity,
                     Manifest.permission.READ_MEDIA_AUDIO
-                ) == PackageManager.PERMISSION_GRANTED &&
+                ) != PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(
                     activity,
                     Manifest.permission.READ_MEDIA_VIDEO
-                ) == PackageManager.PERMISSION_GRANTED &&
+                ) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(
                         activity,
                         Manifest.permission.RECORD_AUDIO
-                    ) == PackageManager.PERMISSION_GRANTED){
+                    ) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(
                     activity, arrayOf<String>(
                         Manifest.permission.READ_MEDIA_AUDIO,
