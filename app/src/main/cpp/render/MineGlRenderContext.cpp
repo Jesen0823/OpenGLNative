@@ -109,6 +109,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_ROTARY_HEAD:
                 m_pCurSample = new RotaryHeadSample;
                 break;
+            case SAMPLE_TYPE_KEY_VISUALIZE_AUDIO:
+                m_pCurSample = new VisualizeAudioSample();
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;
@@ -196,7 +199,7 @@ void MineGlRenderContext::UpdateTransformMatrix(float rotateX, float rotateY, fl
 
 void MineGlRenderContext::SetImageDataWithIndex(int index, int format, int width, int height,
                                                 uint8_t *pData) {
-    LOGCATE("MyGLRenderContext::SetImageDataWithIndex index=%d, format=%d, width=%d, height=%d, pData=%p",
+    LOGCATE("MineGlRenderContext::SetImageDataWithIndex index=%d, format=%d, width=%d, height=%d, pData=%p",
             index, format, width, height, pData);
     NativeImage nativeImage;
     nativeImage.format = format;
@@ -219,5 +222,13 @@ void MineGlRenderContext::SetImageDataWithIndex(int index, int format, int width
 
     if (m_pCurSample) {
         m_pCurSample->LoadMultiImageWithIndex(index, &nativeImage);
+    }
+}
+
+void MineGlRenderContext::SetParamsShortArr(short *const pShortArr, int arrSize) {
+    LOGCATE("MineGlRenderContext::SetParamsShortArr pShortArr=%p, arrSize=%d, pShortArr[0]=%d",
+            pShortArr, arrSize, pShortArr[0]);
+    if (m_pCurSample) {
+        m_pCurSample->LoadShortArrData(pShortArr, arrSize);
     }
 }

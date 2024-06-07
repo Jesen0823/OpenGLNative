@@ -33,6 +33,7 @@
 #include "BigEyesSample.h"
 #include "BigHeadSample.h"
 #include "RotaryHeadSample.h"
+#include "VisualizeAudioSample.h"
 
 class MineGlRenderContext {
 public:
@@ -53,6 +54,8 @@ public:
     void OnSurfaceChanged(int width, int height);
 
     void OnDrawFrame();
+
+    void SetParamsShortArr(short *const pShortArr, int arrSize);
 
     static void DestroyInstance();
 

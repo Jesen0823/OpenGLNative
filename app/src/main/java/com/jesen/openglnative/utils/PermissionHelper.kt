@@ -29,11 +29,16 @@ class PermissionHelper {
                 ActivityCompat.checkSelfPermission(
                     activity,
                     Manifest.permission.READ_MEDIA_VIDEO
-                ) == PackageManager.PERMISSION_GRANTED) {
+                ) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(
+                        activity,
+                        Manifest.permission.RECORD_AUDIO
+                    ) == PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(
                     activity, arrayOf<String>(
                         Manifest.permission.READ_MEDIA_AUDIO,
-                        Manifest.permission.READ_MEDIA_VIDEO
+                        Manifest.permission.READ_MEDIA_VIDEO,
+                        Manifest.permission.RECORD_AUDIO
                     ), 200
                 )
             }
@@ -58,7 +63,8 @@ class PermissionHelper {
             multiplePermission.launch(
                 arrayOf(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.RECORD_AUDIO
                 )
             )
         }

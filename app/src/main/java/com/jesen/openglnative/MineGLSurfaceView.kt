@@ -64,7 +64,8 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
                     Constants.SAMPLE_TYPE_PARTICLES,
                     Constants.SAMPLE_TYPE_SKYBOX,
                     Constants.SAMPLE_TYPE_3D_MODEL,
-                    Constants.SAMPLE_TYPE_PBO -> {
+                    Constants.SAMPLE_TYPE_PBO,
+                    Constants.SAMPLE_TYPE_KEY_VISUALIZE_AUDIO-> {
                         mGLRender.updateTransformMatrix(mXAngle, mYAngle, mCurScale, mCurScale)
                         requestRender()
                     }
@@ -106,7 +107,8 @@ class MineGLSurfaceView @JvmOverloads constructor(context: Context, attrs: Attri
             Constants.SAMPLE_TYPE_COORD_SYSTEM,
             Constants.SAMPLE_TYPE_BASIC_LIGHTING,
             Constants.SAMPLE_TYPE_INSTANCING,
-            Constants.SAMPLE_TYPE_3D_MODEL -> {
+            Constants.SAMPLE_TYPE_3D_MODEL,
+            Constants.SAMPLE_TYPE_KEY_VISUALIZE_AUDIO-> {
                 val preSpan = detector.previousSpan
                 val curSpan = detector.currentSpan
                 mCurScale = if (curSpan < preSpan) {

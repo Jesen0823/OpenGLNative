@@ -40,6 +40,7 @@
 #define SAMPLE_TYPE_KEY_BIG_EYES                    SAMPLE_TYPE+24
 #define SAMPLE_TYPE_KEY_BIG_HEAD                    SAMPLE_TYPE+25
 #define SAMPLE_TYPE_KEY_ROTARY_HEAD                 SAMPLE_TYPE+26
+#define SAMPLE_TYPE_KEY_VISUALIZE_AUDIO             SAMPLE_TYPE+27
 
 class GLSampleBase {
 protected:
@@ -69,9 +70,9 @@ public:
 
     virtual void Destroy() = 0;
 
-    virtual void SetParamsInt(int paramType, int value0, int value1) {
+    virtual void LoadShortArrData(short *const pShortArr, int arrSize){
 
-    };
+    }
 };
 
 #endif //OPENGLNATIVE_GLSAMPLEBASE_H

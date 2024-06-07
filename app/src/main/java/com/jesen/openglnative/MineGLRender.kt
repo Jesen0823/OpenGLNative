@@ -54,4 +54,7 @@ class MineGLRender() :GLSurfaceView.Renderer {
     }
 
     fun getSampleType() = mSampleType
+    fun setAudioData(buffer: ShortArray) {
+        nativeRender.native_SetAudioData(buffer)
+    }
 }

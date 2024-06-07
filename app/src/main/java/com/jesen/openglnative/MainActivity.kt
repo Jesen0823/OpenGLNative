@@ -21,13 +21,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jesen.openglnative.Constants.IMAGE_FORMAT_RGBA
+import com.jesen.openglnative.audio.AudioCollector
 import com.jesen.openglnative.databinding.ActivityMainBinding
 import com.jesen.openglnative.egl.EGLActivity
 import com.jesen.openglnative.utils.FileUtil
 import com.jesen.openglnative.utils.PermissionHelper
 import java.nio.ByteBuffer
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),AudioCollector.Callback {
     private lateinit var mGLSurfaceView: MineGLSurfaceView
     private lateinit var mRootView: ViewGroup
     private lateinit var binding: ActivityMainBinding
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity() {
     private val permissionHelper = PermissionHelper()
     private var sharedPre: SharedPreferences? = null
     private var editor: SharedPreferences.Editor? = null
+    private var mAudioCollector: AudioCollector? = null
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -145,7 +147,8 @@ class MainActivity : AppCompatActivity() {
 
                 mGLSurfaceView.getEGLRender()
                     .setParamsInt(Constants.SAMPLE_TYPE, position + Constants.SAMPLE_TYPE, 0)
-                when (position + Constants.SAMPLE_TYPE) {
+                val sampleType = position + Constants.SAMPLE_TYPE
+                when (sampleType) {
                     Constants.SAMPLE_TYPE_TRIANGLE -> {}
                     Constants.SAMPLE_TYPE_TEXTURE_MAP -> loadRGBAImage(R.drawable.dzzz)
 
@@ -216,10 +219,23 @@ class MainActivity : AppCompatActivity() {
                         mGLSurfaceView.setAspectRatio(bitmap.width, bitmap.height)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
+                    Constants.SAMPLE_TYPE_KEY_VISUALIZE_AUDIO->{
+                        if(mAudioCollector == null){
+                            mAudioCollector = AudioCollector(this@MainActivity)
+                        }
+                        mAudioCollector!!.addCallback(this@MainActivity)
+                        mAudioCollector!!.initAudio()
+                        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+                    }
 
                     else -> {}
                 }
                 mGLSurfaceView.requestRender()
+
+                if (sampleType != Constants.SAMPLE_TYPE_KEY_VISUALIZE_AUDIO && mAudioCollector!=null){
+                    mAudioCollector!!.unInitAudio()
+                    mAudioCollector = null
+                }
 
                 dialog.cancel()
             }
@@ -246,8 +262,19 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onPause() {
+        super.onPause()
+        mAudioCollector?.unInitAudio()
+        mAudioCollector = null
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         mGLSurfaceView.getEGLRender().unInit()
+    }
+
+    override fun onAudioBufferCallback(buffer: ShortArray) {
+        Log.e("MainActivity", "onAudioBufferCallback() called with: buffer[0] = [" + buffer[0] + "]")
+        mGLSurfaceView.getEGLRender().setAudioData(buffer)
     }
 }
