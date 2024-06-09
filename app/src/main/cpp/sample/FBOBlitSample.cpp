@@ -1,9 +1,8 @@
 //
 // Created by xie_s on 2024/6/9.
 //
-
 #include <gtc/matrix_transform.hpp>
-#include "MRTSample.h"
+#include "FBOBlitSample.h"
 #include "GLUtils.h"
 
 const GLenum attachments[ATTACHMENT_NUM] = {
@@ -13,7 +12,7 @@ const GLenum attachments[ATTACHMENT_NUM] = {
         GL_COLOR_ATTACHMENT3
 };
 
-MRTSample::MRTSample() {
+FBOBlitSample::FBOBlitSample() {
     m_SamplerLoc = GL_NONE;
     m_MVPMatLoc = GL_NONE;
 
@@ -26,16 +25,15 @@ MRTSample::MRTSample() {
     m_ScaleX = 1.0f;
     m_ScaleY = 1.0f;
 
-    m_MRTProgramObj = GL_NONE;
+    m_ProgramObj = GL_NONE;
 }
 
-MRTSample::~MRTSample() {
+FBOBlitSample::~FBOBlitSample() {
     NativeImageUtil::FreeNativeImage(&m_RenderImage);
 }
 
-void MRTSample::Init() {
-    if (m_ProgramObj)
-        return;
+void FBOBlitSample::Init() {
+    if (m_ProgramObj) return;
     //create RGBA texture
     glGenTextures(1, &m_TextureId);
     glBindTexture(GL_TEXTURE_2D, m_TextureId);
@@ -46,61 +44,39 @@ void MRTSample::Init() {
     glBindTexture(GL_TEXTURE_2D, GL_NONE);
 
     char vShaderStr[] =
-            "#version 300 es                                                  \n"
-            "layout(location = 0) in vec4 a_position;                         \n"
-            "layout(location = 1) in vec2 a_texCoord;                         \n"
-            "uniform mat4 u_MVPMatrix;                                        \n"
-            "out vec2 v_texCoord;                                             \n"
-            "void main(){                                                     \n"
-            "    gl_Position = u_MVPMatrix * a_position;                      \n"
-            "    v_texCoord = a_texCoord;                                     \n"
+            "#version 300 es                                                               \n"
+            "layout(location = 0) in vec4 a_position;                                      \n"
+            "layout(location = 1) in vec2 a_texCoord;                                      \n"
+            "uniform mat4 u_MVPMatrix;                                                     \n"
+            "out vec2 v_texCoord;                                                          \n"
+            "void main(){                                                                  \n"
+            "    gl_Position = u_MVPMatrix * a_position;                                   \n"
+            "    v_texCoord = a_texCoord;                                                  \n"
             "}";
 
     char fMRTShaderStr[] =
-            "#version 300 es                                                  \n"
-            "precision mediump float;                                         \n"
-            "in vec2 v_texCoord;                                              \n"
-            "layout(location = 0) out vec4 outColor0;                         \n"
-            "layout(location = 1) out vec4 outColor1;                         \n"
-            "layout(location = 2) out vec4 outColor2;                         \n"
-            "layout(location = 3) out vec4 outColor3;                         \n"
-            "uniform sampler2D s_Texture;                                     \n"
-            "void main(){                                                     \n"
-            "    vec4 outputColor = texture(s_Texture, v_texCoord);           \n"
-            "    outColor0 = outputColor;                                     \n"
-            "    outColor1 = vec4(outputColor.r, 0.0, 0.0, 1.0);              \n"
-            "    outColor2 = vec4(0.0, outputColor.g, 0.0, 1.0);              \n"
-            "    outColor3 = vec4(0.0, 0.0, outputColor.b, 1.0);              \n"
+            "#version 300 es                                                               \n"
+            "precision mediump float;                                                      \n"
+            "in vec2 v_texCoord;                                                           \n"
+            "layout(location = 0) out vec4 outColor0;                                      \n"
+            "layout(location = 1) out vec4 outColor1;                                      \n"
+            "layout(location = 2) out vec4 outColor2;                                      \n"
+            "layout(location = 3) out vec4 outColor3;                                      \n"
+            "uniform sampler2D s_Texture;                                                  \n"
+            "void main(){                                                                  \n"
+            "    vec4 outputColor = texture(s_Texture, v_texCoord);                        \n"
+            "    outColor0 = outputColor;                                                  \n"
+            "    outColor1 = vec4(outputColor.r, 0.0, 0.0, 1.0);                           \n"
+            "    outColor2 = vec4(0.0, outputColor.g, 0.0, 1.0);                           \n"
+            "    outColor3 = vec4(0.0, 0.0, outputColor.b, 1.0);                           \n"
             "}";
 
-    char fShaderStr[] =
-            "#version 300 es                                                  \n"
-            "precision mediump float;                                         \n"
-            "in vec2 v_texCoord;                                              \n"
-            "layout(location = 0) out vec4 outColor;                          \n"
-            "uniform sampler2D s_Texture0;                                    \n"
-            "uniform sampler2D s_Texture1;                                    \n"
-            "uniform sampler2D s_Texture2;                                    \n"
-            "uniform sampler2D s_Texture3;                                    \n"
-            "void main(){                                                     \n"
-            "    if(v_texCoord.x < 0.5 && v_texCoord.y < 0.5){                \n"
-            "        outColor = texture(s_Texture0, v_texCoord);              \n"
-            "    }else if(v_texCoord.x > 0.5 && v_texCoord.y < 0.5){          \n"
-            "        outColor = texture(s_Texture1, v_texCoord);              \n"
-            "    }else if(v_texCoord.x < 0.5 && v_texCoord.y > 0.5){          \n"
-            "        outColor = texture(s_Texture2, v_texCoord);              \n"
-            "    }else{                                                       \n"
-            "        outColor = texture(s_Texture3, v_texCoord);              \n"
-            "    }                                                            \n"
-            "}";
-
-    m_MRTProgramObj = GLUtils::CreateProgram(vShaderStr, fMRTShaderStr);
-    m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr);
-    if (m_MRTProgramObj) {
-        m_SamplerLoc = glGetUniformLocation(m_MRTProgramObj, "s_Texture");
-        m_MVPMatLoc = glGetUniformLocation(m_MRTProgramObj, "u_MVPMatrix");
+    m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fMRTShaderStr);
+    if (m_ProgramObj) {
+        m_SamplerLoc = glGetUniformLocation(m_ProgramObj, "s_Texture");
+        m_MVPMatLoc = glGetUniformLocation(m_ProgramObj, "u_MVPMatrix");
     } else {
-        LOGCATE("MRTSample::Init create program fail");
+        LOGCATE("FBOBlitSample::Init create program fail");
     }
 
     GLfloat verticesCoords[] = {
@@ -155,11 +131,11 @@ void MRTSample::Init() {
                  GL_UNSIGNED_BYTE, m_RenderImage.ppPlane[0]);
     glBindTexture(GL_TEXTURE_2D, GL_NONE);
 
-    LOGCATE("MRTSample::Init InitFBO = %d", InitFBO());
+    LOGCATE("FBOBlitSample::Init InitFBO = %d", InitFBO());
 }
 
-void MRTSample::LoadImage(NativeImage *pImage) {
-    LOGCATE("MRTSample::LoadImage pImage = %p", pImage->ppPlane[0]);
+void FBOBlitSample::LoadImage(NativeImage *pImage) {
+    LOGCATE("FBOBlitSample::LoadImage pImage = %p", pImage->ppPlane[0]);
     if (pImage) {
         m_RenderImage.width = pImage->width;
         m_RenderImage.height = pImage->height;
@@ -168,12 +144,12 @@ void MRTSample::LoadImage(NativeImage *pImage) {
     }
 }
 
-void MRTSample::Draw(int screenW, int screenH) {
-    LOGCATE("MRTSample::Draw()");
+void FBOBlitSample::Draw(int screenW, int screenH) {
+    LOGCATE("FBOBlitSample::Draw()");
     m_SurfaceWidth = screenW;
     m_SurfaceHeight = screenH;
 
-    if (m_MRTProgramObj == GL_NONE || m_TextureId == GL_NONE) return;
+    if (m_ProgramObj == GL_NONE || m_TextureId == GL_NONE) return;
 
     GLint defaultFrameBuffer = GL_NONE;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFrameBuffer);
@@ -183,10 +159,10 @@ void MRTSample::Draw(int screenW, int screenH) {
     glClear(GL_COLOR_BUFFER_BIT);
     glDrawBuffers(ATTACHMENT_NUM, attachments);
 
-    glUseProgram(m_MRTProgramObj);
+    glUseProgram(m_ProgramObj);
 
     glBindVertexArray(m_VaoId);
-    UpdateMVPMatrix(m_MVPMatrix, 180, m_AngleY, (float) screenW / screenH);
+    UpdateMVPMatrix(m_MVPMatrix, 0, m_AngleY, (float) screenW / screenH);
     glUniformMatrix4fv(m_MVPMatLoc, 1, GL_FALSE, &m_MVPMatrix[0][0]);
 
     // Bind the RGBA map
@@ -201,32 +177,21 @@ void MRTSample::Draw(int screenW, int screenH) {
     glViewport(0, 0, m_SurfaceWidth, m_SurfaceHeight);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glUseProgram(m_ProgramObj);
-    UpdateMVPMatrix(m_MVPMatrix, 0, m_AngleY, (float) screenW / screenH);
-    glUniformMatrix4fv(m_MVPMatLoc, 1, GL_FALSE, &m_MVPMatrix[0][0]);
-
-    for (int i = 0; i < ATTACHMENT_NUM; ++i) {
-        glActiveTexture(GL_TEXTURE0 + i);
-        glBindTexture(GL_TEXTURE_2D, m_AttachTexIds[i]);
-        char samplerName[64] = {0};
-        sprintf(samplerName, "s_Texture%d", i);
-        GLUtils::setInt(m_ProgramObj, samplerName, i);
-    }
-
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, (const void *) 0);
+    BlitTextures();
 }
 
-void MRTSample::Destroy() {
+void FBOBlitSample::Destroy() {
     if (m_ProgramObj) {
         glDeleteProgram(m_ProgramObj);
-        glDeleteProgram(m_MRTProgramObj);
+        glDeleteProgram(m_ProgramObj);
         glDeleteBuffers(3, m_VboIds);
         glDeleteVertexArrays(1, &m_VaoId);
         glDeleteTextures(1, &m_TextureId);
     }
 }
 
-void MRTSample::UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY) {
+void
+FBOBlitSample::UpdateTransformMatrix(float rotateX, float rotateY, float scaleX, float scaleY) {
     GLSampleBase::UpdateTransformMatrix(rotateX, rotateY, scaleX, scaleY);
     m_AngleX = static_cast<int>(rotateX);
     m_AngleY = static_cast<int>(rotateY);
@@ -234,8 +199,8 @@ void MRTSample::UpdateTransformMatrix(float rotateX, float rotateY, float scaleX
     m_ScaleY = scaleY;
 }
 
-void MRTSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio) {
-    LOGCATE("MRTSample::UpdateMVPMatrix angleX = %d, angleY = %d, ratio = %f", angleX, angleY,
+void FBOBlitSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio) {
+    LOGCATE("FBOBlitSample::UpdateMVPMatrix angleX = %d, angleY = %d, ratio = %f", angleX, angleY,
             ratio);
     angleX = angleX % 360;
     angleY = angleY % 360;
@@ -267,7 +232,7 @@ void MRTSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, fl
     mvpMatrix = Projection * View * Model;
 }
 
-bool MRTSample::InitFBO() {
+bool FBOBlitSample::InitFBO() {
     GLint defaultFrameBuffer = GL_NONE;
 
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFrameBuffer);
@@ -295,4 +260,28 @@ bool MRTSample::InitFBO() {
     }
     glBindFramebuffer(GL_FRAMEBUFFER, defaultFrameBuffer);
     return true;
+}
+
+void FBOBlitSample::BlitTextures() {
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_FBO);
+
+    glReadBuffer(GL_COLOR_ATTACHMENT0);
+    glBlitFramebuffer(0, 0, m_RenderImage.width, m_RenderImage.height,
+                      0, 0, m_SurfaceWidth / 2, m_SurfaceHeight / 2,
+                      GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+    glReadBuffer(GL_COLOR_ATTACHMENT1);
+    glBlitFramebuffer(0, 0, m_RenderImage.width, m_RenderImage.height,
+                      m_SurfaceWidth / 2, 0, m_SurfaceWidth, m_SurfaceHeight / 2,
+                      GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+    glReadBuffer(GL_COLOR_ATTACHMENT2);
+    glBlitFramebuffer(0, 0, m_RenderImage.width, m_RenderImage.height,
+                      0, m_SurfaceHeight / 2, m_SurfaceWidth / 2, m_SurfaceHeight,
+                      GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+    glReadBuffer(GL_COLOR_ATTACHMENT3);
+    glBlitFramebuffer(0, 0, m_RenderImage.width, m_RenderImage.height,
+                      m_SurfaceWidth / 2, m_SurfaceHeight / 2, m_SurfaceWidth, m_SurfaceHeight,
+                      GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }

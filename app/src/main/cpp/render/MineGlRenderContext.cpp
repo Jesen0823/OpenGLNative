@@ -124,6 +124,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_MRT:
                 m_pCurSample = new MRTSample;
                 break;
+            case SAMPLE_TYPE_KEY_FBO_BLIT:
+                m_pCurSample = new FBOBlitSample;
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;

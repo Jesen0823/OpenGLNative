@@ -37,6 +37,8 @@ public interface Constants {
     public static final int SAMPLE_TYPE_KEY_AVATAR = SAMPLE_TYPE + 29;
     public static final int SAMPLE_TYPE_KEY_SHOCK_WAVE = SAMPLE_TYPE + 30;
     public static final int SAMPLE_TYPE_KEY_MRT = SAMPLE_TYPE + 31;
+    public static final int SAMPLE_TYPE_KEY_FBO_BLIT = SAMPLE_TYPE + 32;
+
     public static final int SAMPLE_TYPE_SET_TOUCH_LOC = SAMPLE_TYPE + 999;
     public static final int SAMPLE_TYPE_SET_GRAVITY_XY = SAMPLE_TYPE + 1000;
     public static final int IMAGE_FORMAT_RGBA = 0x01;
@@ -58,7 +60,7 @@ public interface Constants {
             "SkyBox", "Assimp Load 3D Model", "PBO", "Beating Heart",
             "Cloud", "Time Tunnel", "Bezier Curve", "Face Slender", "Big Eyes",
             "Big Head", "Rotary Head", "Visualize Audio", "Scratch Card",
-            "3D Avatar", "Shock Wave","MRT",
+            "3D Avatar", "Shock Wave","MRT","FBO Blit",
     };
 
 }

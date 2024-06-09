@@ -38,6 +38,7 @@
 #include "AvatarSample.h"
 #include "ShockWaveSample.h"
 #include "MRTSample.h"
+#include "FBOBlitSample.h"
 
 class MineGlRenderContext {
 public:

@@ -2,21 +2,21 @@
 // Created by xie_s on 2024/6/9.
 //
 
-#ifndef OPENGLNATIVE_MRTSAMPLE_H
-#define OPENGLNATIVE_MRTSAMPLE_H
+#ifndef OPENGLNATIVE_FBOBLITSAMPLE_H
+#define OPENGLNATIVE_FBOBLITSAMPLE_H
 
 #include <detail/type_mat.hpp>
 #include <detail/type_mat4x4.hpp>
 #include "GLSampleBase.h"
 
-#define ATTACHMENT_NUM    4
+#define ATTACHMENT_NUM   4
 
-class MRTSample : public GLSampleBase {
+class FBOBlitSample : public GLSampleBase {
 
 public:
-    MRTSample();
+    FBOBlitSample();
 
-    virtual ~MRTSample();
+    virtual ~FBOBlitSample();
 
     virtual void Init();
 
@@ -32,6 +32,8 @@ public:
 
     bool InitFBO();
 
+    void BlitTextures();
+
 private:
     GLuint m_TextureId;
     GLuint m_AttachTexIds[ATTACHMENT_NUM];
@@ -43,8 +45,6 @@ private:
     NativeImage m_RenderImage;
     glm::mat4 m_MVPMatrix;
 
-    GLuint m_MRTProgramObj;
-
     int m_AngleX;
     int m_AngleY;
     float m_ScaleX;
@@ -52,4 +52,4 @@ private:
 };
 
 
-#endif //OPENGLNATIVE_MRTSAMPLE_H
+#endif //OPENGLNATIVE_FBOBLITSAMPLE_H

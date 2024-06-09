@@ -66,7 +66,8 @@ set(src_files
         sample/ScratchCardSample.cpp
         sample/AvatarSample.cpp
         sample/ShockWaveSample.cpp
-        sample/MRTSample.cpp)
+        sample/MRTSample.cpp
+        sample/FBOBlitSample.cpp)
 
 add_library(
         ${CMAKE_PROJECT_NAME}
