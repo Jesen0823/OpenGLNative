@@ -121,6 +121,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_SHOCK_WAVE:
                 m_pCurSample = new ShockWaveSample;
                 break;
+            case SAMPLE_TYPE_KEY_MRT:
+                m_pCurSample = new MRTSample;
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;

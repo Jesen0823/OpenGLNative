@@ -37,6 +37,7 @@
 #include "ScratchCardSample.h"
 #include "AvatarSample.h"
 #include "ShockWaveSample.h"
+#include "MRTSample.h"
 
 class MineGlRenderContext {
 public:

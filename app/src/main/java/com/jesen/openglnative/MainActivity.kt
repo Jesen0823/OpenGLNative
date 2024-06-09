@@ -290,6 +290,10 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
                         mGLSurfaceView.setAspectRatio(bp.width, bp.height)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
+                    Constants.SAMPLE_TYPE_KEY_MRT->{
+                        val bp = loadRGBAImage(R.drawable.lye)
+                        mGLSurfaceView.setAspectRatio(bp.width,bp.height)
+                    }
 
                     else -> {}
                 }
