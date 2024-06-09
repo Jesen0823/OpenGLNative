@@ -35,6 +35,7 @@
 #include "RotaryHeadSample.h"
 #include "VisualizeAudioSample.h"
 #include "ScratchCardSample.h"
+#include "AvatarSample.h"
 
 class MineGlRenderContext {
 public:

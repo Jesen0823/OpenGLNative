@@ -42,8 +42,10 @@
 #define SAMPLE_TYPE_KEY_ROTARY_HEAD                 SAMPLE_TYPE+26
 #define SAMPLE_TYPE_KEY_VISUALIZE_AUDIO             SAMPLE_TYPE+27
 #define SAMPLE_TYPE_KEY_SCRATCH_CARD                SAMPLE_TYPE+28
+#define SAMPLE_TYPE_KEY_AVATAR                      SAMPLE_TYPE+29
 
 #define SAMPLE_TYPE_KEY_SET_TOUCH_LOC               SAMPLE_TYPE+999
+#define SAMPLE_TYPE_SET_GRAVITY_XY                  SAMPLE_TYPE+1000
 
 class GLSampleBase {
 protected:
@@ -82,6 +84,9 @@ public:
     }
 
     virtual void SetTouchLocation(float x, float y) {
+
+    }
+    virtual void SetGravityXY(float x, float y){
 
     }
 };

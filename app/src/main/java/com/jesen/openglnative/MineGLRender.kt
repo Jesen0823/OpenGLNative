@@ -62,4 +62,8 @@ class MineGLRender() :GLSurfaceView.Renderer {
     fun setTouchLoc(x:Float,y:Float){
         nativeRender.native_SetParamsFloat(Constants.SAMPLE_TYPE_SET_TOUCH_LOC,x,y)
     }
+
+    fun setGravityXY(x:Float,y:Float){
+        nativeRender.native_SetParamsFloat(Constants.SAMPLE_TYPE_SET_GRAVITY_XY,x,y)
+    }
 }

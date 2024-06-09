@@ -35,8 +35,9 @@ public interface Constants {
     public static final int SAMPLE_TYPE_KEY_ROTARY_HEAD = SAMPLE_TYPE + 26;
     public static final int SAMPLE_TYPE_KEY_VISUALIZE_AUDIO = SAMPLE_TYPE + 27;
     public static final int SAMPLE_TYPE_KEY_SCRATCH_CARD = SAMPLE_TYPE + 28;
+    public static final int SAMPLE_TYPE_KEY_AVATAR = SAMPLE_TYPE + 29;
     public static final int SAMPLE_TYPE_SET_TOUCH_LOC = SAMPLE_TYPE + 999;
-
+    public static final int SAMPLE_TYPE_SET_GRAVITY_XY = SAMPLE_TYPE + 1000;
     public static final int IMAGE_FORMAT_RGBA = 0x01;
     public static final int IMAGE_FORMAT_NV21 = 0x02;
     public static final int IMAGE_FORMAT_NV12 = 0x03;
@@ -56,6 +57,7 @@ public interface Constants {
             "SkyBox", "Assimp Load 3D Model", "PBO", "Beating Heart",
             "Cloud", "Shock Wave", "Bezier Curve", "Face Slender", "Big Eyes",
             "Big Head", "Rotary Head", "Visualize Audio","Scratch Card",
+            "3D Avatar",
     };
 
 }

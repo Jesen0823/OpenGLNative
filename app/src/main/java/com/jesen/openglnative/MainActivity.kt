@@ -1,11 +1,15 @@
 package com.jesen.openglnative
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.opengl.GLSurfaceView
-import android.opengl.GLSurfaceView.RENDERMODE_CONTINUOUSLY
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -33,7 +37,7 @@ import java.nio.ByteBuffer
 
 
 class MainActivity : AppCompatActivity(), AudioCollector.Callback,
-    ViewTreeObserver.OnGlobalLayoutListener {
+    ViewTreeObserver.OnGlobalLayoutListener,SensorEventListener {
     private lateinit var mGLSurfaceView: MineGLSurfaceView
     private lateinit var mRootView: ViewGroup
     private lateinit var binding: ActivityMainBinding
@@ -45,6 +49,7 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
     private var editor: SharedPreferences.Editor? = null
     private var mAudioCollector: AudioCollector? = null
     private val mMineGLRender: MineGLRender = MineGLRender()
+    private lateinit var mSensorManager:SensorManager
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +73,8 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
         mRootView.viewTreeObserver.addOnGlobalLayoutListener(this@MainActivity)
         mMineGLRender.init()
 
+        mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+
         //mGLSurfaceView = binding.mineGlSurfaceView
         //mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
     }
@@ -81,6 +88,12 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
 
             editor!!.putBoolean("initIO", true)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mSensorManager.registerListener(this@MainActivity
+            , mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY),SensorManager.SENSOR_DELAY_NORMAL)
     }
 
     private fun loadRGBAImage(resId: Int): Bitmap {
@@ -259,6 +272,13 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
                         val bitmap = loadRGBAImage(R.drawable.yifei)
                         mGLSurfaceView.setAspectRatio(bitmap.width, bitmap.height)
                     }
+                    Constants.SAMPLE_TYPE_KEY_AVATAR->{
+                        val bp = loadRGBAImage(R.drawable.avatar_a,0)
+                        mGLSurfaceView.setAspectRatio(bp.width,bp.height)
+                        loadRGBAImage(R.drawable.avatar_b,1)
+                        loadRGBAImage(R.drawable.avatar_c,2)
+                        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+                    }
 
                     else -> {}
                 }
@@ -298,6 +318,7 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
         super.onPause()
         mAudioCollector?.unInitAudio()
         mAudioCollector = null
+        mSensorManager.unregisterListener(this@MainActivity)
     }
 
     override fun onDestroy() {
@@ -321,6 +342,20 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
         lp.addRule(RelativeLayout.CENTER_IN_PARENT)
         mGLSurfaceView = MineGLSurfaceView(this, mMineGLRender)
         mRootView.addView(mGLSurfaceView, lp)
-        mGLSurfaceView.renderMode = RENDERMODE_CONTINUOUSLY
+        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
     }
+
+    override fun onSensorChanged(event: SensorEvent) {
+        when(event.sensor.type){
+            Sensor.TYPE_GRAVITY->{
+                Log.d("MainActivity", "onSensorChanged() called with TYPE_GRAVITY: [x,y,z] = [" + event.values[0] + ", " + event.values[1] + ", " + event.values[2] + "]");
+                if(mSampleSelectedIndex + Constants.SAMPLE_TYPE == Constants.SAMPLE_TYPE_KEY_AVATAR){
+                    mMineGLRender.setGravityXY(event.values[0],event.values[1])
+                }
+            }
+            else->{}
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 }
