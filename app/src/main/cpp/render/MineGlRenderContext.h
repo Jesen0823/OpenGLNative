@@ -27,7 +27,7 @@
 #include "PBOSample.h"
 #include "BeatingHeartSample.h"
 #include "CloudSample.h"
-#include "ShockWaveSample.h"
+#include "TimeTunnelSample.h"
 #include "BezierCurveSample.h"
 #include "FaceSlenderSample.h"
 #include "BigEyesSample.h"

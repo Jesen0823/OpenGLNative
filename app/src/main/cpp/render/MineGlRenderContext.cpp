@@ -91,8 +91,8 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_CLOUD:
                 m_pCurSample = new CloudSample();
                 break;
-            case SAMPLE_TYPE_KEY_SHOCK_WAVE:
-                m_pCurSample = new ShockWaveSample();
+            case SAMPLE_TYPE_KEY_TIME_TUNNEL:
+                m_pCurSample = new TimeTunnelSample();
                 break;
             case SAMPLE_TYPE_KEY_BEZIER_CURVE:
                 m_pCurSample = new BezierCurveSample();

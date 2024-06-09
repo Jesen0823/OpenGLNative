@@ -3,7 +3,6 @@ package com.jesen.openglnative;
 public interface Constants {
     public static final String TAG = "MainActivity";
     public static final int ANGLE_TYPE = 300;
-
     public static final int SAMPLE_TYPE = 200;
 
     public static final int SAMPLE_TYPE_TRIANGLE = SAMPLE_TYPE;
@@ -27,7 +26,7 @@ public interface Constants {
     public static final int SAMPLE_TYPE_PBO = SAMPLE_TYPE + 18;
     public static final int SAMPLE_TYPE_KEY_BEATING_HEART = SAMPLE_TYPE + 19;
     public static final int SAMPLE_TYPE_KEY_CLOUD = SAMPLE_TYPE + 20;
-    public static final int SAMPLE_TYPE_KEY_SHOCK_WAVE = SAMPLE_TYPE + 21;
+    public static final int SAMPLE_TYPE_KEY_TIME_TUNNEL = SAMPLE_TYPE + 21;
     public static final int SAMPLE_TYPE_KEY_BEZIER_CURVE = SAMPLE_TYPE + 22;
     public static final int SAMPLE_TYPE_KEY_FACE_SLENDER = SAMPLE_TYPE + 23;
     public static final int SAMPLE_TYPE_KEY_BIG_EYES = SAMPLE_TYPE + 24;
@@ -55,7 +54,7 @@ public interface Constants {
             "基础光照", "TransformFeedback", "MultiLights", "深度测试",
             "Instancing", "Stencil Testing", "Blending", "Particles",
             "SkyBox", "Assimp Load 3D Model", "PBO", "Beating Heart",
-            "Cloud", "Shock Wave", "Bezier Curve", "Face Slender", "Big Eyes",
+            "Cloud", "Time Tunnel", "Bezier Curve", "Face Slender", "Big Eyes",
             "Big Head", "Rotary Head", "Visualize Audio","Scratch Card",
             "3D Avatar",
     };

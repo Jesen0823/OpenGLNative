@@ -236,7 +236,7 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
 
-                    Constants.SAMPLE_TYPE_KEY_SHOCK_WAVE -> {
+                    Constants.SAMPLE_TYPE_KEY_TIME_TUNNEL -> {
                         loadRGBAImage(R.drawable.front)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }

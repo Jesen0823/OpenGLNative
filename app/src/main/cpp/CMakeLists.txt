@@ -55,7 +55,7 @@ set(src_files
         sample/Model3DSample.cpp
         sample/PBOSample.cpp
         sample/BeatingHeartSample.cpp
-        sample/ShockWaveSample.cpp
+        sample/TimeTunnelSample.cpp
         sample/CloudSample.cpp
         sample/BezierCurveSample.cpp
         sample/FaceSlenderSample.cpp

@@ -2,18 +2,18 @@
 // Created by xie_s on 2024/6/5.
 //
 
-#ifndef OPENGLNATIVE_SHOCKWAVESAMPLE_H
-#define OPENGLNATIVE_SHOCKWAVESAMPLE_H
+#ifndef OPENGLNATIVE_TIMETUNNELSAMPLE_H
+#define OPENGLNATIVE_TIMETUNNELSAMPLE_H
 
 #include <detail/type_mat.hpp>
 #include "ImageDef.h"
 #include "GLSampleBase.h"
 
-class ShockWaveSample : public GLSampleBase {
+class TimeTunnelSample : public GLSampleBase {
 public:
-    ShockWaveSample();
+    TimeTunnelSample();
 
-    virtual ~ShockWaveSample();
+    virtual ~TimeTunnelSample();
 
     virtual void Init();
 
@@ -53,4 +53,4 @@ private:
 };
 
 
-#endif //OPENGLNATIVE_SHOCKWAVESAMPLE_H
+#endif //OPENGLNATIVE_TIMETUNNELSAMPLE_H

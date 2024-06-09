@@ -5,13 +5,13 @@
 #include <gtc/matrix_transform.hpp>
 #include <cstdlib>
 #include <opencv2/opencv.hpp>
-#include "ShockWaveSample.h"
+#include "TimeTunnelSample.h"
 #include "GLUtils.h"
 
 #define VERTEX_POS_INDX  0
 #define TEXTURE_POS_INDX 1
 
-ShockWaveSample::ShockWaveSample() {
+TimeTunnelSample::TimeTunnelSample() {
     m_VaoIds[2] = {GL_NONE};
     m_VboIds[4] = {GL_NONE};
 
@@ -36,11 +36,11 @@ ShockWaveSample::ShockWaveSample() {
     m_FrameIndex = 0;
 }
 
-ShockWaveSample::~ShockWaveSample() {
+TimeTunnelSample::~TimeTunnelSample() {
     NativeImageUtil::FreeNativeImage(&m_RenderImage);
 }
 
-void ShockWaveSample::Init() {
+void TimeTunnelSample::Init() {
     if (m_ProgramObj)
         return;
 
@@ -146,7 +146,7 @@ void ShockWaveSample::Init() {
                                              m_FboFragmentShader);
 
     if (m_ProgramObj == GL_NONE || m_FboProgramObj == GL_NONE) {
-        LOGCATE("ShockWaveSample::Init m_ProgramObj == GL_NONE");
+        LOGCATE("TimeTunnelSample::Init m_ProgramObj == GL_NONE");
         return;
     }
     m_SamplerLoc = glGetUniformLocation(m_ProgramObj, "s_TextureMap");
@@ -230,14 +230,14 @@ void ShockWaveSample::Init() {
     GO_CHECK_GL_ERROR();
 
     if (!CreateFrameBufferObj()) {
-        LOGCATE("ShockWaveSample::Init CreateFrameBufferObj fail");
+        LOGCATE("TimeTunnelSample::Init CreateFrameBufferObj fail");
         return;
     }
 
 }
 
-void ShockWaveSample::LoadImage(NativeImage *pImage) {
-    LOGCATE("ShockWaveSample::LoadImage pImage = %p", pImage->ppPlane[0]);
+void TimeTunnelSample::LoadImage(NativeImage *pImage) {
+    LOGCATE("TimeTunnelSample::LoadImage pImage = %p", pImage->ppPlane[0]);
     if (pImage) {
         m_RenderImage.width = pImage->width;
         m_RenderImage.height = pImage->height;
@@ -246,7 +246,7 @@ void ShockWaveSample::LoadImage(NativeImage *pImage) {
     }
 }
 
-void ShockWaveSample::Draw(int screenW, int screenH) {
+void TimeTunnelSample::Draw(int screenW, int screenH) {
     // 离屏渲染
     glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -295,7 +295,7 @@ void ShockWaveSample::Draw(int screenW, int screenH) {
 
 }
 
-void ShockWaveSample::Destroy() {
+void TimeTunnelSample::Destroy() {
     if (m_ProgramObj) {
         glDeleteProgram(m_ProgramObj);
         m_ProgramObj = GL_NONE;
@@ -328,7 +328,7 @@ void ShockWaveSample::Destroy() {
 
 }
 
-bool ShockWaveSample::CreateFrameBufferObj() {
+bool TimeTunnelSample::CreateFrameBufferObj() {
     // 创建并初始化 FBO 纹理
     glGenTextures(1, &m_FboTextureId);
     glBindTexture(GL_TEXTURE_2D, m_FboTextureId);
@@ -346,7 +346,7 @@ bool ShockWaveSample::CreateFrameBufferObj() {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_RenderImage.width, m_RenderImage.height, 0, GL_RGBA,
                  GL_UNSIGNED_BYTE, nullptr);
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        LOGCATE("ShockWaveSample::CreateFrameBufferObj glCheckFramebufferStatus status != GL_FRAMEBUFFER_COMPLETE");
+        LOGCATE("TimeTunnelSample::CreateFrameBufferObj glCheckFramebufferStatus status != GL_FRAMEBUFFER_COMPLETE");
         return false;
     }
     glBindTexture(GL_TEXTURE_2D, GL_NONE);
@@ -355,8 +355,8 @@ bool ShockWaveSample::CreateFrameBufferObj() {
 
 }
 
-void ShockWaveSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio) {
-    LOGCATE("ShockWaveSample::UpdateMVPMatrix angleX = %d, angleY = %d, ratio = %f", angleX, angleY,
+void TimeTunnelSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY, float ratio) {
+    LOGCATE("TimeTunnelSample::UpdateMVPMatrix angleX = %d, angleY = %d, ratio = %f", angleX, angleY,
             ratio);
     angleX = angleX % 360;
     angleY = angleY % 360;
