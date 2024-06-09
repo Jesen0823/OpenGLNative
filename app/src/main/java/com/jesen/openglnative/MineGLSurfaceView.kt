@@ -139,7 +139,9 @@ class MineGLSurfaceView(context: Context, mineGLRender: MineGLRender?, attrs: At
         mLastMultiTouchTime = System.currentTimeMillis()
     }
 
-    fun consumeTouchEvent(e: MotionEvent) {
+    private fun consumeTouchEvent(e: MotionEvent) {
+        dealClickEvent(e)
+
         var touchX = -1f
         var touchY = -1f
         when (e.action) {
@@ -160,6 +162,22 @@ class MineGLSurfaceView(context: Context, mineGLRender: MineGLRender?, attrs: At
             }
 
             else -> {}
+        }
+    }
+
+    private fun dealClickEvent(e:MotionEvent){
+        var touchX = -1f
+        var touchY = -1f
+        when(e.action){
+            MotionEvent.ACTION_UP->{
+                touchX = e.x
+                touchY = e.y
+                when(mMineGLRender.getSampleType()){
+                    Constants.SAMPLE_TYPE_KEY_SHOCK_WAVE->mMineGLRender.setTouchLoc(touchX,touchY)
+                    else->{}
+                }
+            }
+            else->{}
         }
     }
 }

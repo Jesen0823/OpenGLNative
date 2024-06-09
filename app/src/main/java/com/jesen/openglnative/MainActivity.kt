@@ -37,7 +37,7 @@ import java.nio.ByteBuffer
 
 
 class MainActivity : AppCompatActivity(), AudioCollector.Callback,
-    ViewTreeObserver.OnGlobalLayoutListener,SensorEventListener {
+    ViewTreeObserver.OnGlobalLayoutListener, SensorEventListener {
     private lateinit var mGLSurfaceView: MineGLSurfaceView
     private lateinit var mRootView: ViewGroup
     private lateinit var binding: ActivityMainBinding
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
     private var editor: SharedPreferences.Editor? = null
     private var mAudioCollector: AudioCollector? = null
     private val mMineGLRender: MineGLRender = MineGLRender()
-    private lateinit var mSensorManager:SensorManager
+    private lateinit var mSensorManager: SensorManager
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,8 +92,11 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
 
     override fun onResume() {
         super.onResume()
-        mSensorManager.registerListener(this@MainActivity
-            , mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY),SensorManager.SENSOR_DELAY_NORMAL)
+        mSensorManager.registerListener(
+            this@MainActivity,
+            mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY),
+            SensorManager.SENSOR_DELAY_NORMAL
+        )
     }
 
     private fun loadRGBAImage(resId: Int): Bitmap {
@@ -213,6 +216,7 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
                         loadRGBAImage(R.drawable.board_texture)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
+
                     Constants.SAMPLE_TYPE_SKYBOX -> {
                         loadRGBAImage(R.drawable.right, 0)
                         loadRGBAImage(R.drawable.left, 1)
@@ -272,11 +276,18 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
                         val bitmap = loadRGBAImage(R.drawable.yifei)
                         mGLSurfaceView.setAspectRatio(bitmap.width, bitmap.height)
                     }
-                    Constants.SAMPLE_TYPE_KEY_AVATAR->{
-                        val bp = loadRGBAImage(R.drawable.avatar_a,0)
-                        mGLSurfaceView.setAspectRatio(bp.width,bp.height)
-                        loadRGBAImage(R.drawable.avatar_b,1)
-                        loadRGBAImage(R.drawable.avatar_c,2)
+
+                    Constants.SAMPLE_TYPE_KEY_AVATAR -> {
+                        val bp = loadRGBAImage(R.drawable.avatar_a, 0)
+                        mGLSurfaceView.setAspectRatio(bp.width, bp.height)
+                        loadRGBAImage(R.drawable.avatar_b, 1)
+                        loadRGBAImage(R.drawable.avatar_c, 2)
+                        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+                    }
+
+                    Constants.SAMPLE_TYPE_KEY_SHOCK_WAVE -> {
+                        val bp = loadRGBAImage(R.drawable.lye)
+                        mGLSurfaceView.setAspectRatio(bp.width, bp.height)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
 
@@ -346,14 +357,18 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
     }
 
     override fun onSensorChanged(event: SensorEvent) {
-        when(event.sensor.type){
-            Sensor.TYPE_GRAVITY->{
-                Log.d("MainActivity", "onSensorChanged() called with TYPE_GRAVITY: [x,y,z] = [" + event.values[0] + ", " + event.values[1] + ", " + event.values[2] + "]");
-                if(mSampleSelectedIndex + Constants.SAMPLE_TYPE == Constants.SAMPLE_TYPE_KEY_AVATAR){
-                    mMineGLRender.setGravityXY(event.values[0],event.values[1])
+        when (event.sensor.type) {
+            Sensor.TYPE_GRAVITY -> {
+                Log.d(
+                    "MainActivity",
+                    "onSensorChanged() called with TYPE_GRAVITY: [x,y,z] = [" + event.values[0] + ", " + event.values[1] + ", " + event.values[2] + "]"
+                );
+                if (mSampleSelectedIndex + Constants.SAMPLE_TYPE == Constants.SAMPLE_TYPE_KEY_AVATAR) {
+                    mMineGLRender.setGravityXY(event.values[0], event.values[1])
                 }
             }
-            else->{}
+
+            else -> {}
         }
     }
 

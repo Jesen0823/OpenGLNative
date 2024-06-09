@@ -36,6 +36,7 @@
 #include "VisualizeAudioSample.h"
 #include "ScratchCardSample.h"
 #include "AvatarSample.h"
+#include "ShockWaveSample.h"
 
 class MineGlRenderContext {
 public:
