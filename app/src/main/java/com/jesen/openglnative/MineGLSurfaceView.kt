@@ -69,7 +69,8 @@ class MineGLSurfaceView(context: Context, mineGLRender: MineGLRender?, attrs: At
                     Constants.SAMPLE_TYPE_SKYBOX,
                     Constants.SAMPLE_TYPE_3D_MODEL,
                     Constants.SAMPLE_TYPE_PBO,
-                    Constants.SAMPLE_TYPE_KEY_VISUALIZE_AUDIO -> {
+                    Constants.SAMPLE_TYPE_KEY_VISUALIZE_AUDIO,
+                    Constants.SAMPLE_TYPE_KEY_UBO-> {
                         mMineGLRender.updateTransformMatrix(mXAngle, mYAngle, mCurScale, mCurScale)
                         requestRender()
                     }

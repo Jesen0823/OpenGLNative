@@ -292,7 +292,7 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
                     }
 
                     Constants.SAMPLE_TYPE_KEY_MRT, Constants.SAMPLE_TYPE_KEY_FBO_BLIT,
-                    Constants.SAMPLE_TYPE_KEY_TBO -> {
+                    Constants.SAMPLE_TYPE_KEY_TBO,Constants.SAMPLE_TYPE_KEY_UBO -> {
                         val bp = loadRGBAImage(R.drawable.lye)
                         mGLSurfaceView.setAspectRatio(bp.width, bp.height)
                     }

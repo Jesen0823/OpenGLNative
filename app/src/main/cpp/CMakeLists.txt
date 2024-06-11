@@ -68,7 +68,8 @@ set(src_files
         sample/ShockWaveSample.cpp
         sample/MRTSample.cpp
         sample/FBOBlitSample.cpp
-        sample/TextureBufferSample.cpp)
+        sample/TextureBufferSample.cpp
+        sample/UniformBufferSample.cpp)
 
 add_library(
         ${CMAKE_PROJECT_NAME}

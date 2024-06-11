@@ -40,6 +40,7 @@
 #include "MRTSample.h"
 #include "FBOBlitSample.h"
 #include "TextureBufferSample.h"
+#include "UniformBufferSample.h"
 
 class MineGlRenderContext {
 public:
