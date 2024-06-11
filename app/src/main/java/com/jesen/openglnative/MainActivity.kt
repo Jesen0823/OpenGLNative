@@ -296,6 +296,7 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
                         val bp = loadRGBAImage(R.drawable.lye)
                         mGLSurfaceView.setAspectRatio(bp.width, bp.height)
                     }
+                    Constants.SAMPLE_TYPE_KEY_RGB2YUV-> loadRGBAImage(R.drawable.lye)
 
                     else -> {}
                 }

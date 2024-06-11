@@ -133,6 +133,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_UBO:
                 m_pCurSample = new UniformBufferSample();
                 break;
+            case SAMPLE_TYPE_KEY_RGB2YUV:
+                m_pCurSample = new RGB2YUVSample;
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;

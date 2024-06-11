@@ -41,6 +41,7 @@
 #include "FBOBlitSample.h"
 #include "TextureBufferSample.h"
 #include "UniformBufferSample.h"
+#include "RGB2YUVSample.h"
 
 class MineGlRenderContext {
 public:

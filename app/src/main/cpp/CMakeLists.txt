@@ -69,7 +69,8 @@ set(src_files
         sample/MRTSample.cpp
         sample/FBOBlitSample.cpp
         sample/TextureBufferSample.cpp
-        sample/UniformBufferSample.cpp)
+        sample/UniformBufferSample.cpp
+        sample/RGB2YUVSample.cpp)
 
 add_library(
         ${CMAKE_PROJECT_NAME}
