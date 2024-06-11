@@ -39,6 +39,7 @@
 #include "ShockWaveSample.h"
 #include "MRTSample.h"
 #include "FBOBlitSample.h"
+#include "TextureBufferSample.h"
 
 class MineGlRenderContext {
 public:

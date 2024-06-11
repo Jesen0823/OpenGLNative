@@ -5,17 +5,23 @@ import android.util.Log
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class MineGLRender() :GLSurfaceView.Renderer {
+class MineGLRender() : GLSurfaceView.Renderer {
     private val TAG = "MineGLRender"
     private val nativeRender = MineNativeRender()
     private var mSampleType = 0
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
-        Log.d(TAG, "onSurfaceCreated() called with: gl = [$gl], config = [$config]");
+        Log.d(
+            TAG,
+            "onSurfaceCreated() called with: gl = [$gl], config = [$config]， GL_VERSION = ${
+                gl?.glGetString(GL10.GL_VERSION)?:""
+            }"
+        );
         nativeRender.native_OnSurfaceCreated()
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
-        Log.d(TAG,
+        Log.d(
+            TAG,
             "onSurfaceChanged() called with: gl = [$gl], width = [$width], height = [$height]"
         );
         nativeRender.native_OnSurfaceChanged(width, height);
@@ -26,8 +32,8 @@ class MineGLRender() :GLSurfaceView.Renderer {
         nativeRender.native_OnDrawFrame();
     }
 
-    fun setParamsInt(paramType:Int, value0:Int,value1:Int){
-        if(paramType == Constants.SAMPLE_TYPE){
+    fun setParamsInt(paramType: Int, value0: Int, value1: Int) {
+        if (paramType == Constants.SAMPLE_TYPE) {
             mSampleType = value0
         }
         nativeRender.native_SetParamsInt(paramType, value0, value1)
@@ -59,11 +65,11 @@ class MineGLRender() :GLSurfaceView.Renderer {
         nativeRender.native_SetAudioData(buffer)
     }
 
-    fun setTouchLoc(x:Float,y:Float){
-        nativeRender.native_SetParamsFloat(Constants.SAMPLE_TYPE_SET_TOUCH_LOC,x,y)
+    fun setTouchLoc(x: Float, y: Float) {
+        nativeRender.native_SetParamsFloat(Constants.SAMPLE_TYPE_SET_TOUCH_LOC, x, y)
     }
 
-    fun setGravityXY(x:Float,y:Float){
-        nativeRender.native_SetParamsFloat(Constants.SAMPLE_TYPE_SET_GRAVITY_XY,x,y)
+    fun setGravityXY(x: Float, y: Float) {
+        nativeRender.native_SetParamsFloat(Constants.SAMPLE_TYPE_SET_GRAVITY_XY, x, y)
     }
 }
