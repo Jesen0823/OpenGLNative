@@ -51,7 +51,7 @@ void UniformBufferSample::Init() {
             "}";
 
     char fShaderStr[] =
-            "#version 300 es                                                    \n"
+            "#version 310 es                                                    \n"
             "precision mediump float;                                           \n"
             "in vec2 v_texCoord;                                                \n"
             "layout(location = 0) out vec4 outColor;                            \n"
@@ -63,7 +63,6 @@ void UniformBufferSample::Init() {
     m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr, m_VertexShader, m_FragmentShader);
     if (m_ProgramObj) {
         m_SamplerLoc = glGetUniformLocation(m_ProgramObj, "s_TextureMap");
-        m_MVPMatLoc = glGetUniformLocation(m_ProgramObj, "u_MVPMatrix");
     } else {
         LOGCATE("UniformBufferSample::Init create program fail");
     }
@@ -150,10 +149,7 @@ void UniformBufferSample::Draw(int screenW, int screenH) {
 
     // Use the program object
     glUseProgram(m_ProgramObj);
-
     glBindVertexArray(m_VaoId);
-
-    glUniformMatrix4fv(m_MVPMatLoc, 1, GL_FALSE, &m_MVPMatrix[0][0]);
 
     glBindBuffer(GL_UNIFORM_BUFFER, m_UboId);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &m_ProjectionMatrix[0][0]);
@@ -176,6 +172,7 @@ void UniformBufferSample::Destroy() {
         glDeleteBuffers(3, m_VboIds);
         glDeleteVertexArrays(1, &m_VaoId);
         glDeleteTextures(1, &m_TextureId);
+        glDeleteBuffers(1, &m_UboId);
     }
 }
 
@@ -195,9 +192,9 @@ void UniformBufferSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int 
     angleX = angleX % 360;
     angleY = angleY % 360;
 
+    //转化为弧度角
     float radiansX = static_cast<float>(MATH_PI / 180.0f * angleX);
     float radiansY = static_cast<float>(MATH_PI / 180.0f * angleY);
-
 
     // Projection matrix
     glm::mat4 Projection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
