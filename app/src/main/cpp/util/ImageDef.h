@@ -18,12 +18,14 @@
 #define IMAGE_FORMAT_NV12           0x03
 #define IMAGE_FORMAT_I420           0x04
 #define IMAGE_FORMAT_YUYV           0x05
+#define IMAGE_FORMAT_GRAY           0x06
 
 #define IMAGE_FORMAT_RGBA_EXT       "RGB32"
 #define IMAGE_FORMAT_NV21_EXT       "NV21"
 #define IMAGE_FORMAT_NV12_EXT       "NV12"
 #define IMAGE_FORMAT_I420_EXT       "I420"
 #define IMAGE_FORMAT_YUYV_EXT       "YUYV"
+#define IMAGE_FORMAT_GRAY_EXT       "GRAY"
 
 typedef struct NativeRectF {
     float left;
@@ -90,6 +92,10 @@ public:
                 pImage->ppPlane[2] = pImage->ppPlane[1] + pImage->width * (pImage->height >> 2);
             }
                 break;
+            case IMAGE_FORMAT_GRAY: {
+                pImage->ppPlane[0] = static_cast<uint8_t *>(malloc(pImage->width * pImage->height));
+            }
+                break;
             default:
                 LOGCATE("NativeImageUtil::AllocNativeImage do not support the format. Format = %d",
                         pImage->format);
@@ -134,6 +140,10 @@ public:
                        pSrcImg->width * pSrcImg->height * 4);
             }
                 break;
+            case IMAGE_FORMAT_GRAY: {
+                memcpy(pDstImg->ppPlane[0], pSrcImg->ppPlane[0], pSrcImg->width * pSrcImg->height);
+            }
+                break;
             default: {
                 LOGCATE("NativeImageUtil::CopyNativeImage do not support the format. Format = %d",
                         pSrcImg->format);
@@ -167,6 +177,9 @@ public:
                 break;
             case IMAGE_FORMAT_YUYV:
                 pExt = IMAGE_FORMAT_YUYV_EXT;
+                break;
+            case IMAGE_FORMAT_GRAY:
+                pExt = IMAGE_FORMAT_GRAY_EXT;
                 break;
             default:
                 pExt = "Default";
