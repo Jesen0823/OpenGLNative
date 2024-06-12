@@ -25,24 +25,33 @@
 #define IMAGE_FORMAT_I420_EXT       "I420"
 #define IMAGE_FORMAT_YUYV_EXT       "YUYV"
 
-typedef struct _tag_NativeRectF {
+typedef struct NativeRectF {
     float left;
     float top;
     float right;
     float bottom;
 
-    _tag_NativeRectF() {
+    NativeRectF() {
         left = top = right = bottom = 0.0f;
     }
 } RectF;
 
-typedef struct _tag_NativeImage {
+struct SizeF {
+    float width;
+    float height;
+
+    SizeF() {
+        width = height = 0;
+    }
+};
+
+struct NativeImage {
     int width;
     int height;
     int format;
     uint8_t *ppPlane[3];
 
-    _tag_NativeImage() {
+    NativeImage() {
         width = 0;
         height = 0;
         format = 0;
@@ -50,7 +59,7 @@ typedef struct _tag_NativeImage {
         ppPlane[1] = nullptr;
         ppPlane[2] = nullptr;
     }
-} NativeImage;
+};
 
 class NativeImageUtil {
 public:
@@ -94,7 +103,7 @@ public:
         free(pImage->ppPlane[0]);
         pImage->ppPlane[0] = nullptr;
         pImage->ppPlane[1] = nullptr;
-        pImage->ppPlane[1] = nullptr;
+        pImage->ppPlane[2] = nullptr;
     }
 
     static void CopyNativeImage(NativeImage *pSrcImg, NativeImage *pDstImg) {

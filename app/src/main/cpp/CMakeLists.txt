@@ -24,13 +24,15 @@ find_library(
         android-lib
         android)
 
-#[[file(GLOB src_files
+file(GLOB src_files
         ${CMAKE_SOURCE_DIR}/*.cpp
+        ${CMAKE_SOURCE_DIR}/egl/*.cpp
+        ${CMAKE_SOURCE_DIR}/looper/*.cpp
         ${CMAKE_SOURCE_DIR}/util/*.cpp
         ${CMAKE_SOURCE_DIR}/render/*.cpp
-        ${CMAKE_SOURCE_DIR}/sample/*.cpp)]]
+        ${CMAKE_SOURCE_DIR}/sample/*.cpp)
 
-set(src_files
+#[[set(src_files
         JNIImpl.cpp
         util/GLUtils.cpp
         render/EGLRender.cpp
@@ -70,7 +72,7 @@ set(src_files
         sample/FBOBlitSample.cpp
         sample/TextureBufferSample.cpp
         sample/UniformBufferSample.cpp
-        sample/RGB2YUVSample.cpp)
+        sample/RGB2YUVSample.cpp)]]
 
 add_library(
         ${CMAKE_PROJECT_NAME}
