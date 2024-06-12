@@ -213,6 +213,8 @@ public:
                 }
                 default: {
                     LOGCATE("DumpNativeImage default");
+                    fwrite(pSrcImg->ppPlane[0],
+                           static_cast<size_t>(pSrcImg->width * pSrcImg->height), 1, fp);
                     break;
                 }
             }

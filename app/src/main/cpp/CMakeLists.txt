@@ -12,6 +12,7 @@ include_directories(
         glm
         inc
         inc/assimp
+        inc/freetype_2_9_1
         model
         opencv_3_0_0
         egl
@@ -74,7 +75,11 @@ file(GLOB src_files
         sample/FBOBlitSample.cpp
         sample/TextureBufferSample.cpp
         sample/UniformBufferSample.cpp
-        sample/RGB2YUVSample.cpp)]]
+        sample/RGB2YUVSample.cpp
+        sample/SharedEGLContextSample.cpp
+        sample/TextRenderSample.cpp
+        looper/Looper.cpp
+        looper/GLRenderLooper.cpp)]]
 
 add_library(
         ${CMAKE_PROJECT_NAME}
@@ -87,8 +92,12 @@ set_target_properties(assimp PROPERTIES IMPORTED_LOCATION ${jnilibs}/${ANDROID_A
 add_library(opencv_java3 SHARED IMPORTED)
 set_target_properties(opencv_java3 PROPERTIES IMPORTED_LOCATION ${jnilibs}/${ANDROID_ABI}/libopencv_java3.so)
 
+add_library(freetype STATIC IMPORTED )
+set_target_properties(freetype PROPERTIES IMPORTED_LOCATION ${jnilibs}/${ANDROID_ABI}/libfreetype.a)
+
 set(third-party-libs
         assimp
+        freetype
         opencv_java3)
 
 target_link_libraries(${CMAKE_PROJECT_NAME}

@@ -139,6 +139,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_MULTI_THREAD_RENDER:
                 m_pCurSample = new SharedEGLContextSample();
                 break;
+            case SAMPLE_TYPE_KEY_TEXT_RENDER:
+                m_pCurSample = new TextRenderSample;
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;

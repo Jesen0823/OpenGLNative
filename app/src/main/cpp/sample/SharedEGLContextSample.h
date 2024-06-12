@@ -13,6 +13,7 @@
 using namespace std;
 
 class SharedEGLContextSample : public GLSampleBase {
+
 public:
     SharedEGLContextSample();
 

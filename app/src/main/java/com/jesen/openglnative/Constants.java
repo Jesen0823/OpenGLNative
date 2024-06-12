@@ -42,6 +42,7 @@ public interface Constants {
     public static final int SAMPLE_TYPE_KEY_UBO = SAMPLE_TYPE + 34;
     public static final int SAMPLE_TYPE_KEY_RGB2YUV = SAMPLE_TYPE + 35;
     public static final int SAMPLE_TYPE_KEY_MULTI_THREAD_RENDER = SAMPLE_TYPE + 36;
+    public static final int SAMPLE_TYPE_KEY_TEXT_RENDER = SAMPLE_TYPE + 37;
     public static final int SAMPLE_TYPE_SET_TOUCH_LOC = SAMPLE_TYPE + 999;
     public static final int SAMPLE_TYPE_SET_GRAVITY_XY = SAMPLE_TYPE + 1000;
     public static final int IMAGE_FORMAT_RGBA = 0x01;
@@ -65,6 +66,7 @@ public interface Constants {
             "Big Head", "Rotary Head", "Visualize Audio", "Scratch Card",
             "3D Avatar", "Shock Wave", "MRT", "FBO Blit", "Texture Buffer",
             "Uniform Buffer", "OpenGL RGB to YUV","Multi-Thread Render",
+            "Text Render",
     };
 
 }

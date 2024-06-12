@@ -43,6 +43,7 @@
 #include "UniformBufferSample.h"
 #include "RGB2YUVSample.h"
 #include "SharedEGLContextSample.h"
+#include "TextRenderSample.h"
 
 class MineGlRenderContext {
 public:

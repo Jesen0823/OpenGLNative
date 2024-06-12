@@ -50,9 +50,13 @@
 #define SAMPLE_TYPE_KEY_UBO                         SAMPLE_TYPE+34
 #define SAMPLE_TYPE_KEY_RGB2YUV                     SAMPLE_TYPE+35
 #define SAMPLE_TYPE_KEY_MULTI_THREAD_RENDER         SAMPLE_TYPE+36
+#define SAMPLE_TYPE_KEY_TEXT_RENDER                 SAMPLE_TYPE+37
 
 #define SAMPLE_TYPE_KEY_SET_TOUCH_LOC               SAMPLE_TYPE+999
 #define SAMPLE_TYPE_SET_GRAVITY_XY                  SAMPLE_TYPE+1000
+
+
+#define DEFAULT_OGL_ASSETS_DIR "/sdcard/Android/data/com.jesen.openglnative/files/Download"
 
 class GLSampleBase {
 protected:

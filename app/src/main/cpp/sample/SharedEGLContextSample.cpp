@@ -6,7 +6,6 @@
 #include "GLUtils.h"
 #include "SharedEGLContextSample.h"
 
-
 #define VERTEX_POS_INDX      0
 #define TEXTURE_POS_INDX     1
 

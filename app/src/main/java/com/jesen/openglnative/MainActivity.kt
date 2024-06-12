@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
             Log.d("MainActivity", " initIO() has allowed permission")
             val fileDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath
             FileUtil.copyAssetsDirToSDCard(this@MainActivity, "poly", "$fileDir/model")
-
+            FileUtil.copyAssetsDirToSDCard(applicationContext,"fonts","/sdcard")
             editor!!.putBoolean("initIO", true)
         }
     }
@@ -286,7 +286,8 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
                     }
 
                     Constants.SAMPLE_TYPE_KEY_SHOCK_WAVE,
-                    Constants.SAMPLE_TYPE_KEY_MULTI_THREAD_RENDER-> {
+                    Constants.SAMPLE_TYPE_KEY_MULTI_THREAD_RENDER,
+                    Constants.SAMPLE_TYPE_KEY_TEXT_RENDER-> {
                         val bp = loadRGBAImage(R.drawable.lye)
                         mGLSurfaceView.setAspectRatio(bp.width, bp.height)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
