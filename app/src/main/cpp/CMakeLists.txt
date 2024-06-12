@@ -14,6 +14,8 @@ include_directories(
         inc/assimp
         model
         opencv_3_0_0
+        egl
+        looper
 )
 
 find_library(
@@ -25,12 +27,12 @@ find_library(
         android)
 
 file(GLOB src_files
-        ${CMAKE_SOURCE_DIR}/*.cpp
         ${CMAKE_SOURCE_DIR}/egl/*.cpp
         ${CMAKE_SOURCE_DIR}/looper/*.cpp
         ${CMAKE_SOURCE_DIR}/util/*.cpp
         ${CMAKE_SOURCE_DIR}/render/*.cpp
-        ${CMAKE_SOURCE_DIR}/sample/*.cpp)
+        ${CMAKE_SOURCE_DIR}/sample/*.cpp
+        ${CMAKE_SOURCE_DIR}/*.cpp)
 
 #[[set(src_files
         JNIImpl.cpp

@@ -285,18 +285,19 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
 
-                    Constants.SAMPLE_TYPE_KEY_SHOCK_WAVE -> {
+                    Constants.SAMPLE_TYPE_KEY_SHOCK_WAVE,
+                    Constants.SAMPLE_TYPE_KEY_MULTI_THREAD_RENDER-> {
                         val bp = loadRGBAImage(R.drawable.lye)
                         mGLSurfaceView.setAspectRatio(bp.width, bp.height)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
 
                     Constants.SAMPLE_TYPE_KEY_MRT, Constants.SAMPLE_TYPE_KEY_FBO_BLIT,
-                    Constants.SAMPLE_TYPE_KEY_TBO,Constants.SAMPLE_TYPE_KEY_UBO -> {
+                    Constants.SAMPLE_TYPE_KEY_TBO,Constants.SAMPLE_TYPE_KEY_UBO,
+                    Constants.SAMPLE_TYPE_KEY_RGB2YUV -> {
                         val bp = loadRGBAImage(R.drawable.lye)
                         mGLSurfaceView.setAspectRatio(bp.width, bp.height)
                     }
-                    Constants.SAMPLE_TYPE_KEY_RGB2YUV-> loadRGBAImage(R.drawable.lye)
 
                     else -> {}
                 }
