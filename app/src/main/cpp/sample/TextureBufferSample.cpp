@@ -40,6 +40,7 @@ void TextureBufferSample::Init() {
 
     char vShaderStr[] =
             "#version 320 es                                                                     \n"
+            "precision mediump float;                                                            \n"
             "layout(location = 0) in vec4 a_position;                                            \n"
             "layout(location = 1) in vec2 a_texCoord;                                            \n"
             "uniform mat4 u_MVPMatrix;                                                           \n"
@@ -54,23 +55,22 @@ void TextureBufferSample::Init() {
             "#extension GL_EXT_texture_buffer : require                                          \n"
             "in mediump vec2 v_texCoord;                                                         \n"
             "layout(location = 0) out mediump  vec4 outColor;                                    \n"
-            "uniform mediump samplerBuffer u_tbo;                                                \n"
-            "uniform mediump sampler2D u_texture;                                                \n"
+            "uniform mediump samplerBuffer u_buffer_tex;                                         \n"
+            "uniform mediump sampler2D u_2d_texture;                                             \n"
             "uniform mediump int u_BufferSize;                                                   \n"
             "void main(){                                                                        \n"
             "    mediump float offset = 0.1;                                                     \n"
             "    mediump int index = int((floor(v_texCoord.x/offset) +floor(v_texCoord.y/offset))"
             "                       * offset /2.0 * float(u_BufferSize - 1));                    \n"
-            "    mediump float value = texelFetch(u_tbo, index).x;//index[0~u_BufferSize - 1]    \n"
+            "    mediump float value = texelFetch(u_buffer_tex, index).x;//index[0~u_BufferSize - 1]\n"
             "    mediump vec4 lightColor = vec4(vec3(vec2(value / float(u_BufferSize - 1)),"
             "                              0.0), 1.0);                                           \n"
-            "    outColor = texture(u_texture, v_texCoord) * lightColor;                         \n"
+            "    outColor = texture(u_2d_texture, v_texCoord) * lightColor;                      \n"
             "}";
 
     m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr,
                                           m_VertexShader, m_FragmentShader);
     if (m_ProgramObj) {
-        m_SamplerLoc = glGetUniformLocation(m_ProgramObj, "u_tbo");
         m_MVPMatLoc = glGetUniformLocation(m_ProgramObj, "u_MVPMatrix");
     } else {
         LOGCATE("TextureBufferSample::Init create program fail");
