@@ -9,8 +9,6 @@
 #define TEXTURE_POS_INDX 1
 
 FBOSample::FBOSample() {
-    m_VAOIds[0] = {GL_NONE};
-    m_VBOIds[0] = {GL_NONE};
     m_ImageTextureId = GL_NONE;
     m_FBOTextureId = GL_NONE;
     m_SamplerLoc = GL_NONE;

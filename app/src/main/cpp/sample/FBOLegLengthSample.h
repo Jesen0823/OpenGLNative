@@ -20,14 +20,18 @@
 #define HORIZONTAL_STRETCH_RIGHT_6_POINTS  0x22
 #define HORIZONTAL_STRETCH_4_POINTS        0x23
 
-class FBOLegLengthSample: public GLSampleBase{
+class FBOLegLengthSample : public GLSampleBase {
 public:
     FBOLegLengthSample();
+
     virtual ~FBOLegLengthSample();
 
     virtual void Init();
+
     virtual void LoadImage(NativeImage *pImage);
+
     virtual void Draw(int screenW, int screenH);
+
     virtual void Destroy();
 
     bool CreateFrameBufferObj();
@@ -36,8 +40,8 @@ private:
     GLuint m_ImageTextureId;
     GLuint m_FBOTextureId;
     GLuint m_FBOId;
-    GLuint m_VAOIds[2];
-    GLuint m_VBOIds[6];
+    GLuint m_VAOIds[2] = {GL_NONE};;
+    GLuint m_VBOIds[6] = {GL_NONE};;
     GLint m_SamplerLoc;
     NativeImage m_RenderImage;
     GLuint m_FBOProgramObj;
@@ -55,9 +59,9 @@ private:
     bool m_isGo;
 
     RectF m_StretchRect;
-    int   m_StretchMode;
+    int m_StretchMode;
 
-    bool  m_bIsVerticalMode;
+    bool m_bIsVerticalMode;
 };
 
 

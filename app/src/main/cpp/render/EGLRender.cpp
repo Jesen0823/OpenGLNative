@@ -305,8 +305,6 @@ const GLfloat vFboTexCoors[] = {
 const GLushort indices[] = {0, 1, 2, 1, 3, 2};
 
 EGLRender::EGLRender() {
-    m_VAOIds[1] = {GL_NONE};
-    m_VBOIds[3] = {GL_NONE};
     m_ImageTextureId = GL_NONE;
     m_FBOTextureId = GL_NONE;
     m_TexSizeLoc = GL_NONE;

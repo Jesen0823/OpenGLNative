@@ -56,7 +56,7 @@ const char fFboShaderStr[] =
         "    float luminance = tempColor.r * 0.299 + tempColor.g * 0.587 + tempColor.b * 0.114;\n"
         "    //outColor = vec4(vec3(luminance), tempColor.a);\n"
         "    outColor = tempColor;\n"
-        "}"; // 杈撳嚭鐏板害鍥¾
+        "}";
 
 const GLushort V_EIGHT_POINT_INDICES[] = {0, 1, 2, 0, 2, 3, 1, 4, 7, 1, 7, 2, 4, 5, 6, 4, 6, 7};
 const GLushort V_SIX_POINT_INDICES[] = {0, 1, 2, 0, 2, 3, 1, 4, 5, 1, 5, 2};
@@ -67,8 +67,6 @@ const GLushort H_SIX_POINT_INDICES[] = {0, 1, 2, 0, 2, 3, 3, 2, 5, 3, 5, 4,};
 const GLushort FOUR_POINT_INDICES[] = {0, 1, 2, 0, 2, 3};
 
 FBOLegLengthSample::FBOLegLengthSample() {
-    m_VAOIds[2] = {GL_NONE};
-    m_VBOIds[6] = {GL_NONE};
     m_ImageTextureId = GL_NONE;
     m_FBOTextureId = GL_NONE;
     m_SamplerLoc = GL_NONE;

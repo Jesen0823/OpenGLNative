@@ -55,8 +55,8 @@ private:
     GLuint m_ImageTextureId;
     GLuint m_FBOTextureId;
     GLuint m_FBOId;
-    GLuint m_VAOIds[1];
-    GLuint m_VBOIds[3];
+    GLuint m_VAOIds[1] = {GL_NONE};
+    GLuint m_VBOIds[3] = {GL_NONE};
     GLint m_SamplerLoc;
     GLint m_TexSizeLoc;
     NativeImage m_RenderImage;
@@ -69,7 +69,7 @@ private:
     EGLContext m_eglCtx;
     EGLDisplay m_eglDisplay;
     bool m_IsGLContextReady;
-    const char*m_fShaderStrs[EGL_FEATURE_NUM];
+    const char *m_fShaderStrs[EGL_FEATURE_NUM];
     int m_ShaderIndex;
 };
 
