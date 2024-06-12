@@ -283,8 +283,11 @@ void StencilTestingSample::Draw(int screenW, int screenH) {
 
     UpdateMatrix(m_MVPMatrix, m_ModelMatrix, m_AngleX, m_AngleY,
                  1.0, glm::vec3(0.0f, 0.0f, 0.0f), ratio);
-    glUniformMatrix4fv(m_MVPMatLoc, 1, GL_FALSE, &m_MVPMatrix[0][0]);
-    glUniformMatrix4fv(m_ModelMatrixLoc, 1, GL_FALSE, &m_ModelMatrix[0][0]);
+    //glUniformMatrix4fv(m_MVPMatLoc, 1, GL_FALSE, &m_MVPMatrix[0][0]);
+    //glUniformMatrix4fv(m_ModelMatrixLoc, 1, GL_FALSE, &m_ModelMatrix[0][0]);
+    GLUtils::setMat4(m_FrameProgramObj, "u_MVPMatrix", m_MVPMatrix);
+    GLUtils::setMat4(m_FrameProgramObj, "u_ModelMatrix", m_ModelMatrix);
+
     glDrawArrays(GL_TRIANGLES, 0, 36);
     GO_CHECK_GL_ERROR();
     glBindVertexArray(0);

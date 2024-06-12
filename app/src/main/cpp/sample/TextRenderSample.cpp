@@ -6,8 +6,8 @@
 #include "TextRenderSample.h"
 #include "GLUtils.h"
 
-//\u5b57\u8282\u6d41\u52a8
-static const int BYTE_FLOW[] = {0x6211, 0x8282, 0x6d41, 0x52a8};
+static const wchar_t TEST_CONTENT[] = L"HI呀！画一个王八蛋呀";
+static const int MAX_SHORT_VALUE = 65536;
 
 TextRenderSample::TextRenderSample() {
     m_SamplerLoc = GL_NONE;
@@ -34,7 +34,7 @@ void TextRenderSample::Init() {
 
     LoadFacesByASCII();
 
-    LoadFacesByUnicode(const_cast<int *>(BYTE_FLOW), 4);
+    LoadFacesByUnicode(TEST_CONTENT, sizeof(TEST_CONTENT) / sizeof(TEST_CONTENT[0]) - 1);
 
     //create RGBA texture
     glGenTextures(1, &m_TextureId);
@@ -126,6 +126,8 @@ void TextRenderSample::Draw(int screenW, int screenH) {
                glm::vec3(0.8, 0.1f, 0.1f), viewport);
     RenderText("Welcome to add my OpenGL!", -0.9f, 0.0f, 2.0f,
                glm::vec3(0.2, 0.4f, 0.7f), viewport);
+    RenderText(TEST_CONTENT, sizeof(TEST_CONTENT) / sizeof(TEST_CONTENT[0]) - 1, -0.9f, -0.2f, 1.0f,
+               glm::vec3(0.7f, 0.4f, 0.2f), viewport);
 }
 
 void TextRenderSample::Destroy() {
@@ -208,7 +210,8 @@ void TextRenderSample::RenderText(std::string text, GLfloat x, GLfloat y, GLfloa
         w /= viewport.x;
         h /= viewport.y;
 
-        LOGCATE("TextRenderSample::RenderText [xpos,ypos,w,h]=[%f, %f, %f, %f]", xpos, ypos, w, h);
+        LOGCATE("TextRenderSample::RenderText [xpos,ypos,w,h]=[%f, %f, %f, %f], ch.advance >> 6 = %d",
+                xpos, ypos, w, h, ch.advance >> 6);
 
         // 当前字符的VBO
         GLfloat vertices[6][4] = {
@@ -281,14 +284,10 @@ void TextRenderSample::LoadFacesByASCII() {
                 GL_UNSIGNED_BYTE,
                 face->glyph->bitmap.buffer
         );
-//		NativeImage image;
-//		image.width = face->glyph->bitmap.width;
-//		image.height = face->glyph->bitmap.rows;
-//		image.format = 8;
-//		image.ppPlane[0] = face->glyph->bitmap.buffer;
-//		NativeImageUtil::DumpNativeImage(&image, "/sdcard/DCIM", "TextRenderSample");
-        LOGCATE("TextRenderSample::LoadFacesByASCII [w,h,buffer]=[%d, %d, %p]",
-                face->glyph->bitmap.width, face->glyph->bitmap.rows, face->glyph->bitmap.buffer);
+
+        LOGCATE("TextRenderSample::LoadFacesByASCII [w,h,buffer]=[%d, %d, %p], ch.advance >> 6 = %d",
+                face->glyph->bitmap.width, face->glyph->bitmap.rows,
+                face->glyph->bitmap.buffer, face->glyph->advance.x >> 6);
         // Set texture options
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -309,8 +308,13 @@ void TextRenderSample::LoadFacesByASCII() {
     FT_Done_FreeType(ft);
 }
 
-void TextRenderSample::LoadFacesByUnicode(int *unicodeArr, int size) {
-// FreeType
+void TextRenderSample::RenderText(const wchar_t *text, int textLen, GLfloat x, GLfloat y,
+                                  GLfloat scale, glm::vec3 color, glm::vec2 viewport) {
+
+}
+
+void TextRenderSample::LoadFacesByUnicode(const wchar_t *text, int size) {
+    // FreeType
     FT_Library ft;
     // All functions return a value different than 0 whenever an error occurred
     if (FT_Init_FreeType(&ft))
@@ -318,22 +322,32 @@ void TextRenderSample::LoadFacesByUnicode(int *unicodeArr, int size) {
 
     // Load font as face
     FT_Face face;
-    if (FT_New_Face(ft, "/sdcard/fonts/timesbi.ttf", 0, &face))
+    std::string path(DEFAULT_OGL_ASSETS_DIR);
+    if (FT_New_Face(ft, (path + "/fonts/msyh.ttc").c_str(), 0, &face))
         LOGCATE("TextRenderSample::LoadFacesByUnicode FREETYPE: Failed to load font");
 
     // Set size to load glyphs as
     FT_Set_Pixel_Sizes(face, 96, 96);
-    //FT_Select_Charmap(face, ft_encoding_unicode);
+    FT_Select_Charmap(face, ft_encoding_unicode);
 
-    // Disable byte-alignment restriction
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     for (int i = 0; i < size; ++i) {
-        int index = FT_Get_Char_Index(face, unicodeArr[i]);
-        if (FT_Load_Glyph(face, index, FT_LOAD_RENDER)) {
+        //int index =  FT_Get_Char_Index(face,unicodeArr[i]);
+        if (FT_Load_Glyph(face, FT_Get_Char_Index(face, text[i]), FT_LOAD_DEFAULT)) {
             LOGCATE("TextRenderSample::LoadFacesByUnicode FREETYTPE: Failed to load Glyph");
             continue;
         }
+
+        FT_Glyph glyph;
+        FT_Get_Glyph(face->glyph, &glyph);
+
+        //Convert the glyph to a bitmap.
+        FT_Glyph_To_Bitmap(&glyph, ft_render_mode_normal, 0, 1);
+        FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph) glyph;
+
+        //This reference will make accessing the bitmap easier
+        FT_Bitmap &bitmap = bitmap_glyph->bitmap;
 
         // Generate texture
         GLuint texture;
@@ -343,17 +357,17 @@ void TextRenderSample::LoadFacesByUnicode(int *unicodeArr, int size) {
                 GL_TEXTURE_2D,
                 0,
                 GL_LUMINANCE,
-                face->glyph->bitmap.width,
-                face->glyph->bitmap.rows,
+                bitmap.width,
+                bitmap.rows,
                 0,
                 GL_LUMINANCE,
                 GL_UNSIGNED_BYTE,
-                face->glyph->bitmap.buffer
+                bitmap.buffer
         );
 
-        LOGCATE("TextRenderSample::LoadFacesByUnicode unicodeArr[i]=%d [w,h,buffer]=[%d, %d, %p]",
-                unicodeArr[i], face->glyph->bitmap.width, face->glyph->bitmap.rows,
-                face->glyph->bitmap.buffer);
+        LOGCATE("TextRenderSample::LoadFacesByUnicode text[i]=%d [w,h,buffer]=[%d, %d, %p], advance.x=%ld",
+                text[i], bitmap.width, bitmap.rows, bitmap.buffer,
+                glyph->advance.x / MAX_SHORT_VALUE);
         // Set texture options
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -364,9 +378,10 @@ void TextRenderSample::LoadFacesByUnicode(int *unicodeArr, int size) {
                 texture,
                 glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
                 glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-                static_cast<GLuint>(face->glyph->advance.x)
+                static_cast<GLuint>((glyph->advance.x / MAX_SHORT_VALUE) << 6)
         };
-        m_Characters.insert(std::pair<GLint, Character>(unicodeArr[i], character));
+        m_Characters.insert(std::pair<GLint, Character>(text[i], character));
+
     }
     glBindTexture(GL_TEXTURE_2D, 0);
     // Destroy FreeType once we're finished
