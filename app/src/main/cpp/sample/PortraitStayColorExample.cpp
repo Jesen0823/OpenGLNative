@@ -61,6 +61,7 @@ void PortraitStayColorExample::Init() {
             "layout(location = 0) in vec4 a_position;                         \n"
             "layout(location = 1) in vec2 a_texCoord;                         \n"
             "uniform mat4 u_MVPMatrix;                                        \n"
+            "out vec2 v_texCoord;                                             \n"
             "void main(){                                                     \n"
             "    gl_Position = u_MVPMatrix * a_position;                      \n"
             "    v_texCoord = a_texCoord;                                     \n"
