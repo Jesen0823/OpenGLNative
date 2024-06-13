@@ -45,6 +45,7 @@
 #include "SharedEGLContextSample.h"
 #include "TextRenderSample.h"
 #include "PortraitStayColorExample.h"
+#include "GLTransitionExample.h"
 
 class MineGlRenderContext {
 public:
