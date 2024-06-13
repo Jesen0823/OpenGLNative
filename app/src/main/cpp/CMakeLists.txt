@@ -79,7 +79,8 @@ file(GLOB src_files
         sample/SharedEGLContextSample.cpp
         sample/TextRenderSample.cpp
         looper/Looper.cpp
-        looper/GLRenderLooper.cpp)]]
+        looper/GLRenderLooper.cpp
+        sample/PortraitStayColorExample.cpp)]]
 
 add_library(
         ${CMAKE_PROJECT_NAME}

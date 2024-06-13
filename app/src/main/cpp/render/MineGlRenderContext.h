@@ -44,6 +44,7 @@
 #include "RGB2YUVSample.h"
 #include "SharedEGLContextSample.h"
 #include "TextRenderSample.h"
+#include "PortraitStayColorExample.h"
 
 class MineGlRenderContext {
 public:

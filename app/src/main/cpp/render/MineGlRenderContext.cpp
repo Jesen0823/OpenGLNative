@@ -142,6 +142,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_TEXT_RENDER:
                 m_pCurSample = new TextRenderSample;
                 break;
+            case SAMPLE_TYPE_KEY_STAY_COLOR:
+                m_pCurSample = new PortraitStayColorExample();
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;

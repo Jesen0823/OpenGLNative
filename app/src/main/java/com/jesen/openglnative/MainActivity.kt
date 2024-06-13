@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
             Log.d("MainActivity", " initIO() has allowed permission")
             val fileDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath
             FileUtil.copyAssetsDirToSDCard(this@MainActivity, "poly", "$fileDir/model")
-            FileUtil.copyAssetsDirToSDCard(applicationContext,"fonts",fileDir)
+            FileUtil.copyAssetsDirToSDCard(applicationContext, "fonts", fileDir)
             editor!!.putBoolean("initIO", true)
         }
     }
@@ -138,6 +138,18 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
             val buffer = ByteArray(length)
             it.read(buffer)
             mMineGLRender.setImageData(Constants.IMAGE_FORMAT_NV21, 840, 1074, buffer)
+        }
+    }
+
+    private fun loadGrayImage() {
+        assets.open("lye_1280x800.Gray").use { ins ->
+            var length = ins.available()
+            val buffer = ByteArray(length)
+            ins.read(buffer)
+            mMineGLRender.setImageDataWithIndex(
+                0, Constants.IMAGE_FORMAT_GARY,
+                1280, 800, buffer
+            )
         }
     }
 
@@ -287,17 +299,25 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
 
                     Constants.SAMPLE_TYPE_KEY_SHOCK_WAVE,
                     Constants.SAMPLE_TYPE_KEY_MULTI_THREAD_RENDER,
-                    Constants.SAMPLE_TYPE_KEY_TEXT_RENDER-> {
+                    Constants.SAMPLE_TYPE_KEY_TEXT_RENDER -> {
                         val bp = loadRGBAImage(R.drawable.lye)
                         mGLSurfaceView.setAspectRatio(bp.width, bp.height)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
 
                     Constants.SAMPLE_TYPE_KEY_MRT, Constants.SAMPLE_TYPE_KEY_FBO_BLIT,
-                    Constants.SAMPLE_TYPE_KEY_TBO,Constants.SAMPLE_TYPE_KEY_UBO,
+                    Constants.SAMPLE_TYPE_KEY_TBO, Constants.SAMPLE_TYPE_KEY_UBO,
                     Constants.SAMPLE_TYPE_KEY_RGB2YUV -> {
                         val bp = loadRGBAImage(R.drawable.lye)
                         mGLSurfaceView.setAspectRatio(bp.width, bp.height)
+                    }
+
+                    Constants.SAMPLE_TYPE_KEY_STAY_COLOR -> {
+                        loadGrayImage()
+                        val bp = loadRGBAImage(R.drawable.lye2)
+                        loadRGBAImage(R.drawable.ascii_mapping, 1)
+                        mGLSurfaceView.setAspectRatio(bp.width, bp.height)
+                        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
 
                     else -> {}
