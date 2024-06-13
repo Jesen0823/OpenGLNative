@@ -319,14 +319,24 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
                         mGLSurfaceView.setAspectRatio(bp.width, bp.height)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
-                    Constants.SAMPLE_TYPE_KEY_TRANSITION->{
-                        loadRGBAImage(R.drawable.lye,0)
-                        loadRGBAImage(R.drawable.lye4,1)
-                        loadRGBAImage(R.drawable.lye5,2)
-                        loadRGBAImage(R.drawable.lye6,3)
-                        loadRGBAImage(R.drawable.lye7,4)
-                        val bp = loadRGBAImage(R.drawable.lye8,5)
-                        mGLSurfaceView.setAspectRatio(bp.width,bp.height)
+
+                    Constants.SAMPLE_TYPE_KEY_TRANSITIONS_1,
+                    Constants.SAMPLE_TYPE_KEY_TRANSITIONS_2,
+                    Constants.SAMPLE_TYPE_KEY_TRANSITIONS_3,
+                    Constants.SAMPLE_TYPE_KEY_TRANSITIONS_4 -> {
+                        loadRGBAImage(R.drawable.lye, 0)
+                        loadRGBAImage(R.drawable.lye4, 1)
+                        loadRGBAImage(R.drawable.lye5, 2)
+                        loadRGBAImage(R.drawable.lye6, 3)
+                        loadRGBAImage(R.drawable.lye7, 4)
+                        val bp = loadRGBAImage(R.drawable.lye8, 5)
+                        mGLSurfaceView.setAspectRatio(bp.width, bp.height)
+                        mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+                    }
+
+                    Constants.SAMPLE_TYPE_KEY_CONVEYOR_BELT -> {
+                        val bp = loadRGBAImage(R.drawable.huge);
+                        mGLSurfaceView.setAspectRatio(bp.width, bp.height)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
 

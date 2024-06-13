@@ -145,8 +145,20 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_STAY_COLOR:
                 m_pCurSample = new PortraitStayColorExample();
                 break;
-            case SAMPLE_TYPE_KEY_TRANSITION:
+            case SAMPLE_TYPE_KEY_TRANSITIONS_1:
                 m_pCurSample = new GLTransitionExample();
+                break;
+            case SAMPLE_TYPE_KEY_TRANSITIONS_2:
+                m_pCurSample = new GLTransitionExample_2();
+                break;
+            case SAMPLE_TYPE_KEY_TRANSITIONS_3:
+                m_pCurSample = new GLTransitionExample_3();
+                break;
+            case SAMPLE_TYPE_KEY_TRANSITIONS_4:
+                m_pCurSample = new GLTransitionExample_4();
+                break;
+            case SAMPLE_TYPE_KEY_CONVEYOR_BELT:
+                m_pCurSample = new ConveyorBeltExample;
                 break;
             default:
                 m_pCurSample = nullptr;

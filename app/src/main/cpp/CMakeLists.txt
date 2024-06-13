@@ -80,7 +80,12 @@ file(GLOB src_files
         sample/TextRenderSample.cpp
         looper/Looper.cpp
         looper/GLRenderLooper.cpp
-        sample/PortraitStayColorExample.cpp)]]
+        sample/PortraitStayColorExample.cpp
+        sample/GLTransitionExample.cpp
+        sample/GLTransitionExample_2.cpp
+        sample/GLTransitionExample_3.cpp
+        sample/GLTransitionExample_4.cpp
+        sample/ConveyorBeltExample.cpp)]]
 
 add_library(
         ${CMAKE_PROJECT_NAME}

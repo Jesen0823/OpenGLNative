@@ -46,6 +46,10 @@
 #include "TextRenderSample.h"
 #include "PortraitStayColorExample.h"
 #include "GLTransitionExample.h"
+#include "GLTransitionExample_2.h"
+#include "GLTransitionExample_3.h"
+#include "GLTransitionExample_4.h"
+#include "ConveyorBeltExample.h"
 
 class MineGlRenderContext {
 public:
