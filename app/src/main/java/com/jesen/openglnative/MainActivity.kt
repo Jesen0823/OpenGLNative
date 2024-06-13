@@ -84,8 +84,9 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
         if (Environment.isExternalStorageManager()) {
             Log.d("MainActivity", " initIO() has allowed permission")
             val fileDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath
-            FileUtil.copyAssetsDirToSDCard(this@MainActivity, "poly", "$fileDir/model")
+            FileUtil.copyAssetsDirToSDCard(applicationContext, "poly", "$fileDir/model")
             FileUtil.copyAssetsDirToSDCard(applicationContext, "fonts", fileDir)
+            FileUtil.copyAssetsDirToSDCard(applicationContext, "yuv", fileDir)
             editor!!.putBoolean("initIO", true)
         }
     }
