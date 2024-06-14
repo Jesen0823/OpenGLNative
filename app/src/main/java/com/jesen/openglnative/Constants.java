@@ -52,6 +52,7 @@ public interface Constants {
     public static final int SAMPLE_TYPE_KEY_RGB2NV21 = SAMPLE_TYPE + 44;
     public static final int SAMPLE_TYPE_KEY_RGB2I420 = SAMPLE_TYPE + 45;
     public static final int SAMPLE_TYPE_KEY_RGB2I444 = SAMPLE_TYPE + 46;
+    public static final int SAMPLE_TYPE_KEY_COPY_TEXTURE = SAMPLE_TYPE + 47;
     public static final int SAMPLE_TYPE_SET_TOUCH_LOC = SAMPLE_TYPE + 999;
     public static final int SAMPLE_TYPE_SET_GRAVITY_XY = SAMPLE_TYPE + 1000;
     public static final int IMAGE_FORMAT_RGBA = 0x01;
@@ -80,5 +81,6 @@ public interface Constants {
             "Text Render", "Portrait stay color", "GL Transitions_1",
             "GL Transitions_2", "GL Transitions_3", "GL Transitions_4",
             "Conveyor Belt", "RGB to NV21", "RGB to I420","RGB to I444",
+            "Copy Texture",
     };
 }

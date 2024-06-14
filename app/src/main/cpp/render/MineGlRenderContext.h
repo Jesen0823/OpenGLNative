@@ -53,6 +53,7 @@
 #include "RGB2NV21Sample.h"
 #include "RGB2I420Sample.h"
 #include "RGB2I444Sample.h"
+#include "CopyTextureExample.h"
 
 class MineGlRenderContext {
 public:

@@ -169,6 +169,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_RGB2I444:
                 m_pCurSample = new RGB2I444Sample();
                 break;
+            case SAMPLE_TYPE_KEY_COPY_TEXTURE:
+                m_pCurSample = new CopyTextureExample;
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;

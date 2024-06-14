@@ -206,7 +206,11 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
 
                     Constants.SAMPLE_TYPE_YUV_TEXTURE_MAP -> loadNV21Image()
                     Constants.SAMPLE_TYPE_VAO -> {}
-                    Constants.SAMPLE_TYPE_FBO -> loadRGBAImage(R.drawable.java)
+                    Constants.SAMPLE_TYPE_FBO, Constants.SAMPLE_TYPE_KEY_COPY_TEXTURE -> {
+                        val bp = loadRGBAImage(R.drawable.lye)
+                        mGLSurfaceView.setAspectRatio(bp.width, bp.height)
+                    }
+
                     Constants.SAMPLE_TYPE_EGL -> {
                         startActivity(Intent(this@MainActivity, EGLActivity::class.java))
                     }
