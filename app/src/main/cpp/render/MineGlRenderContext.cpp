@@ -178,6 +178,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_BINARY_PROGRAM:
                 m_pCurSample = new BinaryProgramSample();
                 break;
+            case SAMPLE_TYPE_KEY_RENDER_16BIT_GRAY:
+                m_pCurSample = new Render16BitGraySample;
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;
@@ -308,7 +311,7 @@ void MineGlRenderContext::SetParamsFloat(int paramType, float value0, float valu
                 m_pCurSample->SetTouchLocation(value0, value1);
                 break;
             case SAMPLE_TYPE_SET_GRAVITY_XY:
-                m_pCurSample->SetGravityXY(value0,value1);
+                m_pCurSample->SetGravityXY(value0, value1);
                 break;
             default:
                 break;

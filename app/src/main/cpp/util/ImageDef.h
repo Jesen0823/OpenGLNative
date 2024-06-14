@@ -21,6 +21,7 @@
 #define IMAGE_FORMAT_GRAY           0x06
 #define IMAGE_FORMAT_I444           0x07
 #define IMAGE_FORMAT_P010           0x08
+#define IMAGE_FORMAT_GRAY10         0x09
 
 #define IMAGE_FORMAT_RGBA_EXT       "RGB32"
 #define IMAGE_FORMAT_NV21_EXT       "NV21"
@@ -29,7 +30,8 @@
 #define IMAGE_FORMAT_YUYV_EXT       "YUYV"
 #define IMAGE_FORMAT_GRAY_EXT       "GRAY"
 #define IMAGE_FORMAT_I444_EXT       "I444"
-#define IMAGE_FORMAT_P010_EXT       "P010" //16bit NV21
+#define IMAGE_FORMAT_P010_EXT       "P010"   //16bit NV21
+#define IMAGE_FORMAT_GRAY10_EXT     "GRAY10" //16bit GRAY
 
 typedef struct NativeRectF {
     float left;
@@ -111,6 +113,11 @@ public:
                 pImage->ppPlane[1] = pImage->ppPlane[0] + pImage->width * pImage->height * 2;
             }
                 break;
+            case IMAGE_FORMAT_GRAY10: {
+                pImage->ppPlane[0] = static_cast<uint8_t *>(malloc(
+                        pImage->width * pImage->height * 2));
+            }
+                break;
             default:
                 LOGCATE("NativeImageUtil::AllocNativeImage do not support the format. Format = %d",
                         pImage->format);
@@ -166,6 +173,11 @@ public:
                        pSrcImg->width * pSrcImg->height * 3);
             }
                 break;
+            case IMAGE_FORMAT_GRAY10: {
+                memcpy(pDstImg->ppPlane[0], pSrcImg->ppPlane[0],
+                       pSrcImg->width * pSrcImg->height * 2);
+            }
+                break;
             default: {
                 LOGCATE("NativeImageUtil::CopyNativeImage do not support the format. Format = %d",
                         pSrcImg->format);
@@ -207,6 +219,9 @@ public:
                 break;
             case IMAGE_FORMAT_I444:
                 pExt = IMAGE_FORMAT_I444_EXT;
+                break;
+            case IMAGE_FORMAT_GRAY10:
+                pExt = IMAGE_FORMAT_GRAY10_EXT;
                 break;
             default:
                 pExt = "Default";
@@ -270,6 +285,11 @@ public:
                            static_cast<size_t>(pSrcImg->width * pSrcImg->height), 1, fp);
                     break;
                 }
+                case IMAGE_FORMAT_GRAY10: {
+                    fwrite(pSrcImg->ppPlane[0],
+                           static_cast<size_t>(pSrcImg->width * pSrcImg->height * 2), 1, fp);
+                    break;
+                }
                 default: {
                     LOGCATE("DumpNativeImage default");
                     fwrite(pSrcImg->ppPlane[0],
@@ -313,8 +333,13 @@ public:
                     break;
                 }
                 case IMAGE_FORMAT_P010:
-                case IMAGE_FORMAT_I444:{
+                case IMAGE_FORMAT_I444: {
                     dataSize = pSrcImg->width * pSrcImg->height * 3;
+                    fread(pSrcImg->ppPlane[0], dataSize, 1, fp);
+                    break;
+                }
+                case IMAGE_FORMAT_GRAY10: {
+                    dataSize = pSrcImg->width * pSrcImg->height * 2;
                     fread(pSrcImg->ppPlane[0], dataSize, 1, fp);
                     break;
                 }
@@ -389,7 +414,7 @@ public:
             uint16_t *pu16YData = (uint16_t *) (pP010Img->ppPlane[0] + pP010Img->width * 2 * i);
             uint8_t *pu8YData = pNV21Img->ppPlane[0] + pNV21Img->width * i;
             for (int j = 0; j < width; j++, pu8YData++, pu16YData++) {
-                *pu16YData = (u_int16_t) *pu8YData << 8;
+                *pu16YData = (u_int16_t) *pu8YData << 6;
             }
         }
 

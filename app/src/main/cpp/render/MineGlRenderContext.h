@@ -56,6 +56,7 @@
 #include "CopyTextureExample.h"
 #include "BlitFrameBufferSample.h"
 #include "BinaryProgramSample.h"
+#include "Render16BitGraySample.h"
 
 class MineGlRenderContext {
 public:

@@ -7,36 +7,35 @@
 
 void NV21TextureMapSample::Init() {
     char vShaderStr[] =
-            "#version 300 es                            \n"
-            "layout(location = 0) in vec4 a_position;   \n"
-            "layout(location = 1) in vec2 a_texCoord;   \n"
-            "out vec2 v_texCoord;                       \n"
-            "void main()                                \n"
-            "{                                          \n"
-            "   gl_Position = a_position;               \n"
-            "   v_texCoord = a_texCoord;                \n"
-            "}                                          \n";
+            "#version 300 es                                        \n"
+            "layout(location = 0) in vec4 a_position;               \n"
+            "layout(location = 1) in vec2 a_texCoord;               \n"
+            "out vec2 v_texCoord;                                   \n"
+            "void main(){                                           \n"
+            "   gl_Position = a_position;                           \n"
+            "   v_texCoord = a_texCoord;                            \n"
+            "}                                                      \n";
 
     char fShaderStr[] =
-            "#version 300 es                                     \n"
-            "precision mediump float;                            \n"
-            "in vec2 v_texCoord;                                 \n"
-            "layout(location = 0) out vec4 outColor;             \n"
-            "uniform sampler2D y_texture;                        \n"
-            "uniform sampler2D uv_texture;                       \n"
-            "void main()                                         \n"
-            "{                                                   \n"
-            "	vec3 yuv;										 \n"
-            "   yuv.x = texture(y_texture, v_texCoord).r;  	     \n"
-            "   yuv.y = texture(uv_texture, v_texCoord).a-0.5;	 \n"
-            "   yuv.z = texture(uv_texture, v_texCoord).r-0.5;	 \n"
-            "	highp vec3 rgb = mat3( 1,1,1,					 \n"
-            "                          0,-0.344,1.770,			 \n"
-            "                          1.403,-0.714,0) * yuv; 	 \n"
-            "	outColor = vec4(rgb, 1);						 \n"
-            "}                                                   \n";
+            "#version 300 es                                         \n"
+            "precision mediump float;                                \n"
+            "in vec2 v_texCoord;                                     \n"
+            "layout(location = 0) out vec4 outColor;                 \n"
+            "uniform sampler2D y_texture;                            \n"
+            "uniform sampler2D uv_texture;                           \n"
+            "void main(){                                            \n"
+            "	vec3 yuv;										     \n"
+            "   yuv.x = texture(y_texture, v_texCoord).r-0.063;  	 \n"
+            "   yuv.y = texture(uv_texture, v_texCoord).a-0.502;	 \n"
+            "   yuv.z = texture(uv_texture, v_texCoord).r-0.502;	 \n"
+            "	highp vec3 rgb = mat3( 1.164, 1.164, 1.164,			 \n"
+            "                          0, -0.392, 2.017,			 \n"
+            "                          1.596, -0.813, 0.0) * yuv; 	 \n"
+            "	outColor = vec4(rgb, 1.0);						     \n"
+            "}";
 
-    m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr, m_VertexShader, m_FragmentShader);
+    m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr,
+                                          m_VertexShader, m_FragmentShader);
     // Get the sampler location
     m_ySamplerLoc = glGetUniformLocation(m_ProgramObj, "y_texture");
     m_uvSamplerLoc = glGetUniformLocation(m_ProgramObj, "uv_texture");
@@ -58,14 +57,15 @@ void NV21TextureMapSample::LoadImage(NativeImage *pImage) {
     }
 }
 
-void NV21TextureMapSample::Draw(int width,int height) {
+void NV21TextureMapSample::Draw(int width, int height) {
     LOGCATE("NV21TextureMapSample::Draw()");
     if (m_ProgramObj == GL_NONE || m_yTextureId == GL_NONE || m_uvTextureId == GL_NONE) {
         return;
     }
     // upload Y plane data
     glBindTexture(GL_TEXTURE_2D, m_yTextureId);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, m_RenderImage.width, m_RenderImage.height, 0,
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, m_RenderImage.width,
+                 m_RenderImage.height, 0,
                  GL_LUMINANCE, GL_UNSIGNED_BYTE, m_RenderImage.ppPlane[0]);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
