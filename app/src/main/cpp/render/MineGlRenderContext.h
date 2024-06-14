@@ -57,6 +57,7 @@
 #include "BlitFrameBufferSample.h"
 #include "BinaryProgramSample.h"
 #include "Render16BitGraySample.h"
+#include "RenderP010Sample.h"
 
 class MineGlRenderContext {
 public:

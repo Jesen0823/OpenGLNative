@@ -351,8 +351,9 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
                         mGLSurfaceView.setAspectRatio(bp.width, bp.height)
                         mGLSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
                     }
-                    Constants.SAMPLE_TYPE_KEY_RENDER_16BIT_GRAY->{
-                        mGLSurfaceView.setAspectRatio(440,310)
+
+                    Constants.SAMPLE_TYPE_KEY_RENDER_16BIT_GRAY, Constants.SAMPLE_TYPE_KEY_P010 -> {
+                        mGLSurfaceView.setAspectRatio(440, 310)
                     }
 
                     else -> {}

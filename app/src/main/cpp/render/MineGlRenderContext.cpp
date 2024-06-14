@@ -181,6 +181,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_RENDER_16BIT_GRAY:
                 m_pCurSample = new Render16BitGraySample;
                 break;
+            case SAMPLE_TYPE_KEY_P010:
+                m_pCurSample = new RenderP010Sample;
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;
