@@ -91,10 +91,10 @@ void RGB2YUYVSample::Init() {
             "    vec2 texelOffset = vec2(u_Offset, 0.0);                                 \n"
             "    vec4 color0 = texture(s_TextureMap, v_texCoord);                        \n"
             "    vec4 color1 = texture(s_TextureMap, v_texCoord + texelOffset);          \n"
-            "    float y0 = dot(color0.rgb, COEF_Y);                                     \n"
-            "    float u0 = dot(color0.rgb, COEF_U) + 0.5;                               \n"
-            "    float v0 = dot(color0.rgb, COEF_V) + 0.5;                               \n"
-            "    float y1 = dot(color1.rgb, COEF_Y);                                     \n"
+            "    float y0 = dot(color0.rgb, COEF_Y) + 0.063;                             \n"
+            "    float u0 = dot(color0.rgb, COEF_U) + 0.502;                             \n"
+            "    float v0 = dot(color0.rgb, COEF_V) + 0.502;                             \n"
+            "    float y1 = dot(color1.rgb, COEF_Y) + 0.063;                             \n"
             "    outColor = vec4(y0, u0, y1, v0);                                        \n"
             "}";
 
