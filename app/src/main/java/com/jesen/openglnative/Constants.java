@@ -40,7 +40,7 @@ public interface Constants {
     public static final int SAMPLE_TYPE_KEY_FBO_BLIT = SAMPLE_TYPE + 32;
     public static final int SAMPLE_TYPE_KEY_TBO = SAMPLE_TYPE + 33;
     public static final int SAMPLE_TYPE_KEY_UBO = SAMPLE_TYPE + 34;
-    public static final int SAMPLE_TYPE_KEY_RGB2YUV = SAMPLE_TYPE + 35;
+    public static final int SAMPLE_TYPE_KEY_RGB2YUYV = SAMPLE_TYPE + 35;
     public static final int SAMPLE_TYPE_KEY_MULTI_THREAD_RENDER = SAMPLE_TYPE + 36;
     public static final int SAMPLE_TYPE_KEY_TEXT_RENDER = SAMPLE_TYPE + 37;
     public static final int SAMPLE_TYPE_KEY_STAY_COLOR = SAMPLE_TYPE + 38;
@@ -73,7 +73,7 @@ public interface Constants {
             "Cloud", "Time Tunnel", "Bezier Curve", "Face Slender", "Big Eyes",
             "Big Head", "Rotary Head", "Visualize Audio", "Scratch Card",
             "3D Avatar", "Shock Wave", "MRT", "FBO Blit", "Texture Buffer",
-            "Uniform Buffer", "OpenGL RGB to YUV", "Multi-Thread Render",
+            "Uniform Buffer", "OpenGL RGB to YUYV", "Multi-Thread Render",
             "Text Render", "Portrait stay color", "GL Transitions_1",
             "GL Transitions_2", "GL Transitions_3", "GL Transitions_4",
             "Conveyor Belt",

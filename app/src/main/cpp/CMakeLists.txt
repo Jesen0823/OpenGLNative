@@ -75,7 +75,7 @@ file(GLOB src_files
         sample/FBOBlitSample.cpp
         sample/TextureBufferSample.cpp
         sample/UniformBufferSample.cpp
-        sample/RGB2YUVSample.cpp
+        sample/RGB2YUYVSample.cpp
         sample/SharedEGLContextSample.cpp
         sample/TextRenderSample.cpp
         looper/Looper.cpp

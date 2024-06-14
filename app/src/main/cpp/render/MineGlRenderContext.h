@@ -41,7 +41,7 @@
 #include "FBOBlitSample.h"
 #include "TextureBufferSample.h"
 #include "UniformBufferSample.h"
-#include "RGB2YUVSample.h"
+#include "RGB2YUYVSample.h"
 #include "SharedEGLContextSample.h"
 #include "TextRenderSample.h"
 #include "PortraitStayColorExample.h"

@@ -48,7 +48,7 @@
 #define SAMPLE_TYPE_KEY_FBO_BLIT                    SAMPLE_TYPE+32
 #define SAMPLE_TYPE_KEY_TBO                         SAMPLE_TYPE+33
 #define SAMPLE_TYPE_KEY_UBO                         SAMPLE_TYPE+34
-#define SAMPLE_TYPE_KEY_RGB2YUV                     SAMPLE_TYPE+35
+#define SAMPLE_TYPE_KEY_RGB2YUYV                     SAMPLE_TYPE+35
 #define SAMPLE_TYPE_KEY_MULTI_THREAD_RENDER         SAMPLE_TYPE+36
 #define SAMPLE_TYPE_KEY_TEXT_RENDER                 SAMPLE_TYPE+37
 #define SAMPLE_TYPE_KEY_STAY_COLOR                  SAMPLE_TYPE+38

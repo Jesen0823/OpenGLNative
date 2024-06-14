@@ -3,12 +3,12 @@
 //
 
 #include <GLUtils.h>
-#include "RGB2YUVSample.h"
+#include "RGB2YUYVSample.h"
 
 #define VERTEX_POS_INDX      0
 #define TEXTURE_POS_INDX     1
 
-RGB2YUVSample::RGB2YUVSample() {
+RGB2YUYVSample::RGB2YUYVSample() {
     m_ImageTextureId = GL_NONE;
     m_FboTextureId = GL_NONE;
     m_SamplerLoc = GL_NONE;
@@ -19,12 +19,12 @@ RGB2YUVSample::RGB2YUVSample() {
     m_FboSamplerLoc = GL_NONE;
 }
 
-RGB2YUVSample::~RGB2YUVSample() {
+RGB2YUYVSample::~RGB2YUYVSample() {
     NativeImageUtil::FreeNativeImage(&m_RenderImage);
 }
 
-void RGB2YUVSample::Init() {
-//顶点坐标
+void RGB2YUYVSample::Init() {
+    //顶点坐标
     GLfloat vVertices[] = {
             -1.0f, -1.0f, 0.0f,
             1.0f, -1.0f, 0.0f,
@@ -51,54 +51,51 @@ void RGB2YUVSample::Init() {
     GLushort indices[] = {0, 1, 2, 1, 3, 2};
 
     char vShaderStr[] =
-            "#version 300 es                            \n"
-            "layout(location = 0) in vec4 a_position;   \n"
-            "layout(location = 1) in vec2 a_texCoord;   \n"
-            "out vec2 v_texCoord;                       \n"
-            "void main()                                \n"
-            "{                                          \n"
-            "   gl_Position = a_position;               \n"
-            "   v_texCoord = a_texCoord;                \n"
-            "}                                          \n";
+            "#version 300 es                                                            \n"
+            "layout(location = 0) in vec4 a_position;                                   \n"
+            "layout(location = 1) in vec2 a_texCoord;                                   \n"
+            "out vec2 v_texCoord;                                                       \n"
+            "void main(){                                                               \n"
+            "   gl_Position = a_position;                                               \n"
+            "   v_texCoord = a_texCoord;                                                \n"
+            "}";
 
     // 用于普通渲染的片段着色器脚本，简单纹理映射
     char fShaderStr[] =
-            "#version 300 es\n"
-            "precision mediump float;\n"
-            "in vec2 v_texCoord;\n"
-            "layout(location = 0) out vec4 outColor;\n"
-            "uniform sampler2D s_TextureMap;\n"
-            "void main()\n"
-            "{\n"
-            "    outColor = texture(s_TextureMap, v_texCoord);\n"
+            "#version 300 es                                                             \n"
+            "precision mediump float;                                                    \n"
+            "in vec2 v_texCoord;                                                         \n"
+            "layout(location = 0) out vec4 outColor;                                     \n"
+            "uniform sampler2D s_TextureMap;                                             \n"
+            "void main(){                                                                \n"
+            "    outColor = texture(s_TextureMap, v_texCoord);                           \n"
             "}";
 
 
     // 用于离屏渲染的片段着色器脚本，RGB to YUV
     char fFboShaderStr[] =
-            "#version 300 es\n"
-            "precision mediump float;\n"
-            "in vec2 v_texCoord;\n"
-            "layout(location = 0) out vec4 outColor;\n"
-            "uniform sampler2D s_TextureMap;\n"
-            "uniform float u_Offset;\n"
-            "//Y =  0.299R + 0.587G + 0.114B\n"
-            "//U = -0.147R - 0.289G + 0.436B\n"
-            "//V =  0.615R - 0.515G - 0.100B\n"
-            "const vec3 COEF_Y = vec3( 0.299,  0.587,  0.114);\n"
-            "const vec3 COEF_U = vec3(-0.147, -0.289,  0.436);\n"
-            "const vec3 COEF_V = vec3( 0.615, -0.515, -0.100);\n"
-            "\n"
-            "void main()\n"
-            "{\n"
-            "    vec2 texelOffset = vec2(u_Offset, 0.0);\n"
-            "    vec4 color0 = texture(s_TextureMap, v_texCoord);\n"
-            "    vec4 color1 = texture(s_TextureMap, v_texCoord + texelOffset);\n"
-            "    float y0 = dot(color0.rgb, COEF_Y);\n"
-            "    float u0 = dot(color0.rgb, COEF_U) + 0.5;\n"
-            "    float v0 = dot(color0.rgb, COEF_V) + 0.5;\n"
-            "    float y1 = dot(color1.rgb, COEF_Y);\n"
-            "    outColor = vec4(y0, u0, y1, v0);\n"
+            "#version 300 es                                                             \n"
+            "precision mediump float;                                                    \n"
+            "in vec2 v_texCoord;                                                         \n"
+            "layout(location = 0) out vec4 outColor;                                     \n"
+            "uniform sampler2D s_TextureMap;                                             \n"
+            "uniform float u_Offset;                                                     \n"
+            "//Y =  0.299R + 0.587G + 0.114B                                             \n"
+            "//U = -0.147R - 0.289G + 0.436B                                             \n"
+            "//V =  0.615R - 0.515G - 0.100B                                             \n"
+            "const vec3 COEF_Y = vec3( 0.299,  0.587,  0.114);                           \n"
+            "const vec3 COEF_U = vec3(-0.147, -0.289,  0.436);                           \n"
+            "const vec3 COEF_V = vec3( 0.615, -0.515, -0.100);                           \n"
+            "                                                                            \n"
+            "void main(){                                                                \n"
+            "    vec2 texelOffset = vec2(u_Offset, 0.0);                                 \n"
+            "    vec4 color0 = texture(s_TextureMap, v_texCoord);                        \n"
+            "    vec4 color1 = texture(s_TextureMap, v_texCoord + texelOffset);          \n"
+            "    float y0 = dot(color0.rgb, COEF_Y);                                     \n"
+            "    float u0 = dot(color0.rgb, COEF_U) + 0.5;                               \n"
+            "    float v0 = dot(color0.rgb, COEF_V) + 0.5;                               \n"
+            "    float y1 = dot(color1.rgb, COEF_Y);                                     \n"
+            "    outColor = vec4(y0, u0, y1, v0);                                        \n"
             "}";
 
     // 编译链接用于普通渲染的着色器程序
@@ -109,7 +106,7 @@ void RGB2YUVSample::Init() {
                                              m_FboFragmentShader);
 
     if (m_ProgramObj == GL_NONE || m_FboProgramObj == GL_NONE) {
-        LOGCATE("RGB2YUVSample::Init m_ProgramObj == GL_NONE");
+        LOGCATE("RGB2YUYVSample::Init m_ProgramObj == GL_NONE");
         return;
     }
     m_SamplerLoc = glGetUniformLocation(m_ProgramObj, "s_TextureMap");
@@ -189,13 +186,13 @@ void RGB2YUVSample::Init() {
     GO_CHECK_GL_ERROR();
 
     if (!CreateFrameBufferObj()) {
-        LOGCATE("RGB2YUVSample::Init CreateFrameBufferObj fail");
+        LOGCATE("RGB2YUYVSample::Init CreateFrameBufferObj fail");
         return;
     }
 }
 
-void RGB2YUVSample::LoadImage(NativeImage *pImage) {
-    LOGCATE("RGB2YUVSample::LoadImage pImage = %p", pImage->ppPlane[0]);
+void RGB2YUYVSample::LoadImage(NativeImage *pImage) {
+    LOGCATE("RGB2YUYVSample::LoadImage pImage = %p", pImage->ppPlane[0]);
     if (pImage) {
         m_RenderImage.width = pImage->width;
         m_RenderImage.height = pImage->height;
@@ -204,7 +201,7 @@ void RGB2YUVSample::LoadImage(NativeImage *pImage) {
     }
 }
 
-void RGB2YUVSample::Draw(int screenW, int screenH) {
+void RGB2YUYVSample::Draw(int screenW, int screenH) {
     // 离屏渲染
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -257,7 +254,7 @@ void RGB2YUVSample::Draw(int screenW, int screenH) {
     glBindVertexArray(GL_NONE);
 }
 
-void RGB2YUVSample::Destroy() {
+void RGB2YUYVSample::Destroy() {
     if (m_ProgramObj) {
         glDeleteProgram(m_ProgramObj);
     }
@@ -287,7 +284,7 @@ void RGB2YUVSample::Destroy() {
     }
 }
 
-bool RGB2YUVSample::CreateFrameBufferObj() {
+bool RGB2YUYVSample::CreateFrameBufferObj() {
     // 创建并初始化 FBO 纹理
     glGenTextures(1, &m_FboTextureId);
     glBindTexture(GL_TEXTURE_2D, m_FboTextureId);
@@ -305,7 +302,7 @@ bool RGB2YUVSample::CreateFrameBufferObj() {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_RenderImage.width / 2, m_RenderImage.height, 0,
                  GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        LOGCATE("RGB2YUVSample::CreateFrameBufferObj glCheckFramebufferStatus status != GL_FRAMEBUFFER_COMPLETE");
+        LOGCATE("RGB2YUYVSample::CreateFrameBufferObj glCheckFramebufferStatus status != GL_FRAMEBUFFER_COMPLETE");
         return false;
     }
     glBindTexture(GL_TEXTURE_2D, GL_NONE);

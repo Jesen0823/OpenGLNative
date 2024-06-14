@@ -2,17 +2,17 @@
 // Created by xie_s on 2024/6/11.
 //
 
-#ifndef OPENGLNATIVE_RGB2YUVSAMPLE_H
-#define OPENGLNATIVE_RGB2YUVSAMPLE_H
+#ifndef OPENGLNATIVE_RGB2YUYVSAMPLE_H
+#define OPENGLNATIVE_RGB2YUYVSAMPLE_H
 
 #include "GLSampleBase.h"
 #include "ImageDef.h"
 
-class RGB2YUVSample : public GLSampleBase {
+class RGB2YUYVSample : public GLSampleBase {
 public:
-    RGB2YUVSample();
+    RGB2YUYVSample();
 
-    virtual ~RGB2YUVSample();
+    virtual ~RGB2YUYVSample();
 
     virtual void Init();
 
@@ -40,4 +40,4 @@ private:
 };
 
 
-#endif //OPENGLNATIVE_RGB2YUVSAMPLE_H
+#endif //OPENGLNATIVE_RGB2YUYVSAMPLE_H
