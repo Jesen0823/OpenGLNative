@@ -50,6 +50,7 @@
 #include "GLTransitionExample_3.h"
 #include "GLTransitionExample_4.h"
 #include "ConveyorBeltExample.h"
+#include "RGB2NV21Sample.h"
 
 class MineGlRenderContext {
 public:

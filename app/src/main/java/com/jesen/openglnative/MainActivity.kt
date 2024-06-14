@@ -307,10 +307,14 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
                     }
 
                     Constants.SAMPLE_TYPE_KEY_MRT, Constants.SAMPLE_TYPE_KEY_FBO_BLIT,
-                    Constants.SAMPLE_TYPE_KEY_TBO, Constants.SAMPLE_TYPE_KEY_UBO,
-                    Constants.SAMPLE_TYPE_KEY_RGB2YUYV -> {
+                    Constants.SAMPLE_TYPE_KEY_TBO, Constants.SAMPLE_TYPE_KEY_UBO -> {
                         val bp = loadRGBAImage(R.drawable.lye)
                         mGLSurfaceView.setAspectRatio(bp.width, bp.height)
+                    }
+
+                    Constants.SAMPLE_TYPE_KEY_RGB2YUYV, Constants.SAMPLE_TYPE_KEY_RGB2NV21 -> {
+                        val bp = loadRGBAImage(R.drawable.sk)
+                        mGLSurfaceView.setAspectRatio(bp.width,bp.height)
                     }
 
                     Constants.SAMPLE_TYPE_KEY_STAY_COLOR -> {

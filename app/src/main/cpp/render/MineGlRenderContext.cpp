@@ -160,6 +160,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_CONVEYOR_BELT:
                 m_pCurSample = new ConveyorBeltExample;
                 break;
+            case SAMPLE_TYPE_KEY_RGB2NV21:
+                m_pCurSample = new RGB2NV21Sample;
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;
