@@ -172,6 +172,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_COPY_TEXTURE:
                 m_pCurSample = new CopyTextureExample;
                 break;
+            case SAMPLE_TYPE_KEY_BLIT_FRAME_BUFFER:
+                m_pCurSample = new BlitFrameBufferSample;
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;

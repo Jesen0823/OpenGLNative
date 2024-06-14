@@ -206,7 +206,8 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
 
                     Constants.SAMPLE_TYPE_YUV_TEXTURE_MAP -> loadNV21Image()
                     Constants.SAMPLE_TYPE_VAO -> {}
-                    Constants.SAMPLE_TYPE_FBO, Constants.SAMPLE_TYPE_KEY_COPY_TEXTURE -> {
+                    Constants.SAMPLE_TYPE_FBO, Constants.SAMPLE_TYPE_KEY_COPY_TEXTURE,
+                    Constants.SAMPLE_TYPE_KEY_BLIT_FRAME_BUFFER -> {
                         val bp = loadRGBAImage(R.drawable.lye)
                         mGLSurfaceView.setAspectRatio(bp.width, bp.height)
                     }
