@@ -55,6 +55,7 @@
 #include "RGB2I444Sample.h"
 #include "CopyTextureExample.h"
 #include "BlitFrameBufferSample.h"
+#include "BinaryProgramSample.h"
 
 class MineGlRenderContext {
 public:

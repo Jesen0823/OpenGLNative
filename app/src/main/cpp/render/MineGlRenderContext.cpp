@@ -175,6 +175,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_BLIT_FRAME_BUFFER:
                 m_pCurSample = new BlitFrameBufferSample;
                 break;
+            case SAMPLE_TYPE_KEY_BINARY_PROGRAM:
+                m_pCurSample = new BinaryProgramSample();
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;

@@ -2,13 +2,14 @@
 // Created by xie_s on 2024/6/14.
 //
 
+#include <vector>
 #include "GLUtils.h"
-#include "BlitFrameBufferSample.h"
+#include "BinaryProgramSample.h"
 
-#define VERTEX_POS_INDX   0
-#define TEXTURE_POS_INDX  1
+#define VERTEX_POS_INDX  0
+#define TEXTURE_POS_INDX 1
 
-BlitFrameBufferSample::BlitFrameBufferSample() {
+BinaryProgramSample::BinaryProgramSample() {
     m_VaoIds[0] = GL_NONE;
     m_VboIds[0] = GL_NONE;
 
@@ -22,11 +23,11 @@ BlitFrameBufferSample::BlitFrameBufferSample() {
     m_FboSamplerLoc = GL_NONE;
 }
 
-BlitFrameBufferSample::~BlitFrameBufferSample() {
+BinaryProgramSample::~BinaryProgramSample() {
     NativeImageUtil::FreeNativeImage(&m_RenderImage);
 }
 
-void BlitFrameBufferSample::Init() {
+void BinaryProgramSample::Init() {
 //顶点坐标
     GLfloat vVertices[] = {
             -1.0f, -1.0f, 0.0f,
@@ -65,7 +66,7 @@ void BlitFrameBufferSample::Init() {
 
     // 用于普通渲染的片段着色器脚本，简单纹理映射
     char fShaderStr[] =
-            "#version 300 es                                                                    \n"
+            "#version 300  es                                                                   \n"
             "precision mediump float;                                                           \n"
             "in vec2 v_texCoord;                                                                \n"
             "layout(location = 0) out vec4 outColor;                                            \n"
@@ -82,21 +83,52 @@ void BlitFrameBufferSample::Init() {
             "layout(location = 0) out vec4 outColor;                                            \n"
             "uniform sampler2D s_TextureMap;                                                    \n"
             "void main(){                                                                       \n"
-            "    vec4 tempColor = texture(s_TextureMap, v_texCoord);                            \n"
-            "    //float luminance = tempColor.r * 0.299 + tempColor.g * 0.587 + tempColor.b * 0.114;\n"
-            "    //outColor = vec4(vec3(luminance), tempColor.a);                               \n"
-            "    outColor = tempColor;                                                          \n"
+            "    outColor = texture(s_TextureMap, v_texCoord);                                  \n"
             "}";
 
+    //检查是否支持获取二进制 program
+    GLint programBinaryFormats = 0;
+    glGetIntegerv(GL_NUM_PROGRAM_BINARY_FORMATS, &programBinaryFormats);
+    if (programBinaryFormats <= GL_NONE) {
+        LOGCATE("BinaryProgramSample Init(), not support binary programe.");
+    }
+    LOGCATE("BinaryProgramSample Init(),programBinaryFormats=%d", programBinaryFormats);
+
     // 编译链接用于普通渲染的着色器程序
-    m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr,
-                                          m_VertexShader, m_FragmentShader);
+    m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr, m_VertexShader, m_FragmentShader);
 
     // 编译链接用于离屏渲染的着色器程序
-    m_FboProgramObj = GLUtils::CreateProgram(vShaderStr, fFboShaderStr,
-                                             m_FboVertexShader, m_FboFragmentShader);
+    m_FboProgramObj = GLUtils::CreateProgram(vShaderStr, fFboShaderStr, m_FboVertexShader,
+                                             m_FboFragmentShader);
+
+
+    if (programBinaryFormats > GL_NONE) {
+        GLint length = 0;
+        glGetProgramiv(m_ProgramObj, GL_PROGRAM_BINARY_LENGTH, &length);
+
+        std::vector<unsigned char> buffer(length);
+        GLenum format = 0;
+        glGetProgramBinary(m_ProgramObj, length, nullptr, &format, buffer.data());
+
+        ///sdcard/Android/data/com.byteflow.app/files/Download/shader_program.bin_format_34624
+        char binaryFilePath[256] = {0};
+        sprintf(binaryFilePath, "%s/shader_program.bin_format_%d", DEFAULT_OGL_ASSETS_DIR, format);
+        FILE *fp = fopen(binaryFilePath, "wb");
+        LOGCATE("BinaryProgramSample fp=%p, file=%s, binFormat=%d", fp, binaryFilePath, format);
+        if (fp) {
+            fwrite(buffer.data(), length, 1, fp);
+            fclose(fp);
+
+            //删除 program 重新加载
+            glDeleteProgram(m_ProgramObj);
+            m_ProgramObj = GL_NONE;
+        }
+
+        LoadBinary2Program(&m_ProgramObj, binaryFilePath);
+    }
+
     if (m_ProgramObj == GL_NONE || m_FboProgramObj == GL_NONE) {
-        LOGCATE("BlitFrameBufferSample::Init m_ProgramObj == GL_NONE");
+        LOGCATE("BinaryProgramSample::Init m_ProgramObj == GL_NONE");
         return;
     }
     m_SamplerLoc = glGetUniformLocation(m_ProgramObj, "s_TextureMap");
@@ -127,17 +159,18 @@ void BlitFrameBufferSample::Init() {
 
     glBindBuffer(GL_ARRAY_BUFFER, m_VboIds[0]);
     glEnableVertexAttribArray(VERTEX_POS_INDX);
-    glVertexAttribPointer(VERTEX_POS_INDX, 3, GL_FLOAT, GL_FALSE,
-                          3 * sizeof(GLfloat), (const void *) 0);
+    glVertexAttribPointer(VERTEX_POS_INDX, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat),
+                          (const void *) 0);
     glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_VboIds[1]);
     glEnableVertexAttribArray(TEXTURE_POS_INDX);
-    glVertexAttribPointer(TEXTURE_POS_INDX, 2, GL_FLOAT, GL_FALSE,
-                          2 * sizeof(GLfloat), (const void *) 0);
+    glVertexAttribPointer(TEXTURE_POS_INDX, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat),
+                          (const void *) 0);
     glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_VboIds[3]);
+    GO_CHECK_GL_ERROR();
 
     glBindVertexArray(GL_NONE);
 
@@ -146,19 +179,19 @@ void BlitFrameBufferSample::Init() {
 
     glBindBuffer(GL_ARRAY_BUFFER, m_VboIds[0]);
     glEnableVertexAttribArray(VERTEX_POS_INDX);
-    glVertexAttribPointer(VERTEX_POS_INDX, 3, GL_FLOAT, GL_FALSE,
-                          3 * sizeof(GLfloat), (const void *) 0);
+    glVertexAttribPointer(VERTEX_POS_INDX, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat),
+                          (const void *) 0);
     glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_VboIds[2]);
     glEnableVertexAttribArray(TEXTURE_POS_INDX);
-    glVertexAttribPointer(TEXTURE_POS_INDX, 2, GL_FLOAT, GL_FALSE,
-                          2 * sizeof(GLfloat), (const void *) 0);
+    glVertexAttribPointer(TEXTURE_POS_INDX, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat),
+                          (const void *) 0);
     glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_VboIds[3]);
     GO_CHECK_GL_ERROR();
-
+    
     glBindVertexArray(GL_NONE);
 
     // 创建并初始化图像纹理
@@ -168,21 +201,19 @@ void BlitFrameBufferSample::Init() {
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_RenderImage.width,
-                 m_RenderImage.height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                 m_RenderImage.ppPlane[0]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_RenderImage.width, m_RenderImage.height, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, m_RenderImage.ppPlane[0]);
     glBindTexture(GL_TEXTURE_2D, GL_NONE);
     GO_CHECK_GL_ERROR();
+
     if (!CreateFrameBufferObj()) {
-        LOGCATE("BlitFrameBufferSample::Init CreateFrameBufferObj fail");
+        LOGCATE("BinaryProgramSample::Init CreateFrameBufferObj fail");
         return;
     }
-
 }
 
-void BlitFrameBufferSample::LoadImage(NativeImage *pImage) {
-    LOGCATE("BlitFrameBufferSample::LoadImage pImage = %p", pImage->ppPlane[0]);
+void BinaryProgramSample::LoadImage(NativeImage *pImage) {
+    LOGCATE("BinaryProgramSample::LoadImage pImage = %p", pImage->ppPlane[0]);
     if (pImage) {
         m_RenderImage.width = pImage->width;
         m_RenderImage.height = pImage->height;
@@ -191,10 +222,12 @@ void BlitFrameBufferSample::LoadImage(NativeImage *pImage) {
     }
 }
 
-void BlitFrameBufferSample::Draw(int screenW, int screenH) {
+void BinaryProgramSample::Draw(int screenW, int screenH) {
     // 离屏渲染
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glViewport(0, 0, m_RenderImage.width, m_RenderImage.height);
 
+    // Do FBO off screen rendering
     glBindFramebuffer(GL_FRAMEBUFFER, m_FboId);
     glUseProgram(m_FboProgramObj);
     glBindVertexArray(m_VaoIds[1]);
@@ -206,18 +239,26 @@ void BlitFrameBufferSample::Draw(int screenW, int screenH) {
     GO_CHECK_GL_ERROR();
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    // 上屏
+    // 普通渲染
+    // Do normal rendering
     glViewport(0, 0, screenW, screenH);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_FboId);
-    glReadBuffer(GL_COLOR_ATTACHMENT0);
-    glBlitFramebuffer(0, 0, m_RenderImage.width, m_RenderImage.height,
-                      0, screenH, screenW, 0,
-                      GL_COLOR_BUFFER_BIT, GL_LINEAR);
+    glUseProgram(m_ProgramObj);
+    GO_CHECK_GL_ERROR();
+    glBindVertexArray(m_VaoIds[0]);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_FboTextureId);
+    glUniform1i(m_SamplerLoc, 0);
+    GO_CHECK_GL_ERROR();
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, (const void *) 0);
+    GO_CHECK_GL_ERROR();
+    glBindTexture(GL_TEXTURE_2D, GL_NONE);
+    glBindVertexArray(GL_NONE);
 }
 
-void BlitFrameBufferSample::Destroy() {
+void BinaryProgramSample::Destroy() {
     if (m_ProgramObj) {
         glDeleteProgram(m_ProgramObj);
     }
@@ -247,7 +288,7 @@ void BlitFrameBufferSample::Destroy() {
     }
 }
 
-bool BlitFrameBufferSample::CreateFrameBufferObj() {
+bool BinaryProgramSample::CreateFrameBufferObj() {
     // 创建并初始化 FBO 纹理
     glGenTextures(1, &m_FboTextureId);
     glBindTexture(GL_TEXTURE_2D, m_FboTextureId);
@@ -261,15 +302,47 @@ bool BlitFrameBufferSample::CreateFrameBufferObj() {
     glGenFramebuffers(1, &m_FboId);
     glBindFramebuffer(GL_FRAMEBUFFER, m_FboId);
     glBindTexture(GL_TEXTURE_2D, m_FboTextureId);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                           GL_TEXTURE_2D, m_FboTextureId, 0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_RenderImage.width,
-                 m_RenderImage.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_FboTextureId, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_RenderImage.width, m_RenderImage.height, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, nullptr);
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        LOGCATE("BlitFrameBufferSample::CreateFrameBufferObj glCheckFramebufferStatus status != GL_FRAMEBUFFER_COMPLETE");
+        LOGCATE("BinaryProgramSample::CreateFrameBufferObj glCheckFramebufferStatus status != GL_FRAMEBUFFER_COMPLETE");
         return false;
     }
     glBindTexture(GL_TEXTURE_2D, GL_NONE);
     glBindFramebuffer(GL_FRAMEBUFFER, GL_NONE);
     return true;
+}
+
+void BinaryProgramSample::LoadBinary2Program(GLuint *pProgram, char *pBinFilePath) {
+    FILE *fp = fopen(pBinFilePath, "rb");
+    LOGCATE("BinaryProgramSample LoadBinary2Program fp=%p, file=%s", fp, pBinFilePath);
+    if (fp) {
+        fseek(fp, 0L, SEEK_END);
+        int size = ftell(fp);
+        rewind(fp);
+        unsigned char *buffer = new unsigned char[size];
+        fread(buffer, size, 1, fp);
+        fclose(fp);
+
+        *pProgram = glCreateProgram();
+        std::string path(pBinFilePath);
+        int pos = path.find("format_");
+        std::string strFormat = path.substr(pos + 7);
+        int format = std::stoi(strFormat);
+        LOGCATE("BinaryProgramSample format=%d", format);
+        glProgramBinary(*pProgram, format, buffer, size);
+
+        //检查是否加载成功
+        GLint status;
+        glGetProgramiv(*pProgram, GL_LINK_STATUS, &status);
+        if (GL_FALSE == status) {
+            //加载失败
+            LOGCATE("BinaryProgramSample glProgramBinary fail.");
+            glDeleteProgram(*pProgram);
+            *pProgram = GL_NONE;
+        }
+
+        delete[] buffer;
+    }
 }
