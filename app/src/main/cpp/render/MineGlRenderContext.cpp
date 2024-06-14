@@ -163,6 +163,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_RGB2NV21:
                 m_pCurSample = new RGB2NV21Sample;
                 break;
+            case SAMPLE_TYPE_KEY_RGB2I420:
+                m_pCurSample = new RGB2I420Sample();
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;

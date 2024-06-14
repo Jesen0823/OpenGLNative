@@ -312,9 +312,10 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
                         mGLSurfaceView.setAspectRatio(bp.width, bp.height)
                     }
 
-                    Constants.SAMPLE_TYPE_KEY_RGB2YUYV, Constants.SAMPLE_TYPE_KEY_RGB2NV21 -> {
+                    Constants.SAMPLE_TYPE_KEY_RGB2YUYV, Constants.SAMPLE_TYPE_KEY_RGB2NV21,
+                    Constants.SAMPLE_TYPE_KEY_RGB2I420 -> {
                         val bp = loadRGBAImage(R.drawable.sk)
-                        mGLSurfaceView.setAspectRatio(bp.width,bp.height)
+                        mGLSurfaceView.setAspectRatio(bp.width, bp.height)
                     }
 
                     Constants.SAMPLE_TYPE_KEY_STAY_COLOR -> {

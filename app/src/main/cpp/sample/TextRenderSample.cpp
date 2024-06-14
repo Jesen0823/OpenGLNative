@@ -285,7 +285,7 @@ void TextRenderSample::LoadFacesByASCII() {
                 face->glyph->bitmap.buffer
         );
 
-        LOGCATE("TextRenderSample::LoadFacesByASCII [w,h,buffer]=[%d, %d, %p], ch.advance >> 6 = %d",
+        LOGCATE("TextRenderSample::LoadFacesByASCII [w,h,buffer]=[%d, %d, %p], ch.advance >> 6 = %ld",
                 face->glyph->bitmap.width, face->glyph->bitmap.rows,
                 face->glyph->bitmap.buffer, face->glyph->advance.x >> 6);
         // Set texture options
