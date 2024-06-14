@@ -206,10 +206,9 @@ void CopyTextureExample::Draw(int screenW, int screenH) {
     glBindVertexArray(0);
 
     //拷贝纹理
-    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_ImageTextureId);
-    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0,
-                        m_RenderImage.width, m_RenderImage.height);
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0,
+                        m_RenderImage.width, m_RenderImage.height,0);
 
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
