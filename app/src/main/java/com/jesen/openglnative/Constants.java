@@ -59,6 +59,7 @@ public interface Constants {
     public static final int SAMPLE_TYPE_KEY_P010 = SAMPLE_TYPE + 51;
     public static final int SAMPLE_TYPE_KEY_RENDER_NV21 = SAMPLE_TYPE + 52;
     public static final int SAMPLE_TYPE_KEY_RENDER_YUYV = SAMPLE_TYPE + 53;
+    public static final int SAMPLE_TYPE_KEY_RENDER_I444 = SAMPLE_TYPE + 54;
     public static final int SAMPLE_TYPE_SET_TOUCH_LOC = SAMPLE_TYPE + 999;
     public static final int SAMPLE_TYPE_SET_GRAVITY_XY = SAMPLE_TYPE + 1000;
     public static final int IMAGE_FORMAT_RGBA = 0x01;
@@ -67,6 +68,7 @@ public interface Constants {
     public static final int IMAGE_FORMAT_I420 = 0x04;
     public static final int IMAGE_FORMAT_YUYV = 0x05;
     public static final int IMAGE_FORMAT_GARY = 0x06;
+    public static final int IMAGE_FORMAT_I444 = 0x07;
 
     public static final String[] SAMPLE_TITLES = {
             /*"DrawTriangle",
@@ -88,6 +90,6 @@ public interface Constants {
             "GL Transitions_2", "GL Transitions_3", "GL Transitions_4",
             "Conveyor Belt", "RGB to NV21", "RGB to I420", "RGB to I444",
             "Copy Texture", "Blit Frame Buffer", "Binary Program", "Render16BitGray",
-            "Render P010", "RenderNV21", "RenderYUYV",
+            "Render P010", "RenderNV21", "Render YUYV","Render I444",
     };
 }

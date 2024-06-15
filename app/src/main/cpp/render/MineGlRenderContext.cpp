@@ -190,6 +190,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_RENDER_YUYV:
                 m_pCurSample = new RenderYUYVSample;
                 break;
+            case SAMPLE_TYPE_KEY_RENDER_I444:
+                m_pCurSample = new RenderI444Sample;
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;
