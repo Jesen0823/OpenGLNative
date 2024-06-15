@@ -61,6 +61,7 @@
 #include "RenderNV21Sample.h"
 #include "RenderYUYVSample.h"
 #include "RenderI444Sample.h"
+#include "RenderI420Sample.h"
 
 class MineGlRenderContext {
 public:

@@ -168,6 +168,15 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
         }
     }
 
+    private fun loadI420Image(){
+        assets.open("yuv/IMAGE_5288x3732.I420").use {
+            val length = it.available()
+            val buffer = ByteArray(length)
+            it.read(buffer)
+            mMineGLRender.setImageData(Constants.IMAGE_FORMAT_I420, 5288, 3732, buffer)
+        }
+    }
+
     private fun loadGrayImage() {
         assets.open("lye_1280x800.Gray").use { ins ->
             var length = ins.available()
@@ -388,6 +397,7 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
                     }
                     Constants.SAMPLE_TYPE_KEY_RENDER_YUYV-> loadYUYVImage()
                     Constants.SAMPLE_TYPE_KEY_RENDER_I444 -> loadI444Image()
+                    Constants.SAMPLE_TYPE_KEY_RENDER_I420 -> loadI420Image()
 
                     else -> {}
                 }
