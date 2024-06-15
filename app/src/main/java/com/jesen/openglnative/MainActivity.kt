@@ -142,6 +142,15 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
         }
     }
 
+    private fun loadNV21Image2() {
+        assets.open("yuv/IMAGE_4406x3108.NV2").use {
+            val length = it.available()
+            val buffer = ByteArray(length)
+            it.read(buffer)
+            mMineGLRender.setImageData(Constants.IMAGE_FORMAT_NV21, 4406, 3108, buffer)
+        }
+    }
+
     private fun loadGrayImage() {
         assets.open("lye_1280x800.Gray").use { ins ->
             var length = ins.available()
@@ -353,6 +362,11 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
                     }
 
                     Constants.SAMPLE_TYPE_KEY_RENDER_16BIT_GRAY, Constants.SAMPLE_TYPE_KEY_P010 -> {
+                        mGLSurfaceView.setAspectRatio(440, 310)
+                    }
+
+                    Constants.SAMPLE_TYPE_KEY_RENDER_NV21 -> {
+                        loadNV21Image2()
                         mGLSurfaceView.setAspectRatio(440, 310)
                     }
 

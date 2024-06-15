@@ -42,5 +42,4 @@ private:
 
 };
 
-
 #endif //OPENGLNATIVE_RENDERP010SAMPLE_H
