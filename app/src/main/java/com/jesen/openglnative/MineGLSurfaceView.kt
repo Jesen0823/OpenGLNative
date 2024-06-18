@@ -71,7 +71,8 @@ class MineGLSurfaceView(context: Context, mineGLRender: MineGLRender?, attrs: At
                     Constants.SAMPLE_TYPE_PBO,
                     Constants.SAMPLE_TYPE_KEY_VISUALIZE_AUDIO,
                     Constants.SAMPLE_TYPE_KEY_UBO,
-                    Constants.SAMPLE_TYPE_KEY_TEXT_RENDER-> {
+                    Constants.SAMPLE_TYPE_KEY_TEXT_RENDER,
+                    Constants.SAMPLE_TYPE_KEY_MSAA-> {
                         mMineGLRender.updateTransformMatrix(mXAngle, mYAngle, mCurScale, mCurScale)
                         requestRender()
                     }
@@ -115,7 +116,8 @@ class MineGLSurfaceView(context: Context, mineGLRender: MineGLRender?, attrs: At
             Constants.SAMPLE_TYPE_INSTANCING,
             Constants.SAMPLE_TYPE_3D_MODEL,
             Constants.SAMPLE_TYPE_KEY_VISUALIZE_AUDIO,
-            Constants.SAMPLE_TYPE_KEY_TEXT_RENDER-> {
+            Constants.SAMPLE_TYPE_KEY_TEXT_RENDER,
+            Constants.SAMPLE_TYPE_KEY_MSAA -> {
                 val preSpan = detector.previousSpan
                 val curSpan = detector.currentSpan
                 mCurScale = if (curSpan < preSpan) {

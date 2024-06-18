@@ -63,6 +63,7 @@
 #include "RenderI444Sample.h"
 #include "RenderI420Sample.h"
 #include "ComputeShaderSample.h"
+#include "MultiSampleAntiAliasingSample.h"
 
 class MineGlRenderContext {
 public:

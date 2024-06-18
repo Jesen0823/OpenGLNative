@@ -398,6 +398,10 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
                     Constants.SAMPLE_TYPE_KEY_RENDER_YUYV-> loadYUYVImage()
                     Constants.SAMPLE_TYPE_KEY_RENDER_I444 -> loadI444Image()
                     Constants.SAMPLE_TYPE_KEY_RENDER_I420 -> loadI420Image()
+                    Constants.SAMPLE_TYPE_KEY_MSAA ->{
+                        val bp = loadRGBAImage(R.drawable.window);
+                        mGLSurfaceView.setAspectRatio(bp.width, bp.height)
+                    }
 
                     else -> {}
                 }
