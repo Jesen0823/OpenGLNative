@@ -453,16 +453,31 @@ void PBOSample::DownloadPixels() {
                      nullptr);
     END_TIME("DownloadPixels glReadPixels with PBO")
 
-    BEGIN_TIME("DownloadPixels PBO glMapBufferRange")
-        glBindBuffer(GL_PIXEL_PACK_BUFFER, m_DownloadPboIds[nextIndex]);
-        GLubyte *bufPtr = static_cast<GLubyte *>(glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0,
-                                                                  dataSize,
-                                                                  GL_MAP_READ_BIT));
-        if (bufPtr) {
-            nativeImage.ppPlane[0] = bufPtr;
-            //NativeImageUtil::DumpNativeImage(&nativeImage, "/sdcard/DCIM", "PBO");
+    if (m_DownloadImages[nextIndex].ppPlane[0] == nullptr) {
+        m_DownloadImages[nextIndex] = m_RenderImage;
+        m_DownloadImages[nextIndex].format = IMAGE_FORMAT_RGBA;
+
+        BEGIN_TIME("DownloadPixels PBO glMapBufferRange")
+            glBindBuffer(GL_PIXEL_PACK_BUFFER, m_DownloadPboIds[nextIndex]);
+            GLubyte *bufPtr = static_cast<GLubyte *>(glMapBufferRange(GL_PIXEL_PACK_BUFFER,
+                                                                      0,
+                                                                      dataSize,
+                                                                      GL_MAP_READ_BIT));
+
+            if (bufPtr) {
+                m_DownloadImages[nextIndex].ppPlane[0] = bufPtr;
+                //NativeImageUtil::DumpNativeImage(&nativeImage, "/sdcard/DCIM", "PBO");
+            }
             glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-        }
-    END_TIME("DownloadPixels PBO glMapBufferRange")
-    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+        END_TIME("DownloadPixels PBO glMapBufferRange")
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+    }
+
+    if (m_DownloadImages[nextIndex].ppPlane[0] != nullptr) {
+        char key[] = "PBO";
+        char fileName[64] = {0};
+        sprintf(fileName, "%s_%d", key, nextIndex);
+        std::string path(DEFAULT_OGL_ASSETS_DIR);
+        NativeImageUtil::DumpNativeImage(&m_DownloadImages[nextIndex], path.c_str(), fileName);
+    }
 }
