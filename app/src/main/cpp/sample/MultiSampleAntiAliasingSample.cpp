@@ -50,46 +50,46 @@ void MultiSampleAntiAliasingSample::Init() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, GL_NONE);
 
-    char vColShaderStr[] = R"(
-            #version 300 es
-            layout(location = 0) in vec4 a_position;
-            layout(location = 1) in vec2 a_texCoord;
-            uniform mat4 u_MVPMatrix;
-            out vec2 v_texCoord;
-            void main(){
-                gl_Position = u_MVPMatrix * a_position;
-                v_texCoord = a_texCoord;
-            })";
+    char vColShaderStr[] =
+            "#version 300 es                                     \n"
+            "layout(location = 0) in vec4 a_position;            \n"
+            "layout(location = 1) in vec2 a_texCoord;            \n"
+            "uniform mat4 u_MVPMatrix;                           \n"
+            "out vec2 v_texCoord;                                \n"
+            "void main(){                                        \n"
+            "    gl_Position = u_MVPMatrix * a_position;         \n"
+            "    v_texCoord = a_texCoord;                        \n"
+            "}";
 
-    char fColShaderStr[] = R"(
-            #version 300 es
-            precision mediump float;
-            in vec2 v_texCoord;
-            layout(location = 0) out vec4 outColor;
-            uniform sampler2D s_Texture;
-            void main(){
-              outColor = texture(s_Texture, v_texCoord);
-            })";
+    char fColShaderStr[] =
+            "#version 300 es                                     \n"
+            "precision mediump float;                            \n"
+            "in vec2 v_texCoord;                                 \n"
+            "layout(location = 0) out vec4 outColor;             \n"
+            "uniform sampler2D s_Texture;                        \n"
+            "void main(){                                        \n"
+            "  outColor = texture(s_Texture, v_texCoord);        \n"
+            "}";
 
-    char vShaderStr[] = R"(
-            #version 300 es
-            layout(location = 0) in vec4 a_position;
-            layout(location = 1) in vec2 a_texCoord;
-            out vec2 v_texCoord;
-            void main(){
-                gl_Position = a_position;
-                v_texCoord = a_texCoord;
-            })";
+    char vShaderStr[] =
+            "#version 300 es                                     \n"
+            "layout(location = 0) in vec4 a_position;            \n"
+            "layout(location = 1) in vec2 a_texCoord;            \n"
+            "out vec2 v_texCoord;                                \n"
+            "void main(){                                        \n"
+            "    gl_Position = a_position;                       \n"
+            "    v_texCoord = a_texCoord;                        \n"
+            "}";
 
     char fShaderStr[] =
-            R"(#version 300 es
-            precision mediump float;
-            in vec2 v_texCoord;
-            layout(location = 0) out vec4 outColor;
-            uniform sampler2D s_Texture;
-            void main(){
-                outColor = texture(s_Texture, v_texCoord);
-            })";
+            "#version 300 es                                     \n"
+            "precision mediump float;                            \n"
+            "in vec2 v_texCoord;                                 \n"
+            "layout(location = 0) out vec4 outColor;             \n"
+            "uniform sampler2D s_Texture;                        \n"
+            "void main(){                                        \n"
+            "  outColor = texture(s_Texture, v_texCoord);        \n"
+            "}                                                   \n";
 
     m_ProgramObj = GLUtils::CreateProgram(vColShaderStr, fColShaderStr);
     m_ProgramObj2 = GLUtils::CreateProgram(vShaderStr, fShaderStr);
@@ -257,7 +257,8 @@ MultiSampleAntiAliasingSample::UpdateTransformMatrix(float rotateX, float rotate
 
 void MultiSampleAntiAliasingSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int angleY,
                                                     float ratio) {
-    LOGCATE("MultiSampleAntiAliasingSample::UpdateMVPMatrix angleX = %d, angleY = %d, ratio = %f", angleX, angleY, ratio);
+    LOGCATE("MultiSampleAntiAliasingSample::UpdateMVPMatrix angleX = %d, angleY = %d, ratio = %f",
+            angleX, angleY, ratio);
     angleX = angleX % 360;
     angleY = angleY % 360;
 
@@ -269,7 +270,7 @@ void MultiSampleAntiAliasingSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int an
     // Projection matrix
     //glm::mat4 Projection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
     //glm::mat4 Projection = glm::frustum(-ratio, ratio, -1.0f, 1.0f, 4.0f, 100.0f);
-    glm::mat4 Projection = glm::perspective(45.0f,ratio, 0.1f,100.f);
+    glm::mat4 Projection = glm::perspective(45.0f, ratio, 0.1f, 100.f);
 
     // View matrix
     glm::mat4 View = glm::lookAt(

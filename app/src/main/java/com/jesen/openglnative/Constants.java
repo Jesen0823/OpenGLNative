@@ -94,6 +94,6 @@ public interface Constants {
             "Conveyor Belt", "RGB to NV21", "RGB to I420", "RGB to I444",
             "Copy Texture", "Blit Frame Buffer", "Binary Program", "Render16BitGray",
             "Render P010", "RenderNV21", "Render YUYV", "Render I444", "Render I420",
-            "MSAA",
+            "ComputeShader", "MSAA",
     };
 }

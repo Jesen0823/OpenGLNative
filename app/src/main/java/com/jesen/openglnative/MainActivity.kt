@@ -471,10 +471,10 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
     override fun onSensorChanged(event: SensorEvent) {
         when (event.sensor.type) {
             Sensor.TYPE_GRAVITY -> {
-                Log.d(
+                /*Log.d(
                     "MainActivity",
                     "onSensorChanged() called with TYPE_GRAVITY: [x,y,z] = [" + event.values[0] + ", " + event.values[1] + ", " + event.values[2] + "]"
-                );
+                )*/
                 if (mSampleSelectedIndex + Constants.SAMPLE_TYPE == Constants.SAMPLE_TYPE_KEY_AVATAR) {
                     mMineGLRender.setGravityXY(event.values[0], event.values[1])
                 }
