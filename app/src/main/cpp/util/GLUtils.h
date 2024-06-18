@@ -93,6 +93,8 @@ public:
     static glm::vec3 texCoordToVertexCoord(glm::vec2 &texCoord) {
         return glm::vec3(2 * texCoord.x - 1, 1 - 2 * texCoord.y, 0);
     }
+
+    static GLuint LoadComputeShader(const char *computeShaderSource);
 };
 
 

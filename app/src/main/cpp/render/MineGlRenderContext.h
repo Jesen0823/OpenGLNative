@@ -62,6 +62,7 @@
 #include "RenderYUYVSample.h"
 #include "RenderI444Sample.h"
 #include "RenderI420Sample.h"
+#include "ComputeShaderSample.h"
 
 class MineGlRenderContext {
 public:

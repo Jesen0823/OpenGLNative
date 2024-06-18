@@ -20,20 +20,33 @@ TriangleSample::~TriangleSample() {
 void TriangleSample::Init() {
     if(m_ProgramObj) return;
 
+    //char vShaderStr[] =
+            "#version 300 es                             \n"
+            "layout(location = 0) in vec4 vPosition;     \n"
+            "void main(){                                \n"
+            "   gl_Position = vPosition;                 \n"
+            "}                                           \n";
     char vShaderStr[] =
-            "#version 300 es                          \n"
-            "layout(location = 0) in vec4 vPosition;  \n"
-            "void main()                              \n"
-            "{                                        \n"
-            "   gl_Position = vPosition;              \n"
-            "}                                        \n";
+            "attribute vec4 vPosition;                    \n"
+            "uniform mat4 vMatrix;                        \n"
+            "void main(){                                 \n"
+            "    gl_Position = vPosition;                 \n"
+            "}";
 
+    // 片元着色器
     char fShaderStr[] =
+            "precision mediump float;                     \n"
+            "uniform vec4 vColor;                         \n"
+            "void main(){                                 \n"
+                "gl_FragColor=vColor;                     \n"
+            "}";
+
+
+    //char fShaderStr[] =
             "#version 300 es                              \n"
             "precision mediump float;                     \n"
             "out vec4 fragColor;                          \n"
-            "void main()                                  \n"
-            "{                                            \n"
+            "void main(){                                 \n"
             "   fragColor = vec4 ( 1.0, 0.0, 0.0, 1.0 );  \n"
             "}                                            \n";
 

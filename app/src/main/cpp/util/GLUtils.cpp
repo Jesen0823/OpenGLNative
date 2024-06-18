@@ -161,3 +161,31 @@ GLuint GLUtils::CreateProgram(const char *pVertexShaderSource, const char *pFrag
                          fragShaderHandle);
 }
 
+GLuint GLUtils::LoadComputeShader(const char *computeShaderSource) {
+    GLuint computeShader = glCreateShader(GL_COMPUTE_SHADER);
+    glShaderSource(computeShader, 1, &computeShaderSource, nullptr);
+    glCompileShader(computeShader);
+
+    GLint success;
+    glGetShaderiv(computeShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        GLchar infoLog[512];
+        glGetShaderInfoLog(computeShader, 512, nullptr, infoLog);
+        LOGCATE("GLUtils::LoadComputeShader Compute shader compilation failed: %s", infoLog);
+        return 0;
+    }
+    GLuint computeProgram = glCreateProgram();
+    glAttachShader(computeProgram, computeShader);
+    glLinkProgram(computeProgram);
+
+    glGetProgramiv(computeProgram, GL_LINK_STATUS, &success);
+    if (!success) {
+        GLchar infoLog[512];
+        glGetProgramInfoLog(computeProgram, 512, NULL, infoLog);
+        LOGCATE("GLUtils::LoadComputeShader Compute shader linking failed: %s", infoLog);
+        return 0;
+    }
+    glDeleteShader(computeShader);
+    return computeProgram;
+}
+

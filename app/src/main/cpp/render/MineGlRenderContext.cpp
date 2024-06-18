@@ -196,6 +196,9 @@ void MineGlRenderContext::SetParamsInt(int paramType, int value0, int value1) {
             case SAMPLE_TYPE_KEY_RENDER_I420:
                 m_pCurSample = new RenderI420Sample();
                 break;
+            case SAMPLE_TYPE_KEY_COMPUTE_SHADER:
+                m_pCurSample = new ComputeShaderSample();
+                break;
             default:
                 m_pCurSample = nullptr;
                 break;
