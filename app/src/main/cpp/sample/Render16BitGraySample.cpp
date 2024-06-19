@@ -8,27 +8,27 @@
 #define IMAGE_PATH "/sdcard/Android/data/com.jesen.openglnative/files/Download/yuv/IMAGE_4406x3108.GRAY10"
 
 void Render16BitGraySample::Init() {
-    char vShaderStr[] = R"(
-			#version 300 es
-			layout(location = 0) in vec4 a_position;
-			layout(location = 1) in vec2 a_texCoord;
-			out vec2 v_texCoord;
-			void main(){
-			   gl_Position = a_position;
-			   v_texCoord = a_texCoord;
-			})";
+    char vShaderStr[] =
+            R"(#version 300 es
+			    layout(location = 0) in vec4 a_position;
+			    layout(location = 1) in vec2 a_texCoord;
+			    out vec2 v_texCoord;
+			    void main(){
+			        gl_Position = a_position;
+			        v_texCoord = a_texCoord;
+			    })";
 
-    char fShaderStr[] = R"(
-			#version 300 es
-			precision highp float;
-			in vec2 v_texCoord;
-			uniform sampler2D y_texture;
-			out vec4 outColor;
-			void main() {
-				vec4 col = texture(y_texture, v_texCoord);
-				float val = 255.0 * col.r + col.a * 255.0 * pow(2.0, 8.0);
-				outColor = vec4(vec3(val / 65535.0), 1.0);
-			})";
+    char fShaderStr[] =
+            R"(#version 300 es
+			    precision highp float;
+			    in vec2 v_texCoord;
+			    uniform sampler2D y_texture;
+			    out vec4 outColor;
+			    void main() {
+				    vec4 col = texture(y_texture, v_texCoord);
+				    float val = 255.0 * col.r + col.a * 255.0 * pow(2.0, 8.0);
+				    outColor = vec4(vec3(val / 65535.0), 1.0);
+			    })";
 
     // Load the shaders and get a linked program object
     m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr, m_VertexShader, m_FragmentShader);

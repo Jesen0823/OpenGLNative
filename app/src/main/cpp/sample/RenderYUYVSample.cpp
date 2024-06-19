@@ -6,8 +6,8 @@
 #include "RenderYUYVSample.h"
 
 void RenderYUYVSample::Init() {
-    char vShaderStr[] = R"(
-			#version 300 es
+    char vShaderStr[] =
+            R"(#version 300 es
 			layout(location = 0) in vec4 a_position;
 			layout(location = 1) in vec2 a_texCoord;
 			out vec2 v_texCoord;
@@ -16,14 +16,14 @@ void RenderYUYVSample::Init() {
 			   v_texCoord = a_texCoord;
 			})";
 
-    char fShaderStr[] = R"(
-		#version 300 es
-		precision highp float;
-		in vec2 v_texCoord;
-		uniform sampler2D y_texture;
-		uniform vec2 inputSize;
-		out vec4 outColor;
-		void main() {
+    char fShaderStr[] =
+            R"(#version 300 es
+		    precision highp float;
+		    in vec2 v_texCoord;
+		    uniform sampler2D y_texture;
+		    uniform vec2 inputSize;
+		    out vec4 outColor;
+		    void main() {
 				// YUYV
 				vec2 uv = v_texCoord;
 				vec2 pixelUV = v_texCoord * inputSize;
@@ -45,7 +45,7 @@ void RenderYUYVSample::Init() {
 				0, 		 -0.392, 	2.017,
 				1.596,   -0.813,    0.0) * yuv;
 				outColor = vec4(rgb, 1.0);
-		})";
+		    })";
 
     // Load the shaders and get a linked program object
     m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr, m_VertexShader, m_FragmentShader);

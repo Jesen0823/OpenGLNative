@@ -6,8 +6,8 @@
 #include "RenderI444Sample.h"
 
 void RenderI444Sample::Init() {
-    char vShaderStr[] = R"(
-			#version 300 es
+    char vShaderStr[] =
+            R"(#version 300 es
 			layout(location = 0) in vec4 a_position;
 			layout(location = 1) in vec2 a_texCoord;
 			out vec2 v_texCoord;
@@ -16,26 +16,26 @@ void RenderI444Sample::Init() {
 			   v_texCoord = a_texCoord;
 			})";
 
-    char fShaderStr[] = R"(
-		#version 300 es
-		precision highp float;
-		in vec2 v_texCoord;
-		uniform sampler2D y_texture;
-		uniform vec2 inputSize;
-		out vec4 outColor;
-		void main() {
-			vec2 uv = v_texCoord;
-			uv.y *= 1.0 / 3.0;
-			float y = texture(y_texture, uv).r - 0.063;
-			uv.y += 1.0 / 3.0;
-			float u = texture(y_texture, uv).r - 0.502;
-			uv.y += 1.0 / 3.0;
-			float v = texture(y_texture, uv).r - 0.502;
-			vec3 yuv = vec3(y,u,v);
-			highp vec3 rgb = mat3(1.164, 1.164, 1.164,
-			0, 		 -0.392, 	2.017,
-			1.596,   -0.813,    0.0) * yuv;
-			outColor = vec4(rgb, 1.0);
+    char fShaderStr[] =
+            R"(#version 300 es
+		    precision highp float;
+		    in vec2 v_texCoord;
+		    uniform sampler2D y_texture;
+		    uniform vec2 inputSize;
+		    out vec4 outColor;
+		    void main() {
+			    vec2 uv = v_texCoord;
+			    uv.y *= 1.0 / 3.0;
+			    float y = texture(y_texture, uv).r - 0.063;
+			    uv.y += 1.0 / 3.0;
+			    float u = texture(y_texture, uv).r - 0.502;
+			    uv.y += 1.0 / 3.0;
+			    float v = texture(y_texture, uv).r - 0.502;
+			    vec3 yuv = vec3(y,u,v);
+			    highp vec3 rgb = mat3(1.164, 1.164, 1.164,
+			        0, 		 -0.392, 	2.017,
+			        1.596,   -0.813,    0.0) * yuv;
+			    outColor = vec4(rgb, 1.0);
 		})";
 
     // Load the shaders and get a linked program object

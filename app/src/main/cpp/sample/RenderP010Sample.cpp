@@ -8,8 +8,8 @@
 #define IMAGE_PATH "/sdcard/Android/data/com.jesen.openglnative/files/Download/yuv/IMAGE_4406x3108.P010"
 
 void RenderP010Sample::Init() {
-    char vShaderStr[] = R"(
-			#version 300 es
+    char vShaderStr[] =
+            R"(#version 300 es
 			layout(location = 0) in vec4 a_position;
 			layout(location = 1) in vec2 a_texCoord;
 			out vec2 v_texCoord;
@@ -18,8 +18,8 @@ void RenderP010Sample::Init() {
 			   v_texCoord = a_texCoord;
 			})";
 
-    char fShaderStr[] = R"(
-				#version 300 es
+    char fShaderStr[] =
+            R"(#version 300 es
 				precision highp float;
 				in vec2 v_texCoord;
 				uniform sampler2D y_texture;

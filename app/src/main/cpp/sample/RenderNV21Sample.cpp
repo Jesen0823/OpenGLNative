@@ -6,41 +6,41 @@
 #include "RenderNV21Sample.h"
 
 void RenderNV21Sample::Init() {
-    char vShaderStr[] = R"(
-         #version 300 es
-         layout(location = 0) in vec4 a_position;
-         layout(location = 1) in vec2 a_texCoord;
-         out vec2 v_texCoord;
-         void main(){
-             gl_Position = a_position;
-             v_texCoord = a_texCoord;
-         })";
+    char vShaderStr[] =
+            R"(#version 300 es
+            layout(location = 0) in vec4 a_position;
+            layout(location = 1) in vec2 a_texCoord;
+            out vec2 v_texCoord;
+            void main(){
+                gl_Position = a_position;
+                v_texCoord = a_texCoord;
+            })";
 
-    char fShaderStr[] = R"(
-         #version 300 es
-         #extension GL_EXT_YUV_target: require
-         precision highp float;
-         in vec2 v_texCoord;
-         uniform sampler2D y_texture;
-         uniform vec2 inputSize;
-         out vec4 outColor;
-         void main(){
-            vec2 uv = v_texCoord;
-            uv.y *= 2.0 / 3.0;
-            float y = texture(y_texture, uv).r - 0.063;
-            vec2 pixelUV = v_texCoord * inputSize;
-            pixelUV.x = floor(pixelUV.x / 2.0) * 2.0;
-            pixelUV.y = floor(pixelUV.y / 2.0);
-            pixelUV.y += inputSize.y;
-            float v = texelFetch(y_texture, ivec2(int(pixelUV.x), int(pixelUV.y)), 0).r - 0.502;
-            pixelUV.x += 1.0;
-            float u = texelFetch(y_texture, ivec2(int(pixelUV.x), int(pixelUV.y)), 0).r - 0.502;
-            vec3 yuv = vec3(y,u,v);
-            highp vec3 rgb = mat3(1.164, 1.164, 1.164,
+    char fShaderStr[] =
+            R"(#version 300 es
+            #extension GL_EXT_YUV_target: require
+            precision highp float;
+            in vec2 v_texCoord;
+            uniform sampler2D y_texture;
+            uniform vec2 inputSize;
+            out vec4 outColor;
+            void main(){
+                vec2 uv = v_texCoord;
+                uv.y *= 2.0 / 3.0;
+                float y = texture(y_texture, uv).r - 0.063;
+                vec2 pixelUV = v_texCoord * inputSize;
+                pixelUV.x = floor(pixelUV.x / 2.0) * 2.0;
+                pixelUV.y = floor(pixelUV.y / 2.0);
+                pixelUV.y += inputSize.y;
+                float v = texelFetch(y_texture, ivec2(int(pixelUV.x), int(pixelUV.y)), 0).r - 0.502;
+                pixelUV.x += 1.0;
+                float u = texelFetch(y_texture, ivec2(int(pixelUV.x), int(pixelUV.y)), 0).r - 0.502;
+                vec3 yuv = vec3(y,u,v);
+                highp vec3 rgb = mat3(1.164, 1.164, 1.164,
 							0, 		 -0.392, 	2.017,
 							1.596,   -0.813,    0.0) * yuv;
-            outColor = vec4(rgb, 1.0);
-		})";
+                outColor = vec4(rgb, 1.0);
+		    })";
 
     // Load the shaders and get a linked program object
     m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr,

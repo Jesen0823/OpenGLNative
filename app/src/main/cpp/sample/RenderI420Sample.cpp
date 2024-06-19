@@ -6,8 +6,8 @@
 #include "RenderI420Sample.h"
 
 void RenderI420Sample::Init() {
-    char vShaderStr[] = R"(
-			#version 300 es
+    char vShaderStr[] =
+            R"(#version 300 es
 			layout(location = 0) in vec4 a_position;
 			layout(location = 1) in vec2 a_texCoord;
 			out vec2 v_texCoord;
@@ -16,14 +16,14 @@ void RenderI420Sample::Init() {
 			   v_texCoord = a_texCoord;
 			})";
 
-    char fShaderStr[] = R"(
-		#version 300 es
-		precision highp float;
-		in vec2 v_texCoord;
-		uniform sampler2D y_texture;
-		uniform vec2 inputSize;
-		out vec4 outColor;
-		void main() {
+    char fShaderStr[] =
+            R"(#version 300 es
+		    precision highp float;
+		    in vec2 v_texCoord;
+		    uniform sampler2D y_texture;
+		    uniform vec2 inputSize;
+		    out vec4 outColor;
+		    void main() {
 				vec2 uv = v_texCoord;
 				uv.y *= 2.0 / 3.0;
 				float y = texture(y_texture, uv).r - 0.063;
@@ -42,7 +42,7 @@ void RenderI420Sample::Init() {
 				0, 		 -0.392, 	2.017,
 				1.596,   -0.813,    0.0) * yuv;
 				outColor = vec4(rgb, 1.0);
-		})";
+		    })";
 
     // Load the shaders and get a linked program object
     m_ProgramObj = GLUtils::CreateProgram(vShaderStr, fShaderStr, m_VertexShader, m_FragmentShader);

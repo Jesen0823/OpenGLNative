@@ -143,7 +143,7 @@ class MainActivity : AppCompatActivity(), AudioCollector.Callback,
     }
 
     private fun loadNV21Image2() {
-        assets.open("yuv/IMAGE_4406x3108.NV2").use {
+        assets.open("yuv/IMAGE_4406x3108.NV21").use {
             val length = it.available()
             val buffer = ByteArray(length)
             it.read(buffer)
