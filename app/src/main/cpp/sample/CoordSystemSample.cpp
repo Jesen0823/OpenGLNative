@@ -177,7 +177,7 @@ void CoordSystemSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int an
     float radiansY = static_cast<float>(MATH_PI / 180.0f * angleY);
 
 
-    // Projection matrix
+    // Projection matrix 透视矩阵
     //glm::mat4 Projection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 1.0f);
     //glm::mat4 Projection = glm::frustum(-ratio, ratio, -1.0f, 1.0f, 4.0f, 100.0f);
     glm::mat4 Projection = glm::perspective(45.0f, ratio, 0.1f, 100.f);
@@ -190,7 +190,7 @@ void CoordSystemSample::UpdateMVPMatrix(glm::mat4 &mvpMatrix, int angleX, int an
     );
 
     // Model matrix
-    glm::mat4 Model = glm::mat4(1.0f);
+    glm::mat4 Model = glm::mat4(1.0f);  // 单位矩阵
     Model = glm::scale(Model, glm::vec3(m_ScaleX, m_ScaleY, 1.0f));
     Model = glm::rotate(Model, radiansX, glm::vec3(1.0f, 0.0f, 0.0f));
     Model = glm::rotate(Model, radiansY, glm::vec3(0.0f, 1.0f, 0.0f));
